@@ -1,8 +1,11 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { Button } from "../components/Button";
 
 export default function Welcome() {
+
+
   return (
     <View style={styles.container}>
       <Text>WELCOME</Text>
@@ -17,5 +20,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    marginHorizontal: 24,
   },
 });
