@@ -20,9 +20,31 @@ interface StyleProps {
 const styles = ({ size }: StyleProps) =>
   StyleSheet.create({
     avatar: {
-      width: size === 'lg' ? 96 : size === 'md' ? 45 : size === 'sm' ? 36 : 36,
-      height: size === 'lg' ? 96 : size === 'md' ? 45 : size === 'sm' ? 36 : 36,
+      width: getValue(size),
+      height: getValue(size),
       borderRadius: 100,
       overflow: 'hidden',
     },
   });
+
+function getValue(size: StyleProps['size']) {
+  let value = 0;
+  switch (size) {
+    case 'lg':
+      value = 96;
+      break;
+    case 'md':
+      value = 45;
+      break;
+    case 'sm':
+      value = 36;
+      break;
+    case 'xs':
+      value = 32;
+      break;
+    default:
+      value = 36;
+      break;
+  }
+  return value;
+}
