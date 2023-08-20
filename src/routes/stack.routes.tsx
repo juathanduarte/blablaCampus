@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useEffect, useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Welcome from "../screens/Welcome";
-import Login from "../screens/Login";
+import Welcome from '../screens/Welcome';
+import Login from '../screens/Login';
 
-import colors from "../styles/colors";
+import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
 
 const AppRoutes: React.FC = () => {
-
   return (
     <Stack.Navigator
       screenOptions={{
-        contentStyle: { backgroundColor: colors.background },
+        contentStyle: { backgroundColor: colors.white },
         headerShown: false,
       }}
     >
