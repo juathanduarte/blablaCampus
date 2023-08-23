@@ -1,12 +1,29 @@
 import React from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import IonIcons from '@expo/vector-icons/Ionicons';
 
-interface IconProps {
-  icon: keyof typeof Ionicons.glyphMap;
+type IconPropsBase = {
   size: number;
   color?: string;
-}
+};
 
-export default function Icon({ icon, size, color = 'black' }: IconProps) {
-  return <Ionicons name={icon} size={size} color={color} />;
+type IconProps =
+  | ({
+      lib: 'IonIcons';
+      icon: keyof typeof IonIcons.glyphMap;
+    } & IconPropsBase)
+  | ({
+      lib: 'FontAwesome';
+      icon: keyof typeof FontAwesome.glyphMap;
+    } & IconPropsBase);
+
+const Libs = {
+  IonIcons,
+  FontAwesome,
+};
+
+export default function Icon({ icon, size, color = 'black', lib }: IconProps) {
+  const Component = Libs[lib];
+  // @ts-ignore
+  return <Component name={icon} size={size} color={color} />;
 }
