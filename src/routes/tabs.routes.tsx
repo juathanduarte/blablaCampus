@@ -1,11 +1,10 @@
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Search from '../screens/Search';
-import History from '../screens/History';
+import React from 'react';
+import Icon from '../components/Icon';
 import CreateRide from '../screens/CreateRide';
 import Messages from '../screens/Messages';
 import Profile from '../screens/Profile';
-import Icon from '../components/Icon';
+import Search from '../screens/Search';
 
 const Tab = createBottomTabNavigator();
 
