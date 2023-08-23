@@ -15,8 +15,10 @@ export default function Welcome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ff1',
+    backgroundColor: '#fff',
     alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
+    marginHorizontal: 24,
   },
 });
