@@ -5,4 +5,5 @@ export default {
   quaternary: '#807A7A',
   quinary: '#E4DFDF',
   white: '#FFFFFF',
+  title: '#120D26',
 };
