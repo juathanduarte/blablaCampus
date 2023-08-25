@@ -11,7 +11,7 @@ interface RatingProps {
 export default function Rating({ rating }: RatingProps) {
   return (
     <View style={styles.container}>
-      <Icon icon="star" size={15} color={colors.primary} lib="FontAwesome" />
+      <Icon icon="star" size={19} color={colors.primary} lib="FontAwesome" />
       <Text style={styles.text}>{rating.toFixed(1)}</Text>
     </View>
   );
@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
   icon: {},
   text: {
     fontSize: 12,
+    color: colors.gray,
   },
 });
