@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { Button } from '../components/Button';
+import * as React from 'react';
+import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 
-export default function Welcome() {
+import colors from '../styles/colors';
+
+import blablaCampusLogo from '../assets/blablaCampusLogo.png';
+import ufpelLogo from '../assets/ufpelLogo.png';
+
+const Welcome = () => {
   return (
-    <View style={styles.container}>
-      <Text>WELCOME</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image source={blablaCampusLogo} />
+        <Image source={ufpelLogo} style={styles.ufpelLogo} />
+      </View>
+    </SafeAreaView>
   );
-}
+};
+
+export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
-    flexDirection: 'column',
     justifyContent: 'center',
-    marginHorizontal: 24,
+    backgroundColor: colors.white,
+  },
+  imageContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  ufpelLogo: {
+    marginLeft: 'auto',
   },
 });
