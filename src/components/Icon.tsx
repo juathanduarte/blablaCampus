@@ -7,7 +7,7 @@ type IconPropsBase = {
   color?: string;
 };
 
-type IconProps =
+export type IconProps =
   | ({
       lib: 'IonIcons';
       icon: keyof typeof IonIcons.glyphMap;

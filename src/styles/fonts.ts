@@ -6,4 +6,4 @@ export default {
   text_semi_bold: 'Manrope_600SemiBold',
   text_bold: 'Manrope_700Bold',
   text_extra_bold: 'Manrope_800ExtraBold',
-};
+} as const;
