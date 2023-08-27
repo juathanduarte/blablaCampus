@@ -1,73 +1,82 @@
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import Icon, { IconProps } from './Icon';
 
-interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'small' | 'medium' | 'large' | 'personalized';
+interface ButtonProps extends StyleProps {
   label?: string;
-  icon?: any;
-  onClick?: () => void;
+  onClick: () => void;
+  IconProps?: IconProps;
 }
 
-export default function Button({ variant, size, label, icon, onClick }: ButtonProps) {
+export default function Button({
+  variant,
+  size,
+  label,
+  IconProps,
+  onClick,
+  labelWeight,
+}: ButtonProps) {
   const handlePress = () => {
-    if (onClick) {
-      onClick();
-    }
+    onClick();
   };
+  const { icon, lib, size: IconSize, color } = IconProps || {};
+  const iconHasProps = icon && lib && IconSize && color;
 
   return (
     <TouchableOpacity style={styles({ variant, size }).container} onPress={handlePress}>
-      {size === 'small' && icon ? (
-        <Ionicons name={icon} size={42} color={colors.secondary} />
-      ) : (
-        <Text style={styles({ variant, size }).text}>{label}</Text>
+      {label && <Text style={styles({ variant, size, labelWeight }).text}>{label}</Text>}
+      {iconHasProps && (
+        // @ts-ignore
+        <Icon
+          icon={icon}
+          lib={lib}
+          size={IconSize}
+          color={variant === 'primary' ? colors.secondary : colors.primary}
+        />
       )}
     </TouchableOpacity>
   );
 }
 
-const styles = ({ variant, size }: ButtonProps) =>
+interface StyleProps {
+  labelWeight?: 'regular' | 'medium' | 'bold';
+  variant: 'primary' | 'secondary';
+  size: 'small' | 'medium' | 'large';
+}
+
+const styles = ({ variant, size, labelWeight }: StyleProps) =>
   StyleSheet.create({
     container: {
       backgroundColor: variant === 'primary' ? colors.primary : colors.tertiary,
-      width:
-        size === 'large'
-          ? '100%'
-          : size === 'medium'
-          ? '46%'
-          : size === 'personalized'
-          ? 92
-          : 'auto',
-      paddingVertical: size === 'large' ? 18 : size === 'medium' ? 12 : 0,
-      height:
-        size === 'large'
-          ? 58
-          : size === 'medium'
-          ? 48
-          : size === 'small'
-          ? 42
-          : size === 'personalized'
-          ? 28
-          : 0,
+      paddingVertical: size === 'large' ? 18 : size === 'medium' ? 13 : size === 'small' ? 6 : 0,
+      paddingHorizontal: size === 'large' ? 18 : size === 'medium' ? 13 : size === 'small' ? 6 : 0,
       borderRadius: 8,
+      display: 'flex',
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+      gap: 10,
     },
     text: {
-      fontSize: size === 'large' ? 16 : size === 'medium' ? 14 : 12,
+      fontSize: size === 'small' ? 12 : 16,
+      lineHeight: size === 'small' ? 16 : 24,
       color: variant === 'primary' ? colors.secondary : colors.primary,
-      fontFamily:
-        size === 'large'
-          ? fonts.text_bold
-          : size === 'medium'
-          ? fonts.text_medium
-          : size === 'personalized'
-          ? fonts.text_regular
-          : fonts.text_semi_bold,
+      fontFamily: getFontWeight(labelWeight || 'regular'),
       textTransform: size === 'large' ? 'uppercase' : 'none',
     },
   });
+
+function getFontWeight(labelWeight: StyleProps['labelWeight']) {
+  switch (labelWeight) {
+    case 'regular':
+      return fonts.text_regular;
+    case 'medium':
+      return fonts.text_medium;
+    case 'bold':
+      return fonts.text_bold;
+    default:
+      return fonts.text_regular;
+  }
+}
