@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 
-import Welcome from '../screens/Welcome';
 import Login from '../screens/Login';
-
+import Welcome from '../screens/Welcome';
 import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
@@ -17,7 +16,7 @@ const AppRoutes: React.FC = () => {
       }}
     >
       <Stack.Screen name="Welcome" component={Welcome} />
-      {/* <Stack.Screen name="Login" component={Login} /> */}
+      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 };

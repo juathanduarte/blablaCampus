@@ -10,10 +10,18 @@ interface InputProps {
   label: string;
   iconInput?: any;
   iconSize?: any;
-  onChange?: () => void;
+  onChange?: (value: string) => void;
+  error?: string;
 }
 
-export default function Input({ variant, iconInput, label, iconSize, onChange }: InputProps) {
+export default function Input({
+  variant,
+  iconInput,
+  label,
+  iconSize,
+  onChange,
+  error,
+}: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -30,7 +38,7 @@ export default function Input({ variant, iconInput, label, iconSize, onChange }:
             secureTextEntry={variant === 'password' && !showPassword}
             style={styles.textInput}
             placeholderTextColor={colors.quaternary}
-            onChangeText={onChange}
+            onChangeText={(value) => onChange && onChange(value)} // Update this line}
           />
           {variant === 'password' && (
             <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -50,7 +58,7 @@ export default function Input({ variant, iconInput, label, iconSize, onChange }:
             placeholder={label}
             style={styles.textInput}
             placeholderTextColor={colors.quaternary}
-            onChangeText={onChange}
+            onChangeText={(value) => onChange && onChange(value)} // Update this line
           />
         </View>
       )}
