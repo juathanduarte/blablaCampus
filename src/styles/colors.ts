@@ -7,4 +7,5 @@ export default {
   white: '#FFFFFF',
   gray: '#747688',
   title: '#120D26',
+  detail: '#747688',
 };
