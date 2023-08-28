@@ -8,4 +8,5 @@ export default {
   gray: '#747688',
   title: '#120D26',
   detail: '#747688',
+  blueGray: '#3C3E56',
 };
