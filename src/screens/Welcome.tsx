@@ -17,7 +17,6 @@ const Welcome = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
