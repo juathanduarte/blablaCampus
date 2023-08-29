@@ -1,9 +1,12 @@
 import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Dropdown from '../components/Dropdown';
 
 import Icon from '../components/Icon';
 import TabHeader from '../components/TabHeader';
+import TravelPointCard from '../components/TravelPointCard';
 import UserCard from '../components/UserCard';
 
 interface User {
@@ -13,10 +16,16 @@ interface User {
   status: 'active' | 'inactive';
 }
 
+interface Point {
+  id: string;
+  name: string;
+  address: string;
+}
+
 const Admin = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([]);
-  const [points, setPoints] = React.useState([]);
+  const [points, setPoints] = React.useState<Point[]>([]);
 
   React.useEffect(() => {
     setUsers([
@@ -37,6 +46,23 @@ const Admin = ({ navigation }: any) => {
         name: 'Juathan Duarte',
         urlImage: 'https://github.com/juathanduarte.png',
         status: 'active',
+      },
+    ]);
+    setPoints([
+      {
+        id: '1',
+        name: 'Ponto 1',
+        address: 'Rua 1',
+      },
+      {
+        id: '2',
+        name: 'Ponto 2',
+        address: 'Rua 2',
+      },
+      {
+        id: '3',
+        name: 'Ponto 3',
+        address: 'Rua 3',
       },
     ]);
   }, []);
@@ -78,8 +104,10 @@ const Admin = ({ navigation }: any) => {
             {users?.map((user: User) => <UserCard key={user.id} user={user} />)}
           </View>
         ) : (
-          <View>
-            <Text>Pontos</Text>
+          <View style={styles.content}>
+            {points?.map((point: any) => (
+              <TravelPointCard key={point.id} name={point.name} address={point.address} />
+            ))}
           </View>
         )}
       </View>

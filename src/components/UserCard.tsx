@@ -24,6 +24,7 @@ export default function UserCard({ user }: userProps) {
   };
 
   const onPressStatusBtn = () => {
+    console.log('open modal');
     console.log('change status');
   };
 
