@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
 import colors from '../styles/colors';
 import Avatar from './Avatar';
 import Button from './Button';
+import fonts from '../styles/fonts';
 
 interface User {
   id: string;
@@ -18,6 +19,12 @@ interface userProps {
 //todo: check on press status btn and on press perfil
 
 export default function UserCard({ user }: userProps) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
   const onPressPerfil = () => {
     console.log('open perfil');
     console.log(user);
@@ -42,10 +49,34 @@ export default function UserCard({ user }: userProps) {
         </View>
       </TouchableOpacity>
       {user.status === 'active' ? (
-        <Button variant="primary" size="medium" label="Bloquear" onClick={onPressStatusBtn} />
+        <Button variant="primary" size="medium" label="Bloquear" onClick={toggleModal} />
       ) : (
-        <Button variant="secondary" size="medium" label="Desbloquear" onClick={onPressStatusBtn} />
+        <Button variant="secondary" size="medium" label="Desbloquear" onClick={toggleModal} />
       )}
+
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={toggleModal}
+      >
+        <TouchableWithoutFeedback onPress={toggleModal}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>
+                  {user.status == 'active' ? 'Bloquear ' : 'Desbloquear '}
+                  {user.name}
+                </Text>
+                <View style={styles.buttonContainer}>
+                  <Button variant="secondary" size="medium" label="Cancelar" />
+                  <Button variant="primary" size="medium" label="Confirmar" />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 }
@@ -79,5 +110,27 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.detail,
     fontWeight: 'normal',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 32,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+
+  modalTitle: {
+    fontSize: 24,
+    fontFamily: fonts.text_medium,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 32,
   },
 });
