@@ -30,7 +30,7 @@ const Admin = ({ navigation }: any) => {
         id: '20102118',
         name: 'Gabriel Timm',
         urlImage: 'https://github.com/gstimm.png',
-        status: 'active',
+        status: 'inactive',
       },
       {
         id: '20152149',
@@ -75,7 +75,7 @@ const Admin = ({ navigation }: any) => {
       <View style={{ flex: 1, width: '100%' }}>
         {selectedTab === 0 ? (
           <View style={styles.content}>
-            {users?.map((user: any) => <UserCard key={user.id} user={user} />)}
+            {users?.map((user: User) => <UserCard key={user.id} user={user} />)}
           </View>
         ) : (
           <View>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 50,
+    marginTop: 32,
     marginBottom: 20,
   },
   titleHeader: {

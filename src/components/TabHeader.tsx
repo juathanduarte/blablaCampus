@@ -14,7 +14,7 @@ const TabHeader: React.FC<TabHeaderProps> = ({ labels, handleTabChange, activeTa
       {labels.map((label, index) => (
         <TouchableOpacity
           key={index}
-          style={[styles.tab, { width: `${100 / labels.length}%` }, ,]}
+          style={[styles.tab, { width: `${100 / labels.length}%` }]}
           onPress={() => handleTabChange(index)}
         >
           <Text style={[styles.tabText, activeTab === index && styles.activeTabText]}>{label}</Text>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: 5,
     backgroundColor: colors.primary,
-    borderRadius: 10, // Define as bordas arredondadas
+    borderRadius: 10,
   },
   activeTabText: {
     color: colors.primary,
