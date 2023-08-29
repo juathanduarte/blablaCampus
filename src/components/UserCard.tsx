@@ -5,31 +5,34 @@ import Avatar from './Avatar';
 import Button from './Button';
 
 interface userProps {
-  name: string;
-  id: string;
-  urlImage: string;
-  size: 'lg' | 'md' | 'sm' | 'xs';
-  status: 'active' | 'inactive';
+  user: {
+    id: string;
+    name: string;
+    urlImage: string;
+    status: 'active' | 'inactive';
+  };
+  onPressPerfil?: () => void;
+  onPressStatusBtn?: () => void;
 }
 
-//todo: add onclick to button
+//todo: check on press status btn and on press perfil
 
-export default function UserCard({ name, id, urlImage, size, status }: userProps) {
+export default function UserCard({ user, onPressPerfil, onPressStatusBtn }: userProps) {
   return (
     <View style={styles.container}>
       <View style={styles.info}>
-        <Avatar urlImage={urlImage} size={size} />
+        <Avatar urlImage={user.urlImage} size="md" />
         <View>
           <View style={styles.textContainer}>
-            <Text style={styles.textName}>{name}</Text>
-            <Text style={styles.textId}>{id}</Text>
+            <Text style={styles.textName}>{user.name}</Text>
+            <Text style={styles.textId}>{user.id}</Text>
           </View>
         </View>
       </View>
-      {status === 'active' ? (
-        <Button variant="primary" size="medium" label="Bloquear" />
+      {user.status === 'active' ? (
+        <Button variant="primary" size="medium" label="Bloquear" onClick={onPressStatusBtn} />
       ) : (
-        <Button variant="secondary" size="medium" label="Desbloquear" />
+        <Button variant="secondary" size="medium" label="Desbloquear" onClick={onPressStatusBtn} />
       )}
     </View>
   );
