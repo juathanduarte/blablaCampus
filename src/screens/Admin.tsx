@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Dropdown from '../components/Dropdown';
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 
 import Icon from '../components/Icon';
 import TabHeader from '../components/TabHeader';
@@ -100,15 +98,19 @@ const Admin = ({ navigation }: any) => {
       {/* todo : SearchInput */}
       <View style={{ flex: 1, width: '100%' }}>
         {selectedTab === 0 ? (
-          <View style={styles.content}>
-            {users?.map((user: User) => <UserCard key={user.id} user={user} />)}
-          </View>
+          <ScrollView>
+            <View style={styles.content}>
+              {users?.map((user: User) => <UserCard key={user.id} user={user} />)}
+            </View>
+          </ScrollView>
         ) : (
-          <View style={styles.content}>
-            {points?.map((point: any) => (
-              <TravelPointCard key={point.id} name={point.name} address={point.address} />
-            ))}
-          </View>
+          <ScrollView>
+            <View style={styles.content}>
+              {points?.map((point: any) => (
+                <TravelPointCard key={point.id} name={point.name} address={point.address} />
+              ))}
+            </View>
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     // justifyContent: 'space-between',
+    paddingTop: 24,
     paddingHorizontal: 24,
   },
   header: {
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
     gap: 20,
+    marginBottom: 20,
   },
 });
 
