@@ -5,7 +5,14 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from 'react-native';
 import Input from '../components/Input';
@@ -35,38 +42,49 @@ export default function ForgotPassword() {
     }
   };
 
+  const handeDismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color={colors.title} />
-      </TouchableOpacity>
-      <View style={styles.content}>
-        <Text style={styles.title}>Definir senha</Text>
-        <Text style={styles.subtitle}>Digite sua nova senha.</Text>
-      </View>
-      <View style={styles.input}>
-        <Input
-          label="Senha"
-          iconInput="lock"
-          iconSize={20}
-          variant="password"
-          onChange={(text) => setValue('password', text)}
-        />
-      </View>
-      <View style={styles.input}>
-        <Input
-          label="Confirme sua senha"
-          iconInput="lock"
-          iconSize={20}
-          variant="password"
-          onChange={(text) => setValue('password2', text)}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button variant="primary" size="large" label="Continuar" onClick={handleSubmit(onSubmit)} />
-      </View>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={handeDismissKeyboard}>
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color={colors.title} />
+        </TouchableOpacity>
+        <View style={styles.content}>
+          <Text style={styles.title}>Definir senha</Text>
+          <Text style={styles.subtitle}>Digite sua nova senha.</Text>
+        </View>
+        <View style={styles.input}>
+          <Input
+            label="Senha"
+            iconInput="lock"
+            iconSize={20}
+            variant="password"
+            onChange={(text) => setValue('password', text)}
+          />
+        </View>
+        <View style={styles.input}>
+          <Input
+            label="Confirme sua senha"
+            iconInput="lock"
+            iconSize={20}
+            variant="password"
+            onChange={(text) => setValue('password2', text)}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            variant="primary"
+            size="large"
+            label="Continuar"
+            onClick={handleSubmit(onSubmit)}
+          />
+        </View>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -99,6 +117,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   button: {
-    marginTop: 35,
+    marginTop: 30,
   },
 });

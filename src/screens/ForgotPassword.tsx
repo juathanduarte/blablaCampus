@@ -4,7 +4,14 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from 'react-native';
 import Input from '../components/Input';
@@ -26,36 +33,47 @@ export default function ForgotPassword() {
     return emailRegex.test(email);
   };
 
+  const handeDismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   const onSubmit = (data: any) => {
-    if (!isEmailValid(data.email)) {
+    if (!isEmailValid(data.email) || data.email === '') {
       Alert.alert('Erro', 'Por favor, digite um e-mail válido.');
     } else {
       console.log('Email:', data.email);
-      navigation.navigate('ChangePassword');
+      navigation.navigate('VerifyCode');
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color={colors.title} />
-      </TouchableOpacity>
-      <View style={styles.content}>
-        <Text style={styles.title}>Alterar senha</Text>
-        <Text style={styles.subtitle}>Digite seu email para solicitar uma nova senha.</Text>
-      </View>
-      <View style={styles.input}>
-        <Input
-          label="Email"
-          iconInput="envelope"
-          iconSize={20}
-          onChange={(text) => setValue('email', text)}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button variant="primary" size="large" label="Continuar" onClick={handleSubmit(onSubmit)} />
-      </View>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={handeDismissKeyboard}>
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color={colors.title} />
+        </TouchableOpacity>
+        <View style={styles.content}>
+          <Text style={styles.title}>Alterar senha</Text>
+          <Text style={styles.subtitle}>Digite seu email para solicitar uma nova senha.</Text>
+        </View>
+        <View style={styles.input}>
+          <Input
+            label="Email"
+            iconInput="envelope"
+            iconSize={20}
+            onChange={(text) => setValue('email', text)}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            variant="primary"
+            size="large"
+            label="Continuar"
+            onClick={handleSubmit(onSubmit)}
+          />
+        </View>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -88,6 +106,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   button: {
-    marginTop: 20,
+    marginTop: 30,
   },
 });

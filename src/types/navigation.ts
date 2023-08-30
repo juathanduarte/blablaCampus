@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Login: undefined;
   ForgotPassword: undefined;
   ChangePassword: undefined;
+  VerifyCode: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
