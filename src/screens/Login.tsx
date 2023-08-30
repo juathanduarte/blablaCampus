@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 import {
   Alert,
   Image,
@@ -28,6 +29,8 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { register, setValue, handleSubmit } = useForm();
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -88,7 +91,10 @@ export default function Login() {
             variant="password"
             onChange={(text) => setValue('password', text)}
           />
-          <TouchableOpacity style={styles.forgotPassword}>
+          <TouchableOpacity
+            style={styles.forgotPassword}
+            onPress={() => navigation.navigate('ForgotPassword')}
+          >
             <Text style={styles.text}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
           <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
