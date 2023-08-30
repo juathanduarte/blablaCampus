@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import Button from '../components/Button';
 
 import Icon from '../components/Icon';
 import TabHeader from '../components/TabHeader';
@@ -77,6 +78,10 @@ const Admin = ({ navigation }: any) => {
     setSelectedTab(index);
   };
 
+  const handleAddPoint = () => {
+    navigation.navigate('CreatePoint');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -110,6 +115,7 @@ const Admin = ({ navigation }: any) => {
                 <TravelPointCard key={point.id} name={point.name} address={point.address} />
               ))}
             </View>
+            <Button variant="primary" size="small" icon="add" onClick={handleAddPoint} />
           </ScrollView>
         )}
       </View>

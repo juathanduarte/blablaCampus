@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Admin from '../screens/Admin';
+import CreatePoint from '../screens/CreatePoint';
 
 import Login from '../screens/Login';
 import Welcome from '../screens/Welcome';
@@ -19,6 +20,7 @@ const AppRoutes: React.FC = () => {
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Admin" component={Admin} />
+      <Stack.Screen name="CreatePoint" component={CreatePoint} />
     </Stack.Navigator>
   );
 };
