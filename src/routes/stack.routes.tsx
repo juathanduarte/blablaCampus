@@ -5,6 +5,7 @@ import CreatePoint from '../screens/CreatePoint';
 
 import Login from '../screens/Login';
 import Welcome from '../screens/Welcome';
+import VerifyCode from '../screens/VerifyCode';
 import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ const AppRoutes: React.FC = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Admin" component={Admin} />
       <Stack.Screen name="CreatePoint" component={CreatePoint} />
+      <Stack.Screen name="VerifyCode" component={VerifyCode} />
     </Stack.Navigator>
   );
 };
