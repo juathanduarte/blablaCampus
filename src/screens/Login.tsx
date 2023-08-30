@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useNavigation } from '@react-navigation/native';
 import blablaCampusLogo from '../assets/blablaCampusLogo.png';
 import ufpelLogo from '../assets/ufpelLogo.png';
 import Button from '../components/Button';
@@ -23,10 +24,11 @@ import fonts from '../styles/fonts';
 
 export default function Login() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+
   const { register, setValue, handleSubmit } = useForm();
 
   useEffect(() => {
@@ -64,6 +66,10 @@ export default function Login() {
     }
   };
 
+  const handleRegister = () => {
+    navigation.navigate('Register');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -96,7 +102,7 @@ export default function Login() {
         <View style={[styles.footerContainer, { marginBottom: keyboardOpen ? 15 : 86 }]}>
           <View style={styles.registerContainer}>
             <Text style={styles.text}>Não tem uma conta?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleRegister}>
               <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>
                 Cadastre-se
               </Text>

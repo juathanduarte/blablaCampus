@@ -11,6 +11,7 @@ interface InputProps {
   iconInput?: any;
   iconSize?: any;
   onChange?: (value: string) => void;
+  value?: string;
   error?: string;
 }
 
@@ -20,6 +21,7 @@ export default function Input({
   label,
   iconSize,
   onChange,
+  value,
   error,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
