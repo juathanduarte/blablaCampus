@@ -13,7 +13,8 @@ export default function CreatePoint({ navigation }: any) {
   };
 
   const handleOpenDetail = () => {
-    navigation.navigate('Detail');
+    // navigation.navigate('Detail');
+    console.log('Detail');
   };
 
   const handleAdd = () => {
