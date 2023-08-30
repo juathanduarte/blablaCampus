@@ -2,6 +2,7 @@ import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 import Button from '../components/Button';
+import HeaderNav from '../components/HeaderNav';
 
 import Icon from '../components/Icon';
 import TabHeader from '../components/TabHeader';
@@ -84,17 +85,7 @@ const Admin = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.titleHeader}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <Icon lib="IonIcons" icon="arrow-back-outline" size={22} />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Bem vindo Admin</Text>
-        </View>
-        <TouchableOpacity onPress={handleOpenDetail}>
-          <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
-        </TouchableOpacity>
-      </View>
+      <HeaderNav title="Bem vindo Admin" navigation={navigation} />
       <TabHeader
         labels={['Usuários', 'Pontos']}
         handleTabChange={handleTabChange}

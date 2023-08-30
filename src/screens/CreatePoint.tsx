@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 
 import Icon from '../components/Icon';
+import HeaderNav from '../components/HeaderNav';
 
 export default function CreatePoint({ navigation }: any) {
   const handleGoBack = () => {
@@ -24,17 +25,7 @@ export default function CreatePoint({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.titleHeader}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <Icon lib="IonIcons" icon="arrow-back-outline" size={22} />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Novo Ponto</Text>
-        </View>
-        <TouchableOpacity onPress={handleOpenDetail}>
-          <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
-        </TouchableOpacity>
-      </View>
+      <HeaderNav title="Novo Ponto" navigation={navigation} />
       {/* <ScrollView> */}
       <View style={styles.content}>
         <Input label="Nome" />
