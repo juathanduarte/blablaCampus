@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import colors from '../styles/colors';
 import Avatar from './Avatar';
 import Icon from './Icon';
-import colors from '../styles/colors';
 
 interface RideProps {
   urlImage: string;
@@ -73,7 +73,6 @@ export default function RideCard({
 
 const styles = StyleSheet.create({
   container: {
-    width: '80%',
     borderRadius: 8,
     backgroundColor: colors.white,
     padding: 24,

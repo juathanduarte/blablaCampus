@@ -15,6 +15,7 @@ export default function TabRoutes() {
         name="Search"
         component={Search}
         options={{
+          headerShown: false,
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="search" color={color} size={size} lib="FontAwesome" />
