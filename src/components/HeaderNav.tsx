@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from './Icon';
 
 interface HeaderProps {
-  title: string;
+  title?: string;
   navigation: any;
 }
 
