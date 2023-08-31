@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    width: '100%',
     marginTop: 20,
     gap: 20,
     marginBottom: 20,
+    paddingHorizontal: 24,
   },
 });
 

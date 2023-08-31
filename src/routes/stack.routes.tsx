@@ -8,6 +8,7 @@ import VerifyCode from '../screens/VerifyCode';
 import colors from '../styles/colors';
 import ChangePassword from '../screens/ChangePassword';
 import ForgotPassword from '../screens/ForgotPassword';
+import AdminLogin from '../screens/AdminLogin';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ const AppRoutes: React.FC = () => {
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Admin" component={Admin} />
+      <Stack.Screen name="AdminLogin" component={AdminLogin} />
       <Stack.Screen name="CreatePoint" component={CreatePoint} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
