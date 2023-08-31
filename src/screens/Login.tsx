@@ -1,7 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
 import {
   Alert,
   Image,
@@ -102,7 +102,7 @@ export default function Login() {
         <View style={[styles.footerContainer, { marginBottom: keyboardOpen ? 15 : 86 }]}>
           <View style={styles.registerContainer}>
             <Text style={styles.text}>Não tem uma conta?</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>
                 Cadastre-se
               </Text>

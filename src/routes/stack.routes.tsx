@@ -1,14 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Admin from '../screens/Admin';
-import CreatePoint from '../screens/CreatePoint';
-import Login from '../screens/Login';
-import Welcome from '../screens/Welcome';
-import VerifyCode from '../screens/VerifyCode';
-import colors from '../styles/colors';
-import ChangePassword from '../screens/ChangePassword';
-import ForgotPassword from '../screens/ForgotPassword';
 import AdminLogin from '../screens/AdminLogin';
+import ChangePassword from '../screens/ChangePassword';
+import CreatePoint from '../screens/CreatePoint';
+import ForgotPassword from '../screens/ForgotPassword';
+import Login from '../screens/Login';
+import Register from '../screens/Register';
+import VerifyCode from '../screens/VerifyCode';
+import Welcome from '../screens/Welcome';
+import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const AppRoutes: React.FC = () => {
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="VerifyCode" component={VerifyCode} />
+      <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
 };
