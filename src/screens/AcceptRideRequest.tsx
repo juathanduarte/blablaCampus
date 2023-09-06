@@ -3,9 +3,8 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import RequestRideCard from '../components/RequestRideCard';
 
 const AcceptRideRequest = () => {
-  // Create an array with 10 elements (you can change the number if needed)
   const rideRequests = Array.from({ length: 10 }, (_, index) => ({
-    id: index, // You can add a unique ID for each card if needed
+    id: index,
     dateTime: '2021-08-01T10:00:00',
     destinyPoint: 'Praça da Sé',
     name: 'João',
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   cardContainer: {
-    marginTop: 10, // Add a marginTop of 10 to create the gap
+    marginTop: 10,
   },
 });
 
