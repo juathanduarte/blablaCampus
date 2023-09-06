@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from '../components/Icon';
+import AcceptRideRequest from '../screens/AcceptRideRequest';
 import CreateRide from '../screens/CreateRide';
 import Messages from '../screens/Messages';
 import Profile from '../screens/Profile';
@@ -39,6 +40,16 @@ export default function TabRoutes() {
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="chatbox-outline" color={color} size={size} lib="IonIcons" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Solicitações de carona"
+        component={AcceptRideRequest}
+        options={{
+          tabBarLabel: () => null,
+          tabBarIcon: ({ color, size }) => (
+            <Icon icon="thumbs-up" color={color} size={size} lib="IonIcons" />
           ),
         }}
       />
