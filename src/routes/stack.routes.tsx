@@ -4,6 +4,7 @@ import Admin from '../screens/Admin';
 import AdminLogin from '../screens/AdminLogin';
 import ChangePassword from '../screens/ChangePassword';
 import CreatePoint from '../screens/CreatePoint';
+import CreateCar from '../screens/CreateCar';
 import ForgotPassword from '../screens/ForgotPassword';
 import Login from '../screens/Login';
 import Register from '../screens/Register';
@@ -26,6 +27,7 @@ const AppRoutes: React.FC = () => {
       <Stack.Screen name="Admin" component={Admin} />
       <Stack.Screen name="AdminLogin" component={AdminLogin} />
       <Stack.Screen name="CreatePoint" component={CreatePoint} />
+      <Stack.Screen name="CreateCar" component={CreateCar} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="VerifyCode" component={VerifyCode} />

@@ -24,7 +24,7 @@ export default function TabRoutes() {
         }}
       />
       <Tab.Screen
-        name="CreateRide"
+        name="Oferecer Carona"
         component={CreateRide}
         options={{
           tabBarLabel: () => null,
