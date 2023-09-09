@@ -13,9 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm } from 'react-hook-form';
 import { Alert } from 'react-native';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
-import Button from '../components/Button';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
 
 export default function VerificationScreen() {
   const navigation = useNavigation();

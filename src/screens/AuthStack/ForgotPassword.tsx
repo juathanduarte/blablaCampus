@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import {
@@ -15,10 +14,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from 'react-native';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 export default function ForgotPassword() {
   const { register, handleSubmit, setValue } = useForm();
@@ -26,26 +25,26 @@ export default function ForgotPassword() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    register('password');
-    register('password2');
+    register('email');
   }, [register]);
 
-  const onSubmit = (data: any) => {
-    if (data.password !== data.password2) {
-      Alert.alert('As senhas não coincidem.');
-    } else if (!data.password || !data.password2) {
-      Alert.alert('Por favor, preencha todos os campos.');
-    } else {
-      console.log('Password:', data.password);
-      console.log('Password2:', data.password2);
-      navigation.navigate('Login');
-    }
+  const isEmailValid = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const handeDismissKeyboard = () => {
     Keyboard.dismiss();
   };
 
+  const onSubmit = (data: any) => {
+    if (!isEmailValid(data.email) || data.email === '') {
+      Alert.alert('Erro', 'Por favor, digite um e-mail válido.');
+    } else {
+      console.log('Email:', data.email);
+      navigation.navigate('VerifyCode');
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={handeDismissKeyboard}>
       <SafeAreaView style={styles.container}>
@@ -53,25 +52,15 @@ export default function ForgotPassword() {
           <Ionicons name="arrow-back" size={24} color={colors.title} />
         </TouchableOpacity>
         <View style={styles.content}>
-          <Text style={styles.title}>Definir senha</Text>
-          <Text style={styles.subtitle}>Digite sua nova senha.</Text>
+          <Text style={styles.title}>Alterar senha</Text>
+          <Text style={styles.subtitle}>Digite seu email para solicitar uma nova senha.</Text>
         </View>
         <View style={styles.input}>
           <Input
-            label="Senha"
-            iconInput="lock"
+            label="Email"
+            iconInput="envelope"
             iconSize={20}
-            variant="password"
-            onChange={(text) => setValue('password', text)}
-          />
-        </View>
-        <View style={styles.input}>
-          <Input
-            label="Confirme sua senha"
-            iconInput="lock"
-            iconSize={20}
-            variant="password"
-            onChange={(text) => setValue('password2', text)}
+            onChange={(text) => setValue('email', text)}
           />
         </View>
         <View style={styles.button}>

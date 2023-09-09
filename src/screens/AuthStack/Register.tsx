@@ -9,11 +9,11 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from '../components/Button';
-import Icon from '../components/Icon';
-import Input from '../components/Input';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import Icon from '../../components/Icon';
+import Input from '../../components/Input';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
 
 type FormField = keyof FormValues;
 

@@ -15,12 +15,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import blablaCampusLogo from '../assets/blablaCampusLogo.png';
-import ufpelLogo from '../assets/ufpelLogo.png';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import blablaCampusLogo from '../../assets/blablaCampusLogo.png';
+import ufpelLogo from '../../assets/ufpelLogo.png';
+import Input from '../../components/Input';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
 
 export default function Login() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
