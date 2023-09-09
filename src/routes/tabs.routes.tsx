@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from '../components/Icon';
-import AcceptRideRequest from '../screens/AcceptRideRequest';
-import CreateRide from '../screens/CreateRide';
-import Messages from '../screens/Messages';
-import Profile from '../screens/Profile';
-import Search from '../screens/Search';
+import AcceptRideRequest from '../screens/TabUser/AcceptRideRequest';
+import CreateRide from '../screens/TabUser/CreateRide';
+import Messages from '../screens/TabUser/Messages';
+import Profile from '../screens/TabUser/Profile';
+import Search from '../screens/TabUser/Search';
 
 const Tab = createBottomTabNavigator();
 

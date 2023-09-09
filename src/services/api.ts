@@ -1,17 +1,23 @@
 import axios, { isAxiosError } from 'axios';
-const { API_URL } = process.env;
 
 import { BLABLACAMPUS_ACCESS_TOKEN_KEY, BLABLACAMPUS_REFRESH_TOKEN_KEY } from '../constants/keys';
+import { getAsyncStorage, setAsyncStorage } from '../utils/AsyncStorage';
+
+import { API_URL } from '../constants/environment';
 
 export const api = axios.create({
   baseURL: API_URL,
 });
 
-const accessToken = localStorage.getItem(BLABLACAMPUS_ACCESS_TOKEN_KEY);
+async function getAccessToken() {
+  const accessToken = await getAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY });
 
-if (accessToken) {
-  api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  if (accessToken) {
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  }
 }
+
+getAccessToken();
 
 let isRefreshing = false;
 let failedRequestsQueue: {
@@ -23,7 +29,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (isAxiosError(error) && error.response?.status === 401) {
-      const refreshToken = localStorage.getItem(BLABLACAMPUS_REFRESH_TOKEN_KEY);
+      const refreshToken = await getAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY });
 
       if (refreshToken) {
         const originalConfig = error.config;
@@ -33,14 +39,14 @@ api.interceptors.response.use(
 
           api
             .post('/auth/refresh-token', { refreshToken })
-            .then(({ data }) => {
+            .then(async ({ data }) => {
               const { accessToken, refreshToken } = data as {
                 accessToken: string;
                 refreshToken: string;
               };
 
-              localStorage.setItem(BLABLACAMPUS_ACCESS_TOKEN_KEY, accessToken);
-              localStorage.setItem(BLABLACAMPUS_REFRESH_TOKEN_KEY, refreshToken);
+              await setAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY, value: accessToken });
+              await setAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY, value: refreshToken });
 
               api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 

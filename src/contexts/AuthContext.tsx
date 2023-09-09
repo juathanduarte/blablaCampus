@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { User } from '../types/User';
@@ -9,6 +9,7 @@ import {
   BLABLACAMPUS_VIEW_AS,
 } from '../constants/keys';
 import { me } from '../services/user';
+import { getAsyncStorage, removeAsyncStorage, setAsyncStorage } from '../utils/AsyncStorage';
 
 export type AuthContextData = {
   user?: User;
@@ -26,10 +27,15 @@ export const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider({ children }: AuthProviderProps) {
   const queryClient = useQueryClient();
 
-  const [signedIn, setSignedIn] = useState<boolean>(() => {
-    const storedAccessToken = localStorage.getItem(BLABLACAMPUS_ACCESS_TOKEN_KEY);
-    return !!storedAccessToken;
-  });
+  const [signedIn, setSignedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function getStoredData() {
+      const storedAccessToken = await getAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY });
+      setSignedIn(!!storedAccessToken);
+    }
+    getStoredData();
+  }, []);
 
   const { data, isSuccess, isFetching } = useQuery({
     queryKey: ['users', 'me'],
@@ -38,18 +44,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     enabled: signedIn,
   });
 
-  const signIn = useCallback((accessToken: string, refreshToken: string) => {
-    localStorage.setItem(BLABLACAMPUS_ACCESS_TOKEN_KEY, accessToken);
-    localStorage.setItem(BLABLACAMPUS_REFRESH_TOKEN_KEY, refreshToken);
+  const signIn = useCallback(async (accessToken: string, refreshToken: string) => {
+    await setAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY, value: accessToken });
+    await setAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY, value: refreshToken });
 
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     setSignedIn(true);
   }, []);
 
-  const signOut = useCallback(() => {
-    localStorage.removeItem(BLABLACAMPUS_ACCESS_TOKEN_KEY);
-    localStorage.removeItem(BLABLACAMPUS_REFRESH_TOKEN_KEY);
+  const signOut = useCallback(async () => {
+    await removeAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY });
+    await removeAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY });
 
     api.defaults.headers.common.Authorization = undefined;
 

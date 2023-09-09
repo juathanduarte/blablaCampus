@@ -11,6 +11,7 @@ import {
   VerifyCode,
   Register,
 } from '../screens/AuthStack';
+import { FormProvider, useForm } from 'react-hook-form';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +28,8 @@ const StackLoginRoutes: React.FC = () => {
       <Stack.Screen name="AdminLogin" component={AdminLogin} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
-      <Stack.Screen name="VerifyCode" component={VerifyCode} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="VerifyCode" component={VerifyCode} />
     </Stack.Navigator>
   );
 };
