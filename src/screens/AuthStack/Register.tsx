@@ -16,9 +16,9 @@ import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterSchema, registerSchema } from '../../schemas/register';
 import { registerTemporarilyUser } from '../../services/user/register';
 import { useRegisterStore } from '../../stores/register';
+import { registerSchema, RegisterSchema } from '../../schemas';
 
 const Register = () => {
   const navigation = useNavigation();
@@ -29,7 +29,6 @@ const Register = () => {
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
-  console.log({ errors });
 
   const { setUser } = useRegisterStore();
   async function onSubmit(data: RegisterSchema) {

@@ -12,13 +12,13 @@ import {
   View,
   Keyboard,
   TouchableWithoutFeedback,
-  Button,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from 'react-native';
 import Input from '../../components/Input';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
 
 export default function ChangePassword() {
   const { register, handleSubmit, setValue } = useForm();

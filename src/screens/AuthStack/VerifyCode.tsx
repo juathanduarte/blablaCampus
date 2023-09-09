@@ -16,6 +16,7 @@ import { Alert } from 'react-native';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
+
 import { useRegisterStore } from '../../stores/register';
 
 export default function VerificationScreen() {
