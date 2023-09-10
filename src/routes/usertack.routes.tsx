@@ -14,7 +14,7 @@ import colors from '../styles/colors';
 
 const Stack = createNativeStackNavigator();
 
-const TabUserRoutes: React.FC = () => {
+const TabUserRoutes = () => {
   return (
     <Stack.Navigator
       screenOptions={{

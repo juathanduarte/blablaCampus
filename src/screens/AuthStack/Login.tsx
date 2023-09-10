@@ -23,17 +23,50 @@ import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
 import { LoginSchema, loginSchema } from '../../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { login, me } from '../../services/user';
+import { useAuthContext } from '../../contexts/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
+  const { signIn } = useAuthContext();
+
   const {
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async () => {
+      return await login({
+        email: getValues('email'),
+        password: getValues('password'),
+      });
+    },
+    onSuccess: async (data) => {
+      const user = await me();
+      console.log(user);
+      signIn(data.accessToken, data.refreshToken);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  async function showAsyncStorage() {
+    console.log('showAsyncStorage');
+    const keys = await AsyncStorage.getAllKeys();
+    const items = await AsyncStorage.multiGet(keys);
+    console.log(items);
+  }
+
+  console.log(errors);
 
   const navigation = useNavigation();
 
@@ -45,15 +78,14 @@ export default function Login() {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardOpen(false);
     });
-
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
   }, []);
 
-  const onSubmit = (data: any) => {
-    Alert.alert('Error');
+  const onSubmit = () => {
+    mutateAsync();
   };
 
   return (
@@ -94,7 +126,7 @@ export default function Login() {
               fieldState: { invalid, error, isDirty },
             }) => (
               <Input
-                variant={'login'}
+                variant={'password'}
                 iconInput="lock"
                 label="Senha"
                 iconSize={20}
@@ -104,10 +136,7 @@ export default function Login() {
               />
             )}
           />
-          <TouchableOpacity
-            style={styles.forgotPassword}
-            onPress={() => navigation.navigate('ForgotPassword')}
-          >
+          <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
             <Text style={styles.text}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
           <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />

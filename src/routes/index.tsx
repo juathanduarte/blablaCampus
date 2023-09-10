@@ -1,12 +1,45 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import StackLoginRoutes from './stack.routes';
+import { useAuthContext } from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BLABLACAMPUS_ACCESS_TOKEN_KEY, BLABLACAMPUS_REFRESH_TOKEN_KEY } from '../constants/keys';
+import { me } from '../services/user';
+import UserTabRoutes from './user.tabs.routes';
+import AdminRoutes from './AdminRoutes';
 
-const Routes = () => (
-  <NavigationContainer>
-    <StackLoginRoutes />
-  </NavigationContainer>
-);
+const Routes = () => {
+  const { signIn, signedIn, user } = useAuthContext();
+  async function hasSignedUser() {
+    const accessToken = await AsyncStorage.getItem(BLABLACAMPUS_ACCESS_TOKEN_KEY);
+    const refreshToken = await AsyncStorage.getItem(BLABLACAMPUS_REFRESH_TOKEN_KEY);
+    if (!accessToken || !refreshToken) return;
+
+    try {
+      const user = await me();
+      signIn(accessToken, refreshToken);
+      console.log(user);
+    } catch (e: any) {
+      console.log('error');
+    }
+  }
+
+  useEffect(() => {
+    hasSignedUser();
+  }, []);
+
+  return (
+    <NavigationContainer>
+      {!signedIn ? (
+        <StackLoginRoutes />
+      ) : user?.type === 'ADMIN' ? (
+        <AdminRoutes />
+      ) : (
+        <UserTabRoutes />
+      )}
+    </NavigationContainer>
+  );
+};
 
 export default Routes;

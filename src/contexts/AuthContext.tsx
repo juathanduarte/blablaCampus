@@ -1,4 +1,12 @@
-import React, { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { User } from '../types/User';
@@ -61,7 +69,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     setSignedIn(false);
     queryClient.removeQueries();
-    sessionStorage.removeItem(BLABLACAMPUS_VIEW_AS);
   }, [queryClient]);
 
   const contextValues = useMemo(
@@ -77,4 +84,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return (
     <AuthContext.Provider value={contextValues}>{!isFetching && children}</AuthContext.Provider>
   );
+}
+
+export function useAuthContext() {
+  return useContext(AuthContext);
 }

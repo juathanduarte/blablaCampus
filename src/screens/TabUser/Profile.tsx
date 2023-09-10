@@ -7,6 +7,7 @@ import RideCard from '../../components/RideCard';
 import TabHeader from '../../components/TabHeader';
 import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
+import { StatusBar } from 'expo-status-bar';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -24,6 +25,7 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <View style={styles.header}>
         <View style={styles.section}>
           <Image

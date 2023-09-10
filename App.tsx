@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 
-import Entypo from "@expo/vector-icons/Entypo";
-import * as SplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
+import Entypo from '@expo/vector-icons/Entypo';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
 import {
   useFonts,
   Manrope_200ExtraLight,
@@ -12,9 +12,13 @@ import {
   Manrope_600SemiBold,
   Manrope_700Bold,
   Manrope_800ExtraBold,
-} from "@expo-google-fonts/manrope";
+} from '@expo-google-fonts/manrope';
 
-import Routes from "./src/routes";
+import Routes from './src/routes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider } from './src/contexts/AuthContext';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -58,6 +62,10 @@ export default function App() {
   }
 
   return (
-    <Routes />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
