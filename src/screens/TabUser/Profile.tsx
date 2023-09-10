@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import TabHeader from '../components/TabHeader';
-import fonts from '../styles/fonts';
-import Rating from '../components/Rating';
-import RideCard from '../components/RideCard';
-import Button from '../components/Button';
-import CarCard from '../components/CarCard';
+import CarCard from '../../components/CarCard';
+import Rating from '../../components/Rating';
+import RideCard from '../../components/RideCard';
+import TabHeader from '../../components/TabHeader';
+import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);

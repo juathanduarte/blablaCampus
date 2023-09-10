@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Alert,
   Image,
@@ -15,20 +15,25 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import blablaCampusLogo from '../assets/blablaCampusLogo.png';
-import ufpelLogo from '../assets/ufpelLogo.png';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import blablaCampusLogo from '../../assets/blablaCampusLogo.png';
+import ufpelLogo from '../../assets/ufpelLogo.png';
+import Input from '../../components/Input';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
+import Button from '../../components/Button';
+import { LoginSchema, loginSchema } from '../../schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function Login() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const { register, setValue, handleSubmit } = useForm();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const navigation = useNavigation();
 
@@ -47,24 +52,8 @@ export default function Login() {
     };
   }, []);
 
-  useEffect(() => {
-    register('email');
-    register('password');
-  }, [register]);
-
-  const isEmailValid = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const onSubmit = (data: any) => {
-    if (!isEmailValid(data.email)) {
-      Alert.alert('Erro', 'Por favor, digite um e-mail válido.');
-    } else if (!data.password) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
-    } else {
-      Alert.alert(data.email, data.password);
-    }
+    Alert.alert('Error');
   };
 
   return (
@@ -78,18 +67,42 @@ export default function Login() {
           <Image source={ufpelLogo} style={styles.ufpelLogo} />
         </View>
         <View style={styles.loginContainer}>
-          <Input
-            label="Email"
-            iconInput="envelope"
-            iconSize={20}
-            onChange={(text) => setValue('email', text)}
+          <Controller
+            name="email"
+            control={control}
+            render={({
+              field: { value = '', onChange },
+              fieldState: { invalid, error, isDirty },
+            }) => (
+              <Input
+                variant={'login'}
+                iconInput="envelope"
+                label="Email"
+                iconSize={20}
+                error={error?.message}
+                value={value}
+                onChange={onChange}
+              />
+            )}
           />
-          <Input
-            label="Senha"
-            iconInput="lock"
-            iconSize={20}
-            variant="password"
-            onChange={(text) => setValue('password', text)}
+
+          <Controller
+            name="password"
+            control={control}
+            render={({
+              field: { value = '', onChange },
+              fieldState: { invalid, error, isDirty },
+            }) => (
+              <Input
+                variant={'login'}
+                iconInput="lock"
+                label="Senha"
+                iconSize={20}
+                error={error?.message}
+                value={value}
+                onChange={onChange}
+              />
+            )}
           />
           <TouchableOpacity
             style={styles.forgotPassword}

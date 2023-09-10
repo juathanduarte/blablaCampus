@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
-import Button from '../components/Button';
-import HeaderNav from '../components/HeaderNav';
-
-import Icon from '../components/Icon';
-import TabHeader from '../components/TabHeader';
-import TravelPointCard from '../components/TravelPointCard';
-import UserCard from '../components/UserCard';
+import HeaderNav from '../../components/HeaderNav';
+import TabHeader from '../../components/TabHeader';
+import TravelPointCard from '../../components/TravelPointCard';
+import UserCard from '../../components/UserCard';
+import Button from '../../components/Button';
 
 interface User {
   id: string;
