@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 interface CarProps {
   brand: string;
@@ -39,7 +40,6 @@ export default function CarCard({ brand, model, year, plate, color }: CarProps) 
 
 const styles = StyleSheet.create({
   container: {
-    width: '80%',
     borderRadius: 8,
     backgroundColor: colors.white,
     padding: 24,
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.title,
     fontWeight: '500',
+    fontFamily: fonts.text_medium,
   },
   detail: {
     display: 'flex',

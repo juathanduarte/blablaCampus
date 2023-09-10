@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-
 import Welcome from '../screens/Welcome';
 import colors from '../styles/colors';
 import {
@@ -11,7 +10,6 @@ import {
   VerifyCode,
   Register,
 } from '../screens/AuthStack';
-import { FormProvider, useForm } from 'react-hook-form';
 
 const Stack = createNativeStackNavigator();
 
