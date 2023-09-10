@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import RequestRideCard from '../components/RequestRideCard';
+import RequestRideCard from '../../components/RequestRideCard';
 
 const AcceptRideRequest = () => {
   const rideRequests = Array.from({ length: 10 }, (_, index) => ({

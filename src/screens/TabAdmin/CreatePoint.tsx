@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
-import Icon from '../components/Icon';
-import HeaderNav from '../components/HeaderNav';
+import HeaderNav from '../../components/HeaderNav';
 
 export default function CreatePoint({ navigation }: any) {
   const handleGoBack = () => {

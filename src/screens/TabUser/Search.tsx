@@ -2,11 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Icon from '../components/Icon';
-import RideCard from '../components/RideCard';
-import Select from '../components/Select';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import Icon from '../../components/Icon';
+import RideCard from '../../components/RideCard';
+import Select from '../../components/Select';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 const Search = () => {
   const insets = useSafeAreaInsets();
