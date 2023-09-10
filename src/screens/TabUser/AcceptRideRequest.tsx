@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import RequestRideCard from '../../components/RequestRideCard';
 
-const AcceptRideRequest = () => {
+export default function AcceptRideRequest() {
   const rideRequests = Array.from({ length: 10 }, (_, index) => ({
     id: index,
     dateTime: '2021-08-01T10:00:00',
@@ -31,7 +31,7 @@ const AcceptRideRequest = () => {
       ))}
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -42,5 +42,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default AcceptRideRequest;

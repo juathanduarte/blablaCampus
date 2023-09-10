@@ -8,7 +8,7 @@ import Select from '../../components/Select';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
-const Search = () => {
+export default function Search() {
   const insets = useSafeAreaInsets();
   const [open, setOpen] = React.useState(false);
   const [items, setItems] = React.useState([
@@ -90,9 +90,7 @@ const Search = () => {
       </View>
     </View>
   );
-};
-
-export default Search;
+}
 
 interface StylesProps {
   insets?: EdgeInsets;

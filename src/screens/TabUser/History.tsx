@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-const History = () => {
+export default function History() {
   return (
     <View>
       <Text>History</Text>
     </View>
   );
-};
-
-export default History;
+}
 
 const styles = StyleSheet.create({});
