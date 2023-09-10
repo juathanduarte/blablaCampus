@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-export const collegeSpotSchema = z.object({
+export const editCollegeSpotSchema = z.object({
   name: z.string().nonempty({ message: 'Nome inválido' }),
+  newName: z.string().nonempty({ message: 'Nome inválido' }),
   cep: z.string().nonempty({ message: 'CEP inválido' }),
   state: z.string().nonempty({ message: 'Estado inválido' }),
   city: z.string().nonempty({ message: 'Cidade inválida' }),
@@ -13,4 +14,4 @@ export const collegeSpotSchema = z.object({
   updated_at: z.date(),
 });
 
-export type CollegeSpot = z.infer<typeof collegeSpotSchema>;
+export type EditCollegeSpot = z.infer<typeof editCollegeSpotSchema>;
