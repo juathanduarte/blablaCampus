@@ -1,12 +1,9 @@
 import React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
-
-import Button from '../components/Button';
-import Input from '../components/Input';
-
-import Icon from '../components/Icon';
-import HeaderNav from '../components/HeaderNav';
+import HeaderNav from '../../components/HeaderNav';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 export default function CreateCar({ navigation }: any) {
   const handleGoBack = () => {

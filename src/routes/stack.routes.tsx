@@ -10,9 +10,6 @@ import {
   VerifyCode,
   Register,
 } from '../screens/AuthStack';
-import { FormProvider, useForm } from 'react-hook-form';
-import CreateCar from '../screens/CreateCar';
-import CreatePoint from '../screens/TabAdmin/CreatePoint';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,8 +24,6 @@ const StackLoginRoutes: React.FC = () => {
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="AdminLogin" component={AdminLogin} />
-      <Stack.Screen name="CreatePoint" component={CreatePoint} />
-      <Stack.Screen name="CreateCar" component={CreateCar} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="Register" component={Register} />

@@ -4,5 +4,6 @@ import History from './History';
 import Messages from './Messages';
 import Profile from './Profile';
 import Search from './Search';
+import CreateCar from './CreateCar';
 
-export { AcceptRideRequest, CreateRide, History, Messages, Profile, Search };
+export { AcceptRideRequest, CreateRide, History, Messages, Profile, Search, CreateCar };

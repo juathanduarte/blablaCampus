@@ -20,13 +20,7 @@ const Profile = () => {
     setSelectedTab(index);
   };
 
-  const onSubmit = () => {
-    if (selectedTab === 0 || selectedTab === 1) {
-      navigation.navigate('CreateRide');
-    } else {
-      navigation.navigate('CreateCar');
-    }
-  };
+  const onSubmit = () => {};
 
   return (
     <View style={styles.container}>
