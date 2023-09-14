@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
-  Alert,
   Image,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -15,22 +13,20 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation } from '@tanstack/react-query';
 import blablaCampusLogo from '../../assets/blablaCampusLogo.png';
 import ufpelLogo from '../../assets/ufpelLogo.png';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { LoginSchema, loginSchema } from '../../schemas';
+import { login, me } from '../../services/user';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import Button from '../../components/Button';
-import { LoginSchema, loginSchema } from '../../schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { login, me } from '../../services/user';
-import { useAuthContext } from '../../contexts/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-
   const { signIn } = useAuthContext();
 
   const {
@@ -69,20 +65,6 @@ export default function Login() {
   console.log(errors);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardOpen(true);
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardOpen(false);
-    });
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   const onSubmit = () => {
     mutateAsync();
@@ -141,7 +123,7 @@ export default function Login() {
           </TouchableOpacity>
           <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
         </View>
-        <View style={[styles.footerContainer, { marginBottom: keyboardOpen ? 15 : 86 }]}>
+        <View style={[styles.footerContainer, { marginBottom: 15 }]}>
           <View style={styles.registerContainer}>
             <Text style={styles.text}>Não tem uma conta?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
