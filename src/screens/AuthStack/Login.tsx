@@ -2,15 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -72,72 +64,65 @@ export default function Login() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.containerAvoiding}
-      >
-        <View style={styles.imageContainer}>
-          <Image source={blablaCampusLogo} />
-          <Image source={ufpelLogo} style={styles.ufpelLogo} />
-        </View>
-        <View style={styles.loginContainer}>
-          <Controller
-            name="email"
-            control={control}
-            render={({
-              field: { value = '', onChange },
-              fieldState: { invalid, error, isDirty },
-            }) => (
-              <Input
-                variant={'login'}
-                iconInput="envelope"
-                label="Email"
-                iconSize={20}
-                error={error?.message}
-                value={value}
-                onChange={onChange}
-              />
-            )}
-          />
+      <View style={styles.imageContainer}>
+        <Image source={blablaCampusLogo} />
+        <Image source={ufpelLogo} style={styles.ufpelLogo} />
+      </View>
+      <View style={styles.loginContainer}>
+        <Controller
+          name="email"
+          control={control}
+          render={({
+            field: { value = '', onChange },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              variant={'login'}
+              iconInput="envelope"
+              label="Email"
+              iconSize={20}
+              error={error?.message}
+              value={value}
+              onChange={onChange}
+            />
+          )}
+        />
 
-          <Controller
-            name="password"
-            control={control}
-            render={({
-              field: { value = '', onChange },
-              fieldState: { invalid, error, isDirty },
-            }) => (
-              <Input
-                variant={'password'}
-                iconInput="lock"
-                label="Senha"
-                iconSize={20}
-                error={error?.message}
-                value={value}
-                onChange={onChange}
-              />
-            )}
-          />
-          <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
-            <Text style={styles.text}>Esqueceu sua senha?</Text>
-          </TouchableOpacity>
-          <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
-        </View>
-        <View style={[styles.footerContainer, { marginBottom: 15 }]}>
-          <View style={styles.registerContainer}>
-            <Text style={styles.text}>Não tem uma conta?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>
-                Cadastre-se
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.text}>Ou</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AdminLogin')}>
-            <Text style={[styles.text, { color: colors.primary }]}>Acesse como Administrador</Text>
+        <Controller
+          name="password"
+          control={control}
+          render={({
+            field: { value = '', onChange },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              variant={'password'}
+              iconInput="lock"
+              label="Senha"
+              iconSize={20}
+              error={error?.message}
+              value={value}
+              onChange={onChange}
+            />
+          )}
+        />
+        <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
+          <Text style={styles.text}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
+        <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
+      </View>
+      <View style={[styles.footerContainer]}>
+        <View style={styles.registerContainer}>
+          <Text style={styles.text}>Não tem uma conta?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+        <Text style={styles.text}>Ou</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('AdminLogin')}>
+          <Text style={[styles.text, { color: colors.primary }]}>Acesse como Administrador</Text>
+        </TouchableOpacity>
+      </View>
 
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -180,6 +165,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.text_medium,
   },
   footerContainer: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
     alignItems: 'center',
     marginBottom: 86,
