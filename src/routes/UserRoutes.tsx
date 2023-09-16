@@ -11,25 +11,41 @@ import {
 } from '../screens/TabUser';
 
 import colors from '../styles/colors';
+import { Screen } from 'react-native-screens';
 
 const Stack = createNativeStackNavigator();
 
-const TabUserRoutes = () => {
+interface UserRoutesProps {
+  initialRouteName: 'Search' | 'CreateRide' | 'Messages' | 'AskForRide' | 'Profile' | 'History';
+  route?: {
+    params: {
+      initialRouteName: 'Search' | 'CreateRide' | 'Messages' | 'AskForRide' | 'Profile' | 'History';
+    };
+  };
+}
+
+const UserRoutes = ({ route }: any) => {
+  console.log(route.params);
+  console.log(route.params.initialRouteName);
+  const { initialRouteName } = route.params;
+  console.log({ initialRouteName });
+
   return (
     <Stack.Navigator
       screenOptions={{
         contentStyle: { backgroundColor: colors.white },
         headerShown: false,
       }}
+      initialRouteName={initialRouteName}
     >
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="CreateRide" component={CreateRide} />
       <Stack.Screen name="Messages" component={Messages} />
-      <Stack.Screen name="Solicitações de carona" component={AcceptRideRequest} />
+      <Stack.Screen name="AskForRide" component={AcceptRideRequest} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="History" component={History} />
     </Stack.Navigator>
   );
 };
 
-export default TabUserRoutes;
+export default UserRoutes;

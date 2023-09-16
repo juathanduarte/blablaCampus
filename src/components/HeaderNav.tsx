@@ -6,15 +6,12 @@ import Icon from './Icon';
 interface HeaderProps {
   title?: string;
   navigation: any;
+  toggleModal?: () => void;
 }
 
-export default function HeaderNav({ title, navigation }: HeaderProps) {
+export default function HeaderNav({ title, navigation, toggleModal }: HeaderProps) {
   const handleGoBack = () => {
     navigation.goBack();
-  };
-
-  const handleOpenDetail = () => {
-    console.log('open detail');
   };
 
   return (
@@ -25,7 +22,7 @@ export default function HeaderNav({ title, navigation }: HeaderProps) {
         </TouchableOpacity>
         <Text style={styles.textHeader}>{title}</Text>
       </View>
-      <TouchableOpacity onPress={handleOpenDetail}>
+      <TouchableOpacity onPress={toggleModal}>
         <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
       </TouchableOpacity>
     </View>

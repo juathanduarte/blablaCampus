@@ -22,8 +22,8 @@ import { getAsyncStorage, removeAsyncStorage, setAsyncStorage } from '../utils/A
 export type AuthContextData = {
   user?: User;
   signedIn: boolean;
-  signIn: (accessToken: string, refreshToken: string) => void;
-  signOut: () => void;
+  signIn: (accessToken: string, refreshToken: string) => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 type AuthProviderProps = {

@@ -6,6 +6,7 @@ import TabHeader from '../../components/TabHeader';
 import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
 import Button from '../../components/Button';
+import ModalMoreActions from '../../components/ModalMoreActions';
 
 interface User {
   id: string;
@@ -24,6 +25,11 @@ const Admin = ({ navigation }: any) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([]);
   const [points, setPoints] = React.useState<Point[]>([]);
+
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  function toggleModal() {
+    setIsModalVisible(!isModalVisible);
+  }
 
   React.useEffect(() => {
     setUsers([
@@ -83,7 +89,8 @@ const Admin = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderNav title="Bem vindo Admin" navigation={navigation} />
+      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} />
+      <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
       <TabHeader
         labels={['Usuários', 'Pontos']}
         handleTabChange={handleTabChange}

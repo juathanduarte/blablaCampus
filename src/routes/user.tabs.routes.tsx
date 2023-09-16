@@ -17,6 +17,8 @@ import {
 import { useAuthContext } from '../contexts/AuthContext';
 import Button from '../components/Button';
 import fonts from '../styles/fonts';
+import ModalMoreActions from '../components/ModalMoreActions';
+import UserRoutes from './UserRoutes';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,8 +34,9 @@ export default function UserTabRoutes() {
   return (
     <Tab.Navigator backBehavior="history">
       <Tab.Screen
-        name="Search"
-        component={Search}
+        name="Procurar Carona"
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'Search' }}
         options={{
           headerShown: false,
           tabBarLabel: () => null,
@@ -44,7 +47,8 @@ export default function UserTabRoutes() {
       />
       <Tab.Screen
         name="Oferecer Carona"
-        component={CreateRide}
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'CreateRide' }}
         options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
@@ -54,7 +58,8 @@ export default function UserTabRoutes() {
       />
       <Tab.Screen
         name="Messages"
-        component={Messages}
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'Messages' }}
         options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
@@ -64,7 +69,8 @@ export default function UserTabRoutes() {
       />
       <Tab.Screen
         name="Solicitações de carona"
-        component={AcceptRideRequest}
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'AskForRide' }}
         options={{
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
@@ -73,38 +79,16 @@ export default function UserTabRoutes() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Perfil"
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'Profile' }}
         options={{
           headerRight: () => (
             <>
               <TouchableOpacity onPress={toggleModal} style={styles.menuButton}>
                 <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
               </TouchableOpacity>
-              <Modal
-                visible={isModalVisible}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={toggleModal}
-              >
-                <TouchableWithoutFeedback onPress={toggleModal}>
-                  <View style={styles.modalContainer}>
-                    <TouchableWithoutFeedback>
-                      <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}></Text>
-                        <View style={styles.buttonContainer}>
-                          <Button
-                            variant="secondary"
-                            size="medium"
-                            label="Sair"
-                            onClick={signOut}
-                          />
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
-                </TouchableWithoutFeedback>
-              </Modal>
+              <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
             </>
           ),
           tabBarIcon: ({ color, size }) => (
@@ -119,27 +103,5 @@ export default function UserTabRoutes() {
 const styles = StyleSheet.create({
   menuButton: {
     marginRight: 16,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 32,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-  },
-
-  modalTitle: {
-    fontSize: 24,
-    fontFamily: fonts.text_medium,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 32,
   },
 });
