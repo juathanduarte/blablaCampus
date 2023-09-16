@@ -1,21 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
-  View,
+  Alert,
+  Keyboard,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
-  Keyboard,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useForm } from 'react-hook-form';
-import { Alert } from 'react-native';
+import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import Button from '../../components/Button';
 
 import { useRegisterStore } from '../../stores/register';
 
@@ -26,6 +26,7 @@ export default function VerificationScreen() {
   const [verificationCode, setVerificationCode] = useState(['', '', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null, null]);
   const [countdown, setCountdown] = useState(30);
+  const [focusedInput, setFocusedInput] = useState(-1);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -53,6 +54,33 @@ export default function VerificationScreen() {
     if (!updatedCode.includes('')) {
       Keyboard.dismiss();
     }
+  };
+
+  const handleCopyPaste = async ({ nativeEvent: { text } }: { nativeEvent: { text: string } }) => {
+    if (text.length === 1) {
+      return;
+    }
+
+    const cleanedContent = text.replace(/\D/g, '');
+    const codeToPaste = cleanedContent.slice(0, 5);
+
+    const startIndex = verificationCode.findIndex((digit) => digit === '');
+    if (startIndex !== -1) {
+      const updatedCode = [...verificationCode];
+      for (let i = 0; i < codeToPaste.length; i++) {
+        updatedCode[startIndex + i] = codeToPaste.charAt(i);
+      }
+      setVerificationCode(updatedCode);
+      inputRefs.current[startIndex]?.focus();
+    }
+  };
+
+  const handleInputFocus = (index: number) => {
+    setFocusedInput(index);
+  };
+
+  const handleInputBlur = () => {
+    setFocusedInput(-1);
   };
 
   const formattedCountdown = countdown < 10 ? `0${countdown}` : countdown;
@@ -118,13 +146,19 @@ export default function VerificationScreen() {
           {verificationCode.map((digit, index) => (
             <TextInput
               key={index}
-              style={styles.codeInput}
+              style={[
+                styles.codeInput,
+                focusedInput === index && { borderColor: colors.primary, borderWidth: 2 },
+              ]}
               value={digit}
               onChangeText={(text) => handleInputChange(text, index)}
               keyboardType="numeric"
               maxLength={1}
               ref={(ref) => (inputRefs.current[index] = ref)}
-              blurOnSubmit={false}
+              onFocus={() => handleInputFocus(index)}
+              onBlur={handleInputBlur}
+              textAlign="center"
+              onChange={handleCopyPaste}
             />
           ))}
         </View>
@@ -180,6 +214,7 @@ const styles = StyleSheet.create({
   },
   codeInput: {
     alignItems: 'center',
+    justifyContent: 'center',
     height: 48,
     width: 48,
     marginHorizontal: 8,
