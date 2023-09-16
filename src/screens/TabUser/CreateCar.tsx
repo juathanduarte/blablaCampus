@@ -1,11 +1,23 @@
 import React from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import Button from '../../components/Button';
 import HeaderNav from '../../components/HeaderNav';
 import Input from '../../components/Input';
-import Button from '../../components/Button';
+import { CreateCarSchema, createCarSchema } from '../../schemas';
 
 export default function CreateCar({ navigation }: any) {
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm<CreateCarSchema>({
+    resolver: zodResolver(createCarSchema),
+  });
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -25,13 +37,114 @@ export default function CreateCar({ navigation }: any) {
       <HeaderNav title="Cadastrar Veículo" navigation={navigation} />
       {/* <ScrollView> */}
       <View style={styles.content}>
-        <Input label="Marca" />
-        <Input label="Modelo" />
-        <Input label="Placa" />
-        <Input label="Renavam" />
-        <Input label="Ano" />
-        <Input label="Cor" />
-        <Input label="Lugares Disponíveis" />
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Marca"
+              onChange={(value: string) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="marca"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Modelo"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="modelo"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Placa"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="placa"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Renavam"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="renavam"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Ano"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="ano"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
+        <Controller
+          control={control}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Cor"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+          name="cor"
+          rules={{ required: true }}
+          defaultValue=""
+        />
+
         <Button onClick={handleAdd} label="Cadastrar" variant="primary" size="large" />
       </View>
       {/* </ScrollView> */}

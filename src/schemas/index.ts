@@ -1,4 +1,12 @@
-import { RegisterSchema, registerSchema } from './register';
+import { CreateCarSchema, createCarSchema } from './createCar';
 import { LoginSchema, loginSchema } from './login';
+import { RegisterSchema, registerSchema } from './register';
 
-export { RegisterSchema, registerSchema, LoginSchema, loginSchema };
+export {
+  CreateCarSchema,
+  LoginSchema,
+  RegisterSchema,
+  createCarSchema,
+  loginSchema,
+  registerSchema,
+};

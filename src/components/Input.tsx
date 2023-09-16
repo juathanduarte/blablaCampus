@@ -38,9 +38,9 @@ export default function Input({
           <TextInput
             placeholder={label}
             secureTextEntry={variant === 'password' && !showPassword}
-            style={styles.textInput}
+            style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
-            onChangeText={(value) => onChange && onChange(value)} // Update this line}
+            onChangeText={(value) => onChange && onChange(value)}
           />
           {variant === 'password' && (
             <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -58,9 +58,9 @@ export default function Input({
         <View style={styles.containerDefault}>
           <TextInput
             placeholder={label}
-            style={styles.textInput}
+            style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
-            onChangeText={(value) => onChange && onChange(value)} // Update this line
+            onChangeText={(value) => onChange && onChange(value)}
           />
         </View>
       )}
@@ -101,5 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.text_medium,
     color: colors.quaternary,
+    borderColor: 'transparent',
+    borderWidth: 1,
   },
 });
