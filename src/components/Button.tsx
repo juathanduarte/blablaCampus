@@ -6,13 +6,14 @@ import fonts from '../styles/fonts';
 
 interface ButtonProps {
   variant: 'primary' | 'secondary';
+  type?: 'circle';
   size: 'small' | 'medium' | 'large' | 'personalized';
   label?: string;
   icon?: any;
   onClick?: () => void;
 }
 
-export default function Button({ variant, size, label, icon, onClick }: ButtonProps) {
+export default function Button({ variant, type, size, label, icon, onClick }: ButtonProps) {
   const handlePress = () => {
     if (onClick) {
       onClick();
@@ -20,9 +21,13 @@ export default function Button({ variant, size, label, icon, onClick }: ButtonPr
   };
 
   return (
-    <TouchableOpacity style={styles({ variant, size }).container} onPress={handlePress}>
+    <TouchableOpacity style={styles({ variant, size, type }).container} onPress={handlePress}>
       {size === 'small' && icon ? (
-        <Ionicons name={icon} size={42} color={colors.secondary} />
+        <Ionicons
+          name={icon}
+          size={42}
+          color={variant === 'primary' && type === 'circle' ? colors.white : colors.primary}
+        />
       ) : (
         <Text style={styles({ variant, size }).text}>{label}</Text>
       )}
@@ -30,7 +35,7 @@ export default function Button({ variant, size, label, icon, onClick }: ButtonPr
   );
 }
 
-const styles = ({ variant, size }: ButtonProps) =>
+const styles = ({ variant, size, type }: ButtonProps) =>
   StyleSheet.create({
     container: {
       backgroundColor: variant === 'primary' ? colors.primary : colors.tertiary,
@@ -53,7 +58,7 @@ const styles = ({ variant, size }: ButtonProps) =>
           : size === 'personalized'
           ? 28
           : 0,
-      borderRadius: 8,
+      borderRadius: type === 'circle' ? 50 : 8,
       justifyContent: 'center',
       alignItems: 'center',
     },

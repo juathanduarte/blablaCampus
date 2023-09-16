@@ -63,8 +63,20 @@ export default function RequestRideCard({
           </View>
         </View>
         <View style={styles.infoRide}>
-          <Button variant="secondary" size="small" icon={'close'} onClick={handleAccept} />
-          <Button variant="primary" size="small" icon={'add'} onClick={handleDecline} />
+          <Button
+            variant="secondary"
+            type="circle"
+            size="small"
+            icon={'close'}
+            onClick={handleAccept}
+          />
+          <Button
+            variant="primary"
+            type="circle"
+            size="small"
+            icon={'add'}
+            onClick={handleDecline}
+          />
         </View>
       </View>
       <View>
