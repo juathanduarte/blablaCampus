@@ -28,7 +28,6 @@ const Profile = () => {
   function onSubmit() {}
 
   const handleNavigation = (screen: string) => {
-    console.log({ screen });
     // @ts-ignore
     navigation.navigate(screen);
   };

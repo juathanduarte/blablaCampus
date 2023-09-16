@@ -32,12 +32,8 @@ export default function Login() {
 
   const { mutateAsync } = useMutation({
     mutationFn: login,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-      console.log(data);
-    },
+    onError: (error) => {},
+    onSuccess: (data) => {},
   });
 
   async function showAsyncStorage() {
@@ -53,8 +49,6 @@ export default function Login() {
       password: getValues('password'),
     });
     await signIn(data.accessToken, data.refreshToken);
-    // const user = await me();
-    // console.log({ user });
   };
 
   return (

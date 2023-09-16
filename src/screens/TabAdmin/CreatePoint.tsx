@@ -11,12 +11,22 @@ import { collegeSpotSchema } from '../../schemas/collegeSpot';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCollegeSpot, isNameAvailable } from '../../services/collegespot';
+import { createCollegeSpot, editCollegeSpot, isNameAvailable } from '../../services/collegespot';
 import { useNavigation } from '@react-navigation/native';
 
-export default function CreatePoint() {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+export default function CreatePoint(route: RouteProp<CollegeSpot>) {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+
+  const editSpot = route.route.params.data;
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -40,6 +50,7 @@ export default function CreatePoint() {
     clearErrors,
     formState: { errors, isDirty },
   } = useForm<CollegeSpot>({
+    defaultValues: editSpot,
     mode: 'onBlur',
     resolver: zodResolver(collegeSpotSchema),
   });
@@ -57,12 +68,25 @@ export default function CreatePoint() {
     mutateIsNameAvailable(getValues('name'));
   }
 
+  const { mutateAsync: mutateEditCollegeSpot } = useMutation({
+    mutationFn: editCollegeSpot,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['spots'],
+      });
+      navigation.goBack();
+    },
+    onError: (error: any) => {
+      console.log(error?.response);
+    },
+  });
+
   const { mutateAsync } = useMutation({
     mutationFn: createCollegeSpot,
     onSuccess: () => {
       // TODO: Invalidate query spots
       queryClient.invalidateQueries({
-        queryKey: ['points'],
+        queryKey: ['spots'],
       });
       navigation.goBack();
     },
@@ -72,8 +96,15 @@ export default function CreatePoint() {
   });
 
   function onsubmit() {
-    const spot = getValues();
-    mutateAsync(spot);
+    const newSpot = getValues();
+
+    if (editSpot) {
+      return mutateEditCollegeSpot({
+        collegeSpot: newSpot,
+        previousName: editSpot.name,
+      });
+    }
+    mutateAsync(newSpot);
   }
 
   return (
@@ -89,24 +120,26 @@ export default function CreatePoint() {
           control={control}
           name="name"
           rules={{ required: true }}
-          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
-          }) => (
-            <Input
-              label="Nome"
-              onChange={(value) => {
-                onChange(value);
-              }}
-              value={value}
-              error={error?.message}
-              onblur={() => {
-                onBlur();
-                if (isDirty) checkIsNameAvailable();
-              }}
-            />
-          )}
+          }) => {
+            return (
+              <Input
+                label="Nome"
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                value={value}
+                error={error?.message}
+                onblur={() => {
+                  onBlur();
+                  if (isDirty) checkIsNameAvailable();
+                }}
+                defaultValue={editSpot?.name || ''}
+              />
+            );
+          }}
         />
         <Controller
           control={control}
@@ -124,6 +157,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.cep || ''}
             />
           )}
         />
@@ -143,6 +177,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.state || ''}
             />
           )}
         />
@@ -162,6 +197,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.city || ''}
             />
           )}
         />
@@ -181,6 +217,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.neighborhood || ''}
             />
           )}
         />
@@ -200,6 +237,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.street || ''}
             />
           )}
         />
@@ -219,6 +257,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.number || ''}
             />
           )}
         />
@@ -238,6 +277,7 @@ export default function CreatePoint() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editSpot?.complement || ''}
             />
           )}
         />

@@ -26,10 +26,7 @@ interface UserRoutesProps {
 }
 
 const UserRoutes = ({ route }: any) => {
-  console.log(route.params);
-  console.log(route.params.initialRouteName);
   const { initialRouteName } = route.params;
-  console.log({ initialRouteName });
 
   return (
     <Stack.Navigator

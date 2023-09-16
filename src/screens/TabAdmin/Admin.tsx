@@ -10,6 +10,7 @@ import ModalMoreActions from '../../components/ModalMoreActions';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
+import { CollegeSpot } from '../../types/CollegeSpot';
 
 interface User {
   id: string;
@@ -40,7 +41,7 @@ const Admin = () => {
     queryFn: getCollegeSpots,
   });
 
-  const collegeSpots = useMemo(() => spots?.data, [spots]);
+  const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
 
   React.useEffect(() => {
     setUsers([
@@ -102,8 +103,13 @@ const Admin = () => {
         ) : (
           <ScrollView>
             <View style={styles.content}>
-              {collegeSpots?.map((point: any) => (
-                <TravelPointCard key={point.name} name={point.name} address={point.address} />
+              {collegeSpots?.map((point) => (
+                <TravelPointCard
+                  key={point.name}
+                  name={point.name}
+                  address={`${point.street}, ${point.number} - ${point.neighborhood}`}
+                  spot={point}
+                />
               ))}
             </View>
             <Button variant="primary" size="small" icon="add" onClick={handleAddPoint} />

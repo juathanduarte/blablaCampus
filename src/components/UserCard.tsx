@@ -27,7 +27,6 @@ export default function UserCard({ user }: userProps) {
 
   const onPressPerfil = () => {
     console.log('open perfil');
-    console.log(user);
   };
 
   const onPressStatusBtn = () => {

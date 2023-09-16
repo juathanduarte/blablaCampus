@@ -14,6 +14,7 @@ interface InputProps {
   value?: string;
   error?: string;
   onblur?: () => void;
+  defaultValue?: string;
 }
 
 export default function Input({
@@ -25,6 +26,7 @@ export default function Input({
   value,
   error,
   onblur,
+  defaultValue,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,6 +46,7 @@ export default function Input({
             style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
             onChangeText={(value) => onChange && onChange(value)}
+            defaultValue={defaultValue}
           />
           {variant === 'password' && (
             <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -65,6 +68,7 @@ export default function Input({
             style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
             onChangeText={(value) => onChange && onChange(value)}
+            defaultValue={defaultValue}
           />
         </View>
       )}
