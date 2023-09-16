@@ -3,6 +3,7 @@ import React from 'react';
 
 import {
   AcceptRideRequest,
+  CreateCar,
   CreateRide,
   History,
   Messages,
@@ -44,6 +45,7 @@ const UserRoutes = ({ route }: any) => {
       <Stack.Screen name="AskForRide" component={AcceptRideRequest} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="History" component={History} />
+      <Stack.Screen name="CreateCar" component={CreateCar} />
     </Stack.Navigator>
   );
 };

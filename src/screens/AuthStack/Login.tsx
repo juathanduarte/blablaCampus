@@ -35,6 +35,9 @@ export default function Login() {
     onError: (error) => {
       console.log(error);
     },
+    onSuccess: (data) => {
+      console.log(data);
+    },
   });
 
   async function showAsyncStorage() {

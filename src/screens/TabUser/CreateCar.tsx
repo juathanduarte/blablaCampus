@@ -2,43 +2,71 @@ import React from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
 import HeaderNav from '../../components/HeaderNav';
 import Input from '../../components/Input';
 import { CreateCarSchema, createCarSchema } from '../../schemas';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createVehicle } from '../../services/vehicles/createVehicle';
+import { useNavigation } from '@react-navigation/native';
 
-export default function CreateCar({ navigation }: any) {
+export default function CreateCar() {
+  const queryClient = useQueryClient();
+  const navigation = useNavigation();
+
   const {
     handleSubmit,
     control,
     getValues,
-    formState: { errors },
+
+    formState: { errors, isDirty },
   } = useForm<CreateCarSchema>({
     resolver: zodResolver(createCarSchema),
   });
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
+  const { mutateAsync } = useMutation({
+    mutationFn: createVehicle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users', 'me'],
+      });
+      navigation.goBack();
+    },
+    onError: (error: any) => {
+      console.log(Object.keys(error));
+      console.log(error?.response);
+    },
+  });
 
-  const handleOpenDetail = () => {
-    // navigation.navigate('Detail');
-    console.log('Detail');
-  };
-
-  const handleAdd = () => {
-    console.log('Add');
-    navigation.navigate('Admin');
+  const onSubmit = async () => {
+    const vehicle = {
+      brand: getValues('brand'),
+      model: getValues('model'),
+      plate: getValues('plate'),
+      chassis: getValues('chassis'),
+      reindeer: getValues('reindeer'),
+      year: Number(getValues('year')),
+      color: getValues('color'),
+      seats: Number(getValues('seats')),
+    };
+    await mutateAsync(vehicle);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <HeaderNav title="Cadastrar Veículo" navigation={navigation} />
       {/* <ScrollView> */}
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1, gap: 20, marginBottom: 30 }}
+      >
         <Controller
           control={control}
+          name="brand"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -50,13 +78,13 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="marca"
-          rules={{ required: true }}
-          defaultValue=""
         />
 
         <Controller
           control={control}
+          name="model"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -68,13 +96,13 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="modelo"
-          rules={{ required: true }}
-          defaultValue=""
         />
 
         <Controller
           control={control}
+          name="plate"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -86,13 +114,31 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="placa"
-          rules={{ required: true }}
-          defaultValue=""
         />
 
         <Controller
           control={control}
+          name="chassis"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Chassi"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="reindeer"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -104,13 +150,13 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="renavam"
-          rules={{ required: true }}
-          defaultValue=""
         />
 
         <Controller
           control={control}
+          name="year"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -122,13 +168,13 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="ano"
-          rules={{ required: true }}
-          defaultValue=""
         />
 
         <Controller
           control={control}
+          name="color"
+          rules={{ required: true }}
+          defaultValue=""
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
@@ -140,13 +186,33 @@ export default function CreateCar({ navigation }: any) {
               error={error?.message}
             />
           )}
-          name="cor"
+        />
+        <Controller
+          control={control}
+          name="seats"
           rules={{ required: true }}
           defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Lugares"
+              onChange={(value) => onChange(value)}
+              value={value}
+              error={error?.message}
+            />
+          )}
         />
 
-        <Button onClick={handleAdd} label="Cadastrar" variant="primary" size="large" />
-      </View>
+        <Button
+          disabled={!isDirty || Object.keys(errors).length > 0}
+          onClick={onSubmit}
+          label="Cadastrar"
+          variant="primary"
+          size="large"
+        />
+      </ScrollView>
       {/* </ScrollView> */}
     </SafeAreaView>
   );
@@ -156,8 +222,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'space-between',
-    paddingTop: 24,
     paddingHorizontal: 32,
   },
   header: {
@@ -180,9 +244,9 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 20,
+    height: '100%',
+  },
+  input: {
+    marginBottom: 25,
   },
 });

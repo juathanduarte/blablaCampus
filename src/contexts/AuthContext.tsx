@@ -57,6 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     if (!data) return;
+    console.log({ data });
     setUser(data);
   }, [data]);
 

@@ -10,9 +10,10 @@ interface ButtonProps {
   label?: string;
   icon?: any;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-export default function Button({ variant, size, label, icon, onClick }: ButtonProps) {
+export default function Button({ variant, size, label, icon, onClick, disabled }: ButtonProps) {
   const handlePress = () => {
     if (onClick) {
       onClick();
@@ -20,7 +21,11 @@ export default function Button({ variant, size, label, icon, onClick }: ButtonPr
   };
 
   return (
-    <TouchableOpacity style={styles({ variant, size }).container} onPress={handlePress}>
+    <TouchableOpacity
+      disabled={disabled}
+      style={styles({ variant, size }).container}
+      onPress={handlePress}
+    >
       {size === 'small' && icon ? (
         <Ionicons name={icon} size={42} color={colors.secondary} />
       ) : (

@@ -9,12 +9,15 @@ import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
 import { StatusBar } from 'expo-status-bar';
 import { useUserStore } from '../../stores/user';
+import { useQuery } from '@tanstack/react-query';
+import { getVehicles } from '../../services/vehicles/getVehicles';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [avaliações, setAvaliações] = React.useState(23);
   const [caronasOfertadas, setCaronasOfertadas] = React.useState(14);
   const [caronasRecebidas, setCaronasRecebidas] = React.useState(33);
+  const user = useUserStore((state) => state.user);
 
   const navigation = useNavigation();
 
@@ -24,9 +27,11 @@ const Profile = () => {
 
   function onSubmit() {}
 
-  const user = useUserStore((state) => state.user);
-
-  console.log({ user });
+  const handleNavigation = (screen: string) => {
+    console.log({ screen });
+    // @ts-ignore
+    navigation.navigate(screen);
+  };
 
   return (
     <View style={styles.container}>
@@ -118,7 +123,12 @@ const Profile = () => {
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <Button variant="primary" size="small" icon={'add'} onClick={onSubmit} />
+            <Button
+              variant="primary"
+              size="small"
+              icon={'add'}
+              onClick={() => handleNavigation('CreateCar')}
+            />
           </View>
         </View>
       )}
