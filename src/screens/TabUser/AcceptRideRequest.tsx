@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import RequestRideCard from '../../components/RequestRideCard';
+import colors from '../../styles/colors';
 
 export default function AcceptRideRequest() {
   const rideRequests = Array.from({ length: 10 }, (_, index) => ({
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
+    backgroundColor: colors.gray,
   },
   cardContainer: {
     marginTop: 10,
