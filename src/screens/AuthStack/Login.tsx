@@ -44,15 +44,14 @@ export default function Login() {
 
   const navigation = useNavigation();
 
-  const onSubmit = () => {
-    const onSubmit = async () => {
-      const data = await mutateAsync({
-        email: getValues('email'),
-        password: getValues('password'),
-      });
-      await signIn(data.accessToken, data.refreshToken);
-      // await me();
-    };
+  const onSubmit = async () => {
+    const data = await mutateAsync({
+      email: getValues('email'),
+      password: getValues('password'),
+    });
+    await signIn(data.accessToken, data.refreshToken);
+    // const user = await me();
+    // console.log({ user });
   };
 
   return (

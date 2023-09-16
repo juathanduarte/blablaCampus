@@ -18,6 +18,7 @@ import {
 } from '../constants/keys';
 import { me } from '../services/user';
 import { getAsyncStorage, removeAsyncStorage, setAsyncStorage } from '../utils/AsyncStorage';
+import { useUserStore } from '../stores/user';
 
 export type AuthContextData = {
   user?: User;
@@ -35,6 +36,8 @@ export const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider({ children }: AuthProviderProps) {
   const queryClient = useQueryClient();
 
+  const setUser = useUserStore((state) => state.setUser);
+
   const [signedIn, setSignedIn] = useState<boolean>(false);
 
   useEffect(() => {
@@ -51,6 +54,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     staleTime: Infinity,
     enabled: signedIn,
   });
+
+  useEffect(() => {
+    if (!data) return;
+    setUser(data);
+  }, [data]);
 
   const signIn = useCallback(async (accessToken: string, refreshToken: string) => {
     await setAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY, value: accessToken });

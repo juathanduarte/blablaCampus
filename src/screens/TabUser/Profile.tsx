@@ -8,6 +8,7 @@ import TabHeader from '../../components/TabHeader';
 import fonts from '../../styles/fonts';
 import Button from '../../components/Button';
 import { StatusBar } from 'expo-status-bar';
+import { useUserStore } from '../../stores/user';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -21,7 +22,11 @@ const Profile = () => {
     setSelectedTab(index);
   };
 
-  const onSubmit = () => {};
+  function onSubmit() {}
+
+  const user = useUserStore((state) => state.user);
+
+  console.log({ user });
 
   return (
     <View style={styles.container}>
@@ -35,7 +40,7 @@ const Profile = () => {
             style={styles.profileImage}
           />
 
-          <Text style={styles.name}>Thiago Scholl</Text>
+          <Text style={styles.name}>{user?.name}</Text>
         </View>
         <View style={styles.menu}>
           <TouchableOpacity style={styles.menu3Items}>
