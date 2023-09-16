@@ -119,7 +119,9 @@ const Profile = () => {
         <View>
           <ScrollView>
             <View style={styles.content}>
-              <CarCard brand="Ford" model="Belina" year={1983} color="Bege" plate="IEL-8120" />
+              {user?.vehicles?.map((vehicle) => (
+                <CarCard brand="Ford" model="Belina" year={1983} color="Bege" plate="IEL-8120" />
+              ))}
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>
