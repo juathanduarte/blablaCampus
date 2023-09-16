@@ -1,13 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 
-import StackLoginRoutes from './stack.routes';
 import { useAuthContext } from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BLABLACAMPUS_ACCESS_TOKEN_KEY, BLABLACAMPUS_REFRESH_TOKEN_KEY } from '../constants/keys';
 import { me } from '../services/user';
 import UserTabRoutes from './user.tabs.routes';
 import AdminRoutes from './AdminRoutes';
+import StackLoginRoutes from './login.stack.routes';
 
 const Routes = () => {
   const { signIn, signedIn, user } = useAuthContext();
