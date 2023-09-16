@@ -7,6 +7,7 @@ import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
 import Button from '../../components/Button';
 import ModalMoreActions from '../../components/ModalMoreActions';
+import { useNavigation } from '@react-navigation/native';
 
 interface User {
   id: string;
@@ -21,7 +22,9 @@ interface Point {
   address: string;
 }
 
-const Admin = ({ navigation }: any) => {
+const Admin = () => {
+  const navigation = useNavigation();
+
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([]);
   const [points, setPoints] = React.useState<Point[]>([]);
@@ -84,6 +87,7 @@ const Admin = ({ navigation }: any) => {
   };
 
   const handleAddPoint = () => {
+    // @ts-ignore
     navigation.navigate('CreatePoint');
   };
 

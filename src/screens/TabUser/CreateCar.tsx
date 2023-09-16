@@ -8,7 +8,12 @@ import HeaderNav from '../../components/HeaderNav';
 import Input from '../../components/Input';
 import { CreateCarSchema, createCarSchema } from '../../schemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createVehicle } from '../../services/vehicles/createVehicle';
+import {
+  createVehicle,
+  isChassesAvailable,
+  isPlateAvailable,
+  isReindeerAvailable,
+} from '../../services/vehicles/createVehicle';
 import { useNavigation } from '@react-navigation/native';
 
 export default function CreateCar() {
@@ -19,9 +24,11 @@ export default function CreateCar() {
     handleSubmit,
     control,
     getValues,
-
+    setError,
+    clearErrors,
     formState: { errors, isDirty },
   } = useForm<CreateCarSchema>({
+    mode: 'onBlur',
     resolver: zodResolver(createCarSchema),
   });
 
@@ -33,10 +40,7 @@ export default function CreateCar() {
       });
       navigation.goBack();
     },
-    onError: (error: any) => {
-      console.log(Object.keys(error));
-      console.log(error?.response);
-    },
+    onError: (error: any) => {},
   });
 
   const onSubmit = async () => {
@@ -46,12 +50,49 @@ export default function CreateCar() {
       plate: getValues('plate'),
       chassis: getValues('chassis'),
       reindeer: getValues('reindeer'),
-      year: Number(getValues('year')),
       color: getValues('color'),
+      year: Number(getValues('year')),
       seats: Number(getValues('seats')),
     };
+
     await mutateAsync(vehicle);
   };
+
+  // Verifica placa disponível
+  const { mutateAsync: mutateIsPlateAvailable } = useMutation({
+    mutationFn: isPlateAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('plate', { message: 'Placa já cadastrada' });
+      if (!exists && errors.plate) setError('plate', { message: '' });
+    },
+  });
+  function isPlateAvailableHandler() {
+    mutateIsPlateAvailable(getValues('plate'));
+  }
+
+  // Verifica chassi
+  const { mutateAsync: mutateIsChassisAvailable } = useMutation({
+    mutationFn: isChassesAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('chassis', { message: 'Chassi já cadastrado' });
+      if (!exists && errors.chassis) setError('chassis', { message: '' });
+    },
+  });
+  function isChassisAvailableHandler() {
+    mutateIsChassisAvailable(getValues('chassis'));
+  }
+
+  // Verifica reindeer
+  const { mutateAsync: mutateIsReindeerAvailable } = useMutation({
+    mutationFn: isReindeerAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('reindeer', { message: 'Renavam já cadastrado' });
+      if (!exists && errors.reindeer) clearErrors('reindeer');
+    },
+  });
+  function isReindeerAvailableHandler() {
+    mutateIsReindeerAvailable(getValues('reindeer'));
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,9 +114,10 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Marca"
-              onChange={(value: string) => onChange(value)}
+              onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
             />
           )}
         />
@@ -94,6 +136,7 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
             />
           )}
         />
@@ -109,7 +152,14 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Placa"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('plate', { message: '' });
+                onChange(value);
+              }}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isPlateAvailableHandler();
+              }}
               value={value}
               error={error?.message}
             />
@@ -127,9 +177,16 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Chassi"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('chassis', { message: '' });
+                onChange(value);
+              }}
               value={value}
               error={error?.message}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isChassisAvailableHandler();
+              }}
             />
           )}
         />
@@ -145,9 +202,16 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Renavam"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('reindeer', { message: '' });
+                onChange(value);
+              }}
               value={value}
               error={error?.message}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isReindeerAvailableHandler();
+              }}
             />
           )}
         />
@@ -166,6 +230,7 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
             />
           )}
         />
@@ -184,6 +249,7 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
             />
           )}
         />
@@ -201,13 +267,14 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
             />
           )}
         />
 
         <Button
-          disabled={!isDirty || Object.keys(errors).length > 0}
-          onClick={onSubmit}
+          // disabled={Object.keys(errors).length > 0}
+          onClick={handleSubmit(onSubmit)}
           label="Cadastrar"
           variant="primary"
           size="large"
