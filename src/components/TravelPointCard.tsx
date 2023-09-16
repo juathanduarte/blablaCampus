@@ -11,6 +11,8 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCollegeSpot } from '../services/collegespot';
 
 interface TravelPointCardProps {
   name: string;
@@ -18,11 +20,25 @@ interface TravelPointCardProps {
 }
 
 export default function TravelPointCard({ name, address }: TravelPointCardProps) {
+  const queryClient = useQueryClient();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteCollegeSpot,
+    onSuccess: () => {
+      toggleModal();
+      queryClient.invalidateQueries(['spots']);
+    },
+  });
+
+  async function handleDelete() {
+    await mutateAsync(name);
+  }
 
   return (
     <View style={styles.cardContainer}>
@@ -52,7 +68,12 @@ export default function TravelPointCard({ name, address }: TravelPointCardProps)
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>{name}</Text>
                 <View style={styles.buttonContainer}>
-                  <Button variant="secondary" size="medium" label="Excluir" />
+                  <Button
+                    variant="secondary"
+                    size="medium"
+                    label="Excluir"
+                    onClick={handleDelete}
+                  />
                   <Button variant="primary" size="medium" label="Editar" />
                 </View>
               </View>
