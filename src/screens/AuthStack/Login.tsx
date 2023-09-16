@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,35 +31,28 @@ export default function Login() {
   });
 
   const { mutateAsync } = useMutation({
-    mutationFn: async () => {
-      return await login({
-        email: getValues('email'),
-        password: getValues('password'),
-      });
-    },
-    onSuccess: async (data) => {
-      const user = await me();
-      console.log(user);
-      signIn(data.accessToken, data.refreshToken);
-    },
+    mutationFn: login,
     onError: (error) => {
       console.log(error);
     },
   });
 
   async function showAsyncStorage() {
-    console.log('showAsyncStorage');
     const keys = await AsyncStorage.getAllKeys();
     const items = await AsyncStorage.multiGet(keys);
-    console.log(items);
   }
-
-  console.log(errors);
 
   const navigation = useNavigation();
 
   const onSubmit = () => {
-    mutateAsync();
+    const onSubmit = async () => {
+      const data = await mutateAsync({
+        email: getValues('email'),
+        password: getValues('password'),
+      });
+      await signIn(data.accessToken, data.refreshToken);
+      // await me();
+    };
   };
 
   return (
