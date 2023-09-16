@@ -15,10 +15,22 @@ import {
   isReindeerAvailable,
 } from '../../services/vehicles/createVehicle';
 import { useNavigation } from '@react-navigation/native';
+import { Vehicle } from '../../types/Vehicle';
+import { editVehicle } from '../../services/vehicles';
 
-export default function CreateCar() {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+export default function CreateCar(route: RouteProp<Vehicle>) {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
+
+  const editCar = route?.route?.params?.data;
 
   const {
     handleSubmit,
@@ -28,7 +40,8 @@ export default function CreateCar() {
     clearErrors,
     formState: { errors, isDirty },
   } = useForm<CreateCarSchema>({
-    mode: 'onBlur',
+    defaultValues: editCar,
+    mode: 'onSubmit',
     resolver: zodResolver(createCarSchema),
   });
 
@@ -36,11 +49,21 @@ export default function CreateCar() {
     mutationFn: createVehicle,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['users', 'me'],
+        queryKey: ['myVehicles'],
       });
       navigation.goBack();
     },
     onError: (error: any) => {},
+  });
+
+  const { mutateAsync: editMutate } = useMutation({
+    mutationFn: editVehicle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['myVehicles'],
+      });
+      navigation.goBack();
+    },
   });
 
   const onSubmit = async () => {
@@ -51,9 +74,14 @@ export default function CreateCar() {
       chassis: getValues('chassis'),
       reindeer: getValues('reindeer'),
       color: getValues('color'),
-      year: Number(getValues('year')),
-      seats: Number(getValues('seats')),
+      year: getValues('year'),
+      seats: getValues('seats'),
     };
+
+    if (editCar) {
+      await editMutate({ vehicle, oldPlate: editCar.plate });
+      return;
+    }
 
     await mutateAsync(vehicle);
   };
@@ -118,6 +146,7 @@ export default function CreateCar() {
               value={value}
               error={error?.message}
               onblur={onBlur}
+              defaultValue={editCar?.brand || ''}
             />
           )}
         />
@@ -137,6 +166,7 @@ export default function CreateCar() {
               value={value}
               error={error?.message}
               onblur={onBlur}
+              defaultValue={editCar?.model || ''}
             />
           )}
         />
@@ -162,6 +192,7 @@ export default function CreateCar() {
               }}
               value={value}
               error={error?.message}
+              defaultValue={editCar?.plate || ''}
             />
           )}
         />
@@ -187,6 +218,7 @@ export default function CreateCar() {
                 onBlur();
                 if (isDirty) isChassisAvailableHandler();
               }}
+              defaultValue={editCar?.chassis || ''}
             />
           )}
         />
@@ -212,6 +244,7 @@ export default function CreateCar() {
                 onBlur();
                 if (isDirty) isReindeerAvailableHandler();
               }}
+              defaultValue={editCar?.reindeer || ''}
             />
           )}
         />
@@ -220,17 +253,19 @@ export default function CreateCar() {
           control={control}
           name="year"
           rules={{ required: true }}
-          defaultValue=""
+          defaultValue={0}
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
           }) => (
             <Input
               label="Ano"
-              onChange={(value) => onChange(value)}
-              value={value}
+              onChange={(value) => onChange(Number(value))}
+              value={String(value)}
               error={error?.message}
               onblur={onBlur}
+              defaultValue={(editCar?.year && String(editCar?.year)) || ''}
+              inputNumber
             />
           )}
         />
@@ -250,6 +285,7 @@ export default function CreateCar() {
               value={value}
               error={error?.message}
               onblur={onBlur}
+              defaultValue={editCar?.color || ''}
             />
           )}
         />
@@ -257,17 +293,19 @@ export default function CreateCar() {
           control={control}
           name="seats"
           rules={{ required: true }}
-          defaultValue=""
+          defaultValue={0}
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
           }) => (
             <Input
               label="Lugares"
-              onChange={(value) => onChange(value)}
-              value={value}
+              onChange={(value) => onChange(Number(value))}
+              value={String(value)}
               error={error?.message}
               onblur={onBlur}
+              defaultValue={(editCar?.seats && String(editCar?.seats)) || ''}
+              inputNumber
             />
           )}
         />

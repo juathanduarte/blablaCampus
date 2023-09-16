@@ -6,9 +6,9 @@ export const createCarSchema = z.object({
   plate: z.string().nonempty({ message: 'Placa inválida' }),
   reindeer: z.string().nonempty({ message: 'Renavam inválido' }),
   chassis: z.string().nonempty({ message: 'Chassi inválido' }),
-  year: z.string().nonempty({ message: 'Ano inválido' }),
-  seats: z.string().nonempty({ message: 'Cor inválida' }),
   color: z.string().nonempty({ message: 'Cor inválida' }),
+  year: z.number().int().positive({ message: 'Ano inválido' }),
+  seats: z.number().int().positive({ message: 'Quantidade de assentos inválida' }),
 });
 
 export type CreateCarSchema = z.infer<typeof createCarSchema>;
