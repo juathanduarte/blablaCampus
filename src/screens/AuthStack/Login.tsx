@@ -1,36 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-  Alert,
-  Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMutation } from '@tanstack/react-query';
 import blablaCampusLogo from '../../assets/blablaCampusLogo.png';
 import ufpelLogo from '../../assets/ufpelLogo.png';
+import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { LoginSchema, loginSchema } from '../../schemas';
+import { login, me } from '../../services/user';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import Button from '../../components/Button';
-import { LoginSchema, loginSchema } from '../../schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { login, me } from '../../services/user';
-import { useAuthContext } from '../../contexts/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-
   const { signIn } = useAuthContext();
 
   const {
@@ -70,92 +58,71 @@ export default function Login() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardOpen(true);
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardOpen(false);
-    });
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
   const onSubmit = () => {
     mutateAsync();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.containerAvoiding}
-      >
-        <View style={styles.imageContainer}>
-          <Image source={blablaCampusLogo} />
-          <Image source={ufpelLogo} style={styles.ufpelLogo} />
-        </View>
-        <View style={styles.loginContainer}>
-          <Controller
-            name="email"
-            control={control}
-            render={({
-              field: { value = '', onChange },
-              fieldState: { invalid, error, isDirty },
-            }) => (
-              <Input
-                variant={'login'}
-                iconInput="envelope"
-                label="Email"
-                iconSize={20}
-                error={error?.message}
-                value={value}
-                onChange={onChange}
-              />
-            )}
-          />
+      <View style={styles.imageContainer}>
+        <Image source={blablaCampusLogo} />
+        <Image source={ufpelLogo} style={styles.ufpelLogo} />
+      </View>
+      <View style={styles.loginContainer}>
+        <Controller
+          name="email"
+          control={control}
+          render={({
+            field: { value = '', onChange },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              variant={'login'}
+              iconInput="envelope"
+              label="Email"
+              iconSize={20}
+              error={error?.message}
+              value={value}
+              onChange={onChange}
+            />
+          )}
+        />
 
-          <Controller
-            name="password"
-            control={control}
-            render={({
-              field: { value = '', onChange },
-              fieldState: { invalid, error, isDirty },
-            }) => (
-              <Input
-                variant={'password'}
-                iconInput="lock"
-                label="Senha"
-                iconSize={20}
-                error={error?.message}
-                value={value}
-                onChange={onChange}
-              />
-            )}
-          />
-          <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
-            <Text style={styles.text}>Esqueceu sua senha?</Text>
-          </TouchableOpacity>
-          <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
-        </View>
-        <View style={[styles.footerContainer, { marginBottom: keyboardOpen ? 15 : 86 }]}>
-          <View style={styles.registerContainer}>
-            <Text style={styles.text}>Não tem uma conta?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>
-                Cadastre-se
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.text}>Ou</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AdminLogin')}>
-            <Text style={[styles.text, { color: colors.primary }]}>Acesse como Administrador</Text>
+        <Controller
+          name="password"
+          control={control}
+          render={({
+            field: { value = '', onChange },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              variant={'password'}
+              iconInput="lock"
+              label="Senha"
+              iconSize={20}
+              error={error?.message}
+              value={value}
+              onChange={onChange}
+            />
+          )}
+        />
+        <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
+          <Text style={styles.text}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
+        <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
+      </View>
+      <View style={[styles.footerContainer]}>
+        <View style={styles.registerContainer}>
+          <Text style={styles.text}>Não tem uma conta?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+        <Text style={styles.text}>Ou</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('AdminLogin')}>
+          <Text style={[styles.text, { color: colors.primary }]}>Acesse como Administrador</Text>
+        </TouchableOpacity>
+      </View>
 
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -198,6 +165,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.text_medium,
   },
   footerContainer: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
     alignItems: 'center',
     marginBottom: 86,
