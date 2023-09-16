@@ -1,9 +1,4 @@
-import {
-  deleteCollegeSpot,
-  editCollegeSpot,
-  getCollegeSpot,
-  isNameAvailable,
-  registerCollegeSpot,
-} from './crud';
+import { isNameAvailable, createCollegeSpot } from './createCollegeSpot';
+import { getCollegeSpots } from './getCollegeSpots';
 
-export { deleteCollegeSpot, editCollegeSpot, getCollegeSpot, isNameAvailable, registerCollegeSpot };
+export { isNameAvailable, createCollegeSpot, getCollegeSpots };

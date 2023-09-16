@@ -63,7 +63,7 @@ export default function CreateCar() {
     mutationFn: isPlateAvailable,
     onSuccess: ({ exists }) => {
       if (exists) setError('plate', { message: 'Placa já cadastrada' });
-      if (!exists && errors.plate) setError('plate', { message: '' });
+      if (!exists && errors.plate) clearErrors('plate');
     },
   });
   function isPlateAvailableHandler() {
@@ -75,7 +75,7 @@ export default function CreateCar() {
     mutationFn: isChassesAvailable,
     onSuccess: ({ exists }) => {
       if (exists) setError('chassis', { message: 'Chassi já cadastrado' });
-      if (!exists && errors.chassis) setError('chassis', { message: '' });
+      if (!exists && errors.chassis) clearErrors('chassis');
     },
   });
   function isChassisAvailableHandler() {

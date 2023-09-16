@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { Vehicle } from './Vehicle';
 
 export interface User {

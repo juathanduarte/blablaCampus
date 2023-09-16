@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 import HeaderNav from '../../components/HeaderNav';
@@ -8,6 +8,8 @@ import UserCard from '../../components/UserCard';
 import Button from '../../components/Button';
 import ModalMoreActions from '../../components/ModalMoreActions';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { getCollegeSpots } from '../../services/collegespot';
 
 interface User {
   id: string;
@@ -27,12 +29,18 @@ const Admin = () => {
 
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([]);
-  const [points, setPoints] = React.useState<Point[]>([]);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   function toggleModal() {
     setIsModalVisible(!isModalVisible);
   }
+
+  const { data: points, isLoading } = useQuery({
+    queryKey: ['points'],
+    queryFn: getCollegeSpots,
+  });
+
+  const collegeSpots = useMemo(() => points?.data, [points]);
 
   React.useEffect(() => {
     setUsers([
@@ -53,23 +61,6 @@ const Admin = () => {
         name: 'Juathan Duarte',
         urlImage: 'https://github.com/juathanduarte.png',
         status: 'active',
-      },
-    ]);
-    setPoints([
-      {
-        id: '1',
-        name: 'Ponto 1',
-        address: 'Rua 1',
-      },
-      {
-        id: '2',
-        name: 'Ponto 2',
-        address: 'Rua 2',
-      },
-      {
-        id: '3',
-        name: 'Ponto 3',
-        address: 'Rua 3',
       },
     ]);
   }, []);
@@ -111,8 +102,8 @@ const Admin = () => {
         ) : (
           <ScrollView>
             <View style={styles.content}>
-              {points?.map((point: any) => (
-                <TravelPointCard key={point.id} name={point.name} address={point.address} />
+              {collegeSpots?.map((point: any) => (
+                <TravelPointCard key={point.name} name={point.name} address={point.address} />
               ))}
             </View>
             <Button variant="primary" size="small" icon="add" onClick={handleAddPoint} />
