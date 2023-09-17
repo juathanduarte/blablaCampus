@@ -83,14 +83,8 @@ export default function UserTabRoutes() {
         component={UserRoutes}
         initialParams={{ initialRouteName: 'Profile' }}
         options={{
-          headerRight: () => (
-            <>
-              <TouchableOpacity onPress={toggleModal} style={styles.menuButton}>
-                <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
-              </TouchableOpacity>
-              <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
-            </>
-          ),
+          headerShown: false,
+          tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="user-o" color={color} size={size} lib="FontAwesome" />
           ),

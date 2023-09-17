@@ -9,7 +9,7 @@ interface RideProps {
   name: string;
   rating: number;
   dateTime: string;
-  role: string;
+  role?: string;
   startPoint: string;
   destinyPoint: string;
   onClick?: () => void;

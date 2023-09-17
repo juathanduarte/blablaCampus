@@ -14,7 +14,7 @@ interface ReviewCardProps {
 
 export default function ReviewCard({ image, name, type, rating, reviewText }: ReviewCardProps) {
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <View style={styles.cardContainer}>
       <View style={styles.cardContent}>
         <View style={styles.header}>
           <Image source={{ uri: image }} style={styles.profileImage} />
@@ -28,7 +28,7 @@ export default function ReviewCard({ image, name, type, rating, reviewText }: Re
         </View>
         <Text style={styles.reviewText}>{reviewText}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 

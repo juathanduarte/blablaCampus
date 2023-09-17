@@ -36,7 +36,8 @@ export default function AcceptRideRequest() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    paddingHorizontal: 16,
+    paddingTop: 7,
   },
   cardContainer: {
     marginTop: 10,

@@ -10,6 +10,8 @@ import Button from '../../components/Button';
 import { StatusBar } from 'expo-status-bar';
 import { useUserStore } from '../../stores/user';
 import { useQuery } from '@tanstack/react-query';
+import { getVehicles } from '../../services/vehicles/getVehicles';
+import HeaderNav from '../../components/HeaderNav';
 import { getVehicles } from '../../services/vehicles';
 
 const Profile = () => {
@@ -39,6 +41,9 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.HeaderNav}>
+        <HeaderNav title="Perfil" navigation={navigation} />
+      </View>
       <StatusBar style="dark" />
       <View style={styles.header}>
         <View style={styles.section}>
@@ -52,7 +57,10 @@ const Profile = () => {
           <Text style={styles.name}>{user?.name}</Text>
         </View>
         <View style={styles.menu}>
-          <TouchableOpacity style={styles.menu3Items}>
+          <TouchableOpacity
+            style={styles.menu3Items}
+            onPress={() => handleNavigation('Assessments')}
+          >
             <Text style={styles.menuNumber}>{avaliações}</Text>
             <Text style={styles.menuText}>Avaliações</Text>
             <View style={styles.menuIcon}>
@@ -84,7 +92,10 @@ const Profile = () => {
       {selectedTab === 0 ? (
         <View>
           <ScrollView>
-            <View style={styles.content}>
+            <TouchableOpacity
+              style={styles.content}
+              onPress={() => handleNavigation('RideInformations')}
+            >
               <RideCard
                 dateTime="2021-08-20T18:00:00.000Z"
                 destinyPoint="PUCRS"
@@ -94,16 +105,24 @@ const Profile = () => {
                 startPoint="UFRGS"
                 urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
               />
-            </View>
+            </TouchableOpacity>
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <Button variant="primary" size="small" icon={'add'} onClick={onSubmit} />
+            <Button
+              variant="primary"
+              size="small"
+              icon={'add'}
+              onClick={() => handleNavigation('CreateRide')}
+            />
           </View>
         </View>
       ) : selectedTab === 1 ? (
         <View>
           <ScrollView>
-            <View style={styles.content}>
+            <TouchableOpacity
+              style={styles.content}
+              onPress={() => handleNavigation('RideInformations')}
+            >
               <RideCard
                 dateTime="2021-08-20T18:00:00.000Z"
                 destinyPoint="PUCRS"
@@ -113,10 +132,15 @@ const Profile = () => {
                 startPoint="UFRGS"
                 urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
               />
-            </View>
+            </TouchableOpacity>
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <Button variant="primary" size="small" icon={'add'} onClick={onSubmit} />
+            <Button
+              variant="primary"
+              size="small"
+              icon={'add'}
+              onClick={() => handleNavigation('CreateRide')}
+            />
           </View>
         </View>
       ) : (
@@ -153,12 +177,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  HeaderNav: {
+    paddingHorizontal: 24,
+    paddingTop: 7,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF', // Fundo branco
     paddingHorizontal: 24,
-    paddingTop: 18,
   },
   section: {
     marginRight: 8,
@@ -213,9 +240,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   content: {
-    paddingTop: 16,
-    paddingHorizontal: 24,
-    marginBottom: 90,
+    paddingTop: 7,
+    paddingHorizontal: 16,
   },
   buttonContainer: {
     margin: 16,
