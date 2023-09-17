@@ -54,7 +54,7 @@ export default function CreateCar() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <HeaderNav title="Cadastrar Veículo" navigation={navigation} />
       {/* <ScrollView> */}
       <ScrollView
@@ -214,7 +214,7 @@ export default function CreateCar() {
         />
       </ScrollView>
       {/* </ScrollView> */}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 32,
+    paddingTop: 7,
   },
   header: {
     width: '100%',

@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import Icon from '../../components/Icon';
 import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
@@ -22,6 +23,14 @@ export default function Search() {
     },
   ]);
   const [value, setValue] = React.useState('');
+
+  const navigation = useNavigation();
+
+  const handleNavigation = (screen: string) => {
+    console.log({ screen });
+    // @ts-ignore
+    navigation.navigate(screen);
+  };
 
   return (
     <View>
@@ -67,15 +76,16 @@ export default function Search() {
             style={styles({}).list}
             data={[1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6]}
             renderItem={({ item }) => (
-              <RideCard
-                dateTime="2021-08-20T18:00:00.000Z"
-                destinyPoint="PUCRS"
-                name="Gabriel"
-                rating={4.5}
-                role="Passageiro"
-                startPoint="UFRGS"
-                urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
-              />
+              <TouchableOpacity onPress={() => handleNavigation('RequestRide')}>
+                <RideCard
+                  dateTime="2021-08-20T18:00:00.000Z"
+                  destinyPoint="PUCRS"
+                  name="Gabriel"
+                  rating={4.5}
+                  startPoint="UFRGS"
+                  urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
+                />
+              </TouchableOpacity>
             )}
             keyExtractor={(item) => item.toString() + Math.random() * 10}
             CellRendererComponent={({ children, ...props }) => {

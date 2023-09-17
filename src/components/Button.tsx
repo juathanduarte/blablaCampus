@@ -27,7 +27,7 @@ export default function Button({ variant, size, label, icon, onClick, disabled }
       onPress={handlePress}
     >
       {size === 'small' && icon ? (
-        <Ionicons name={icon} size={42} color={colors.secondary} />
+        <Ionicons name={icon} size={24} color={colors.secondary} />
       ) : (
         <Text style={styles({ variant, size }).text}>{label}</Text>
       )}
@@ -44,8 +44,10 @@ const styles = ({ variant, size }: ButtonProps) =>
           ? '100%'
           : size === 'medium'
           ? '46%'
+          : size === 'small'
+          ? 36
           : size === 'personalized'
-          ? 92
+          ? 80
           : 'auto',
       paddingVertical: size === 'large' ? 18 : size === 'medium' ? 12 : 0,
       height:
@@ -54,9 +56,9 @@ const styles = ({ variant, size }: ButtonProps) =>
           : size === 'medium'
           ? 48
           : size === 'small'
-          ? 42
+          ? 36
           : size === 'personalized'
-          ? 28
+          ? 36
           : 0,
       borderRadius: 8,
       justifyContent: 'center',

@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 2,
   },
-  icon: {},
   text: {
     fontSize: 12,
     color: colors.gray,
