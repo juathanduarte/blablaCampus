@@ -13,6 +13,9 @@ interface InputProps {
   onChange?: (value: string) => void;
   value?: string;
   error?: string;
+  onblur?: () => void;
+  defaultValue?: string;
+  inputNumber?: boolean;
 }
 
 export default function Input({
@@ -23,6 +26,9 @@ export default function Input({
   onChange,
   value,
   error,
+  onblur,
+  defaultValue,
+  inputNumber,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,11 +42,17 @@ export default function Input({
         <View style={styles.containerIcon}>
           <Icon icon={iconInput} size={iconSize} color={colors.quaternary} lib="FontAwesome" />
           <TextInput
+            onBlur={onblur}
             placeholder={label}
             secureTextEntry={variant === 'password' && !showPassword}
             style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
-            onChangeText={(value) => onChange && onChange(value)}
+            onChangeText={(value) => {
+              const onlyNumber = value.replace(/[^0-9]/g, '');
+              onChange && onChange(inputNumber ? onlyNumber : value);
+            }}
+            defaultValue={defaultValue}
+            keyboardType={inputNumber ? 'numeric' : 'default'}
           />
           {variant === 'password' && (
             <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -57,10 +69,16 @@ export default function Input({
       {!iconInput && (
         <View style={styles.containerDefault}>
           <TextInput
+            onBlur={onblur}
             placeholder={label}
             style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
             placeholderTextColor={colors.quaternary}
-            onChangeText={(value) => onChange && onChange(value)}
+            onChangeText={(value) => {
+              const onlyNumber = value.replace(/[^0-9]/g, '');
+              onChange && onChange(inputNumber ? onlyNumber : value);
+            }}
+            defaultValue={defaultValue}
+            keyboardType={inputNumber ? 'numeric' : 'default'}
           />
         </View>
       )}

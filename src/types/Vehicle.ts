@@ -9,8 +9,6 @@ export interface Vehicle {
   chassis: string;
   year: number;
   seats: number;
-  created_at: Date;
-  updated_at: Date;
   user: User;
   user_registration: string;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 import HeaderNav from '../../components/HeaderNav';
@@ -7,6 +7,10 @@ import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
 import Button from '../../components/Button';
 import ModalMoreActions from '../../components/ModalMoreActions';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { getCollegeSpots } from '../../services/collegespot';
+import { CollegeSpot } from '../../types/CollegeSpot';
 
 interface User {
   id: string;
@@ -21,15 +25,23 @@ interface Point {
   address: string;
 }
 
-const Admin = ({ navigation }: any) => {
+const Admin = () => {
+  const navigation = useNavigation();
+
   const [selectedTab, setSelectedTab] = React.useState(0);
   const [users, setUsers] = React.useState<User[]>([]);
-  const [points, setPoints] = React.useState<Point[]>([]);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   function toggleModal() {
     setIsModalVisible(!isModalVisible);
   }
+
+  const { data: spots, isLoading } = useQuery({
+    queryKey: ['spots'],
+    queryFn: getCollegeSpots,
+  });
+
+  const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
 
   React.useEffect(() => {
     setUsers([
@@ -52,23 +64,6 @@ const Admin = ({ navigation }: any) => {
         status: 'active',
       },
     ]);
-    setPoints([
-      {
-        id: '1',
-        name: 'Ponto 1',
-        address: 'Rua 1',
-      },
-      {
-        id: '2',
-        name: 'Ponto 2',
-        address: 'Rua 2',
-      },
-      {
-        id: '3',
-        name: 'Ponto 3',
-        address: 'Rua 3',
-      },
-    ]);
   }, []);
 
   const handleGoBack = () => {
@@ -84,6 +79,7 @@ const Admin = ({ navigation }: any) => {
   };
 
   const handleAddPoint = () => {
+    // @ts-ignore
     navigation.navigate('CreatePoint');
   };
 
@@ -107,8 +103,13 @@ const Admin = ({ navigation }: any) => {
         ) : (
           <ScrollView>
             <View style={styles.content}>
-              {points?.map((point: any) => (
-                <TravelPointCard key={point.id} name={point.name} address={point.address} />
+              {collegeSpots?.map((point) => (
+                <TravelPointCard
+                  key={point.name}
+                  name={point.name}
+                  address={`${point.street}, ${point.number} - ${point.neighborhood}`}
+                  spot={point}
+                />
               ))}
             </View>
             <Button variant="primary" size="small" icon="add" onClick={handleAddPoint} />

@@ -11,18 +11,43 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteCollegeSpot } from '../services/collegespot';
+import { CollegeSpot } from '../types/CollegeSpot';
+import { useNavigation } from '@react-navigation/native';
 
 interface TravelPointCardProps {
   name: string;
   address: string;
+  spot: CollegeSpot;
 }
 
-export default function TravelPointCard({ name, address }: TravelPointCardProps) {
+export default function TravelPointCard({ name, address, spot }: TravelPointCardProps) {
+  const queryClient = useQueryClient();
+  const navigation = useNavigation();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteCollegeSpot,
+    onSuccess: () => {
+      toggleModal();
+      queryClient.invalidateQueries(['spots']);
+    },
+  });
+
+  async function handleDelete() {
+    await mutateAsync(name);
+  }
+
+  async function handleEdit() {
+    // @ts-ignore
+    navigation.navigate('CreatePoint', { data: spot });
+  }
 
   return (
     <View style={styles.cardContainer}>
@@ -52,8 +77,13 @@ export default function TravelPointCard({ name, address }: TravelPointCardProps)
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>{name}</Text>
                 <View style={styles.buttonContainer}>
-                  <Button variant="secondary" size="medium" label="Excluir" />
-                  <Button variant="primary" size="medium" label="Editar" />
+                  <Button
+                    variant="secondary"
+                    size="medium"
+                    label="Excluir"
+                    onClick={handleDelete}
+                  />
+                  <Button variant="primary" size="medium" label="Editar" onClick={handleEdit} />
                 </View>
               </View>
             </TouchableWithoutFeedback>

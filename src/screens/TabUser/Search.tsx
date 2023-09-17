@@ -54,7 +54,6 @@ export default function Search() {
                 <View style={styles({}).selectContainer}>
                   <Select
                     onChange={(value, itemIndex) => {
-                      console.log({ value, itemIndex });
                       setValue(value);
                     }}
                     values={items}
@@ -63,7 +62,6 @@ export default function Search() {
                   />
                   <Select
                     onChange={(value, itemIndex) => {
-                      console.log({ value, itemIndex });
                       setValue(value);
                     }}
                     values={items}

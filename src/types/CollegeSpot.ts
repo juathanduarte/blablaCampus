@@ -1,16 +1,10 @@
-import { z } from 'zod';
-
-export const collegeSpotSchema = z.object({
-  name: z.string().nonempty({ message: 'Nome inválido' }),
-  cep: z.string().nonempty({ message: 'CEP inválido' }),
-  state: z.string().nonempty({ message: 'Estado inválido' }),
-  city: z.string().nonempty({ message: 'Cidade inválida' }),
-  neighborhood: z.string().nonempty({ message: 'Bairro inválido' }),
-  street: z.string().nonempty({ message: 'Rua inválida' }),
-  number: z.number().positive({ message: 'Número inválido' }),
-  complement: z.string().optional(),
-  created_at: z.date(),
-  updated_at: z.date(),
-});
-
-export type CollegeSpot = z.infer<typeof collegeSpotSchema>;
+export interface CollegeSpot {
+  name: string;
+  cep: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  number: string;
+  complement: string;
+}

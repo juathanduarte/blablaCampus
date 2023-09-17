@@ -1,13 +1,33 @@
 import React from 'react';
 
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 import HeaderNav from '../../components/HeaderNav';
+import { CollegeSpot } from '../../types/CollegeSpot';
+import { collegeSpotSchema } from '../../schemas/collegeSpot';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createCollegeSpot, editCollegeSpot, isNameAvailable } from '../../services/collegespot';
+import { useNavigation } from '@react-navigation/native';
 
-export default function CreatePoint({ navigation }: any) {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+export default function CreatePoint(route: RouteProp<CollegeSpot>) {
+  const navigation = useNavigation();
+  const queryClient = useQueryClient();
+
+  const editSpot = route.route.params.data;
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -22,20 +42,247 @@ export default function CreatePoint({ navigation }: any) {
     navigation.navigate('Admin');
   };
 
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    setError,
+    clearErrors,
+    formState: { errors, isDirty },
+  } = useForm<CollegeSpot>({
+    defaultValues: editSpot,
+    mode: 'onBlur',
+    resolver: zodResolver(collegeSpotSchema),
+  });
+
+  // Verifica se nome está disponível
+  const { mutateAsync: mutateIsNameAvailable } = useMutation({
+    mutationFn: isNameAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('name', { message: 'Nome já cadastrado' });
+      if (!exists && errors.name) clearErrors('name');
+    },
+  });
+  function checkIsNameAvailable() {
+    if (!errors.name) return;
+    mutateIsNameAvailable(getValues('name'));
+  }
+
+  const { mutateAsync: mutateEditCollegeSpot } = useMutation({
+    mutationFn: editCollegeSpot,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['spots'],
+      });
+      navigation.goBack();
+    },
+    onError: (error: any) => {
+      console.log(error?.response);
+    },
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: createCollegeSpot,
+    onSuccess: () => {
+      // TODO: Invalidate query spots
+      queryClient.invalidateQueries({
+        queryKey: ['spots'],
+      });
+      navigation.goBack();
+    },
+    onError: (error: any) => {
+      console.log(error?.response);
+    },
+  });
+
+  function onsubmit() {
+    const newSpot = getValues();
+
+    if (editSpot) {
+      return mutateEditCollegeSpot({
+        collegeSpot: newSpot,
+        previousName: editSpot.name,
+      });
+    }
+    mutateAsync(newSpot);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderNav title="Novo Ponto" navigation={navigation} />
       {/* <ScrollView> */}
-      <View style={styles.content}>
-        <Input label="Nome" />
-        <Input label="CEP" />
-        <Input label="Estado" />
-        <Input label="Cidade" />
-        <Input label="Logradouro" />
-        <Input label="Número" />
-        <Input label="Complemento" />
-        <Button onClick={handleAdd} label="Cadastrar" variant="primary" size="large" />
-      </View>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1, gap: 20, marginBottom: 30 }}
+      >
+        <Controller
+          control={control}
+          name="name"
+          rules={{ required: true }}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => {
+            return (
+              <Input
+                label="Nome"
+                onChange={(value) => {
+                  onChange(value);
+                }}
+                value={value}
+                error={error?.message}
+                onblur={() => {
+                  onBlur();
+                  if (isDirty) checkIsNameAvailable();
+                }}
+                defaultValue={editSpot?.name || ''}
+              />
+            );
+          }}
+        />
+        <Controller
+          control={control}
+          name="cep"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="CEP"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.cep || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="state"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Estado"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.state || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="city"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Cidade"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.city || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="neighborhood"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Bairro"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.neighborhood || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="street"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Loradouro"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.street || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="number"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Número"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.number || ''}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="complement"
+          rules={{ required: true }}
+          defaultValue=""
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { invalid, error, isDirty },
+          }) => (
+            <Input
+              label="Complemento"
+              onChange={(value) => {
+                onChange(value);
+              }}
+              value={value}
+              error={error?.message}
+              defaultValue={editSpot?.complement || ''}
+            />
+          )}
+        />
+        <Button onClick={handleSubmit(onsubmit)} label="Cadastrar" variant="primary" size="large" />
+      </ScrollView>
       {/* </ScrollView> */}
     </SafeAreaView>
   );
@@ -70,8 +317,7 @@ const styles = StyleSheet.create({
   content: {
     width: '100%',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom: 20,
     gap: 20,
   },
 });

@@ -12,6 +12,7 @@ import { useUserStore } from '../../stores/user';
 import { useQuery } from '@tanstack/react-query';
 import { getVehicles } from '../../services/vehicles/getVehicles';
 import HeaderNav from '../../components/HeaderNav';
+import { getVehicles } from '../../services/vehicles';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -26,8 +27,14 @@ const Profile = () => {
     setSelectedTab(index);
   };
 
+  const { data: vehicles, isLoading } = useQuery({
+    queryKey: ['myVehicles'],
+    queryFn: getVehicles,
+  });
+
+  function onSubmit() {}
+
   const handleNavigation = (screen: string) => {
-    console.log({ screen });
     // @ts-ignore
     navigation.navigate(screen);
   };
@@ -138,12 +145,19 @@ const Profile = () => {
         </View>
       ) : (
         <View>
-          <ScrollView>
-            <View style={styles.content}>
-              {user?.vehicles?.map((vehicle) => (
-                <CarCard brand="Ford" model="Belina" year={1983} color="Bege" plate="IEL-8120" />
-              ))}
-            </View>
+          <ScrollView style={styles.content}>
+            {vehicles?.map((vehicle) => (
+              <CarCard
+                car={vehicle}
+                key={vehicle.plate}
+                brand={vehicle.brand}
+                model={vehicle.model}
+                year={vehicle.year}
+                color={vehicle.color}
+                plate={vehicle.plate}
+                seats={vehicle.seats}
+              />
+            ))}
           </ScrollView>
           <View style={styles.buttonContainer}>
             <Button

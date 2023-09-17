@@ -19,7 +19,6 @@ const Routes = () => {
     try {
       const user = await me();
       signIn(accessToken, refreshToken);
-      console.log(user);
     } catch (e: any) {
       console.log('error');
     }

@@ -40,9 +40,7 @@ const Register = () => {
       setUser(data);
       navigation.navigate('VerifyCode');
     } catch (e: any) {
-      // Print the keys of e
-      console.log(Object.keys(e.config));
-      console.log(e.baseURL);
+      console.log(e);
     }
   }
 

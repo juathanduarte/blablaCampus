@@ -8,20 +8,40 @@ import HeaderNav from '../../components/HeaderNav';
 import Input from '../../components/Input';
 import { CreateCarSchema, createCarSchema } from '../../schemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createVehicle } from '../../services/vehicles/createVehicle';
+import {
+  createVehicle,
+  isChassesAvailable,
+  isPlateAvailable,
+  isReindeerAvailable,
+} from '../../services/vehicles/createVehicle';
 import { useNavigation } from '@react-navigation/native';
+import { Vehicle } from '../../types/Vehicle';
+import { editVehicle } from '../../services/vehicles';
 
-export default function CreateCar() {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+export default function CreateCar(route: RouteProp<Vehicle>) {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
+
+  const editCar = route?.route?.params?.data;
 
   const {
     handleSubmit,
     control,
     getValues,
-
+    setError,
+    clearErrors,
     formState: { errors, isDirty },
   } = useForm<CreateCarSchema>({
+    defaultValues: editCar,
+    mode: 'onSubmit',
     resolver: zodResolver(createCarSchema),
   });
 
@@ -29,13 +49,20 @@ export default function CreateCar() {
     mutationFn: createVehicle,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['users', 'me'],
+        queryKey: ['myVehicles'],
       });
       navigation.goBack();
     },
-    onError: (error: any) => {
-      console.log(Object.keys(error));
-      console.log(error?.response);
+    onError: (error: any) => {},
+  });
+
+  const { mutateAsync: editMutate } = useMutation({
+    mutationFn: editVehicle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['myVehicles'],
+      });
+      navigation.goBack();
     },
   });
 
@@ -46,12 +73,54 @@ export default function CreateCar() {
       plate: getValues('plate'),
       chassis: getValues('chassis'),
       reindeer: getValues('reindeer'),
-      year: Number(getValues('year')),
       color: getValues('color'),
-      seats: Number(getValues('seats')),
+      year: getValues('year'),
+      seats: getValues('seats'),
     };
+
+    if (editCar) {
+      await editMutate({ vehicle, oldPlate: editCar.plate });
+      return;
+    }
+
     await mutateAsync(vehicle);
   };
+
+  // Verifica placa disponível
+  const { mutateAsync: mutateIsPlateAvailable } = useMutation({
+    mutationFn: isPlateAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('plate', { message: 'Placa já cadastrada' });
+      if (!exists && errors.plate) clearErrors('plate');
+    },
+  });
+  function isPlateAvailableHandler() {
+    mutateIsPlateAvailable(getValues('plate'));
+  }
+
+  // Verifica chassi
+  const { mutateAsync: mutateIsChassisAvailable } = useMutation({
+    mutationFn: isChassesAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('chassis', { message: 'Chassi já cadastrado' });
+      if (!exists && errors.chassis) clearErrors('chassis');
+    },
+  });
+  function isChassisAvailableHandler() {
+    mutateIsChassisAvailable(getValues('chassis'));
+  }
+
+  // Verifica reindeer
+  const { mutateAsync: mutateIsReindeerAvailable } = useMutation({
+    mutationFn: isReindeerAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('reindeer', { message: 'Renavam já cadastrado' });
+      if (!exists && errors.reindeer) clearErrors('reindeer');
+    },
+  });
+  function isReindeerAvailableHandler() {
+    mutateIsReindeerAvailable(getValues('reindeer'));
+  }
 
   return (
     <View style={styles.container}>
@@ -73,9 +142,11 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Marca"
-              onChange={(value: string) => onChange(value)}
+              onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
+              defaultValue={editCar?.brand || ''}
             />
           )}
         />
@@ -94,6 +165,8 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
+              defaultValue={editCar?.model || ''}
             />
           )}
         />
@@ -109,9 +182,17 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Placa"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('plate', { message: '' });
+                onChange(value);
+              }}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isPlateAvailableHandler();
+              }}
               value={value}
               error={error?.message}
+              defaultValue={editCar?.plate || ''}
             />
           )}
         />
@@ -127,9 +208,17 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Chassi"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('chassis', { message: '' });
+                onChange(value);
+              }}
               value={value}
               error={error?.message}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isChassisAvailableHandler();
+              }}
+              defaultValue={editCar?.chassis || ''}
             />
           )}
         />
@@ -145,9 +234,17 @@ export default function CreateCar() {
           }) => (
             <Input
               label="Renavam"
-              onChange={(value) => onChange(value)}
+              onChange={(value) => {
+                setError('reindeer', { message: '' });
+                onChange(value);
+              }}
               value={value}
               error={error?.message}
+              onblur={() => {
+                onBlur();
+                if (isDirty) isReindeerAvailableHandler();
+              }}
+              defaultValue={editCar?.reindeer || ''}
             />
           )}
         />
@@ -156,16 +253,19 @@ export default function CreateCar() {
           control={control}
           name="year"
           rules={{ required: true }}
-          defaultValue=""
+          defaultValue={0}
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
           }) => (
             <Input
               label="Ano"
-              onChange={(value) => onChange(value)}
-              value={value}
+              onChange={(value) => onChange(Number(value))}
+              value={String(value)}
               error={error?.message}
+              onblur={onBlur}
+              defaultValue={(editCar?.year && String(editCar?.year)) || ''}
+              inputNumber
             />
           )}
         />
@@ -184,6 +284,8 @@ export default function CreateCar() {
               onChange={(value) => onChange(value)}
               value={value}
               error={error?.message}
+              onblur={onBlur}
+              defaultValue={editCar?.color || ''}
             />
           )}
         />
@@ -191,23 +293,26 @@ export default function CreateCar() {
           control={control}
           name="seats"
           rules={{ required: true }}
-          defaultValue=""
+          defaultValue={0}
           render={({
             field: { onChange, onBlur, value },
             fieldState: { invalid, error, isDirty },
           }) => (
             <Input
               label="Lugares"
-              onChange={(value) => onChange(value)}
-              value={value}
+              onChange={(value) => onChange(Number(value))}
+              value={String(value)}
               error={error?.message}
+              onblur={onBlur}
+              defaultValue={(editCar?.seats && String(editCar?.seats)) || ''}
+              inputNumber
             />
           )}
         />
 
         <Button
-          disabled={!isDirty || Object.keys(errors).length > 0}
-          onClick={onSubmit}
+          // disabled={Object.keys(errors).length > 0}
+          onClick={handleSubmit(onSubmit)}
           label="Cadastrar"
           variant="primary"
           size="large"

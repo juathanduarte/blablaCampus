@@ -41,7 +41,6 @@ export default function ForgotPassword() {
     if (!isEmailValid(data.email) || data.email === '') {
       Alert.alert('Erro', 'Por favor, digite um e-mail válido.');
     } else {
-      console.log('Email:', data.email);
       navigation.navigate('VerifyCode');
     }
   };
