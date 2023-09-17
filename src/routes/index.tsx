@@ -30,7 +30,13 @@ const Routes = () => {
 
   return (
     <NavigationContainer>
-      <UserTabRoutes />
+      {!signedIn ? (
+        <StackLoginRoutes />
+      ) : user?.type === 'ADMIN' ? (
+        <AdminRoutes />
+      ) : (
+        <UserTabRoutes />
+      )}
     </NavigationContainer>
   );
 };

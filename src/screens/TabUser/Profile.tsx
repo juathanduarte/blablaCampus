@@ -12,7 +12,6 @@ import { useUserStore } from '../../stores/user';
 import { useQuery } from '@tanstack/react-query';
 import { getVehicles } from '../../services/vehicles/getVehicles';
 import HeaderNav from '../../components/HeaderNav';
-import { getVehicles } from '../../services/vehicles';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
