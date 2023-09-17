@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 import Icon from './Icon';
 
@@ -7,9 +7,10 @@ interface HeaderProps {
   title?: string;
   navigation: any;
   toggleModal?: () => void;
+  profileImage?: string;
 }
 
-export default function HeaderNav({ title, navigation, toggleModal }: HeaderProps) {
+export default function HeaderNav({ title, navigation, toggleModal, profileImage }: HeaderProps) {
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -20,6 +21,8 @@ export default function HeaderNav({ title, navigation, toggleModal }: HeaderProp
         <TouchableOpacity onPress={handleGoBack}>
           <Icon lib="IonIcons" icon="arrow-back-outline" size={22} />
         </TouchableOpacity>
+        {profileImage ? <Image source={{ uri: profileImage }} style={styles.image} /> : null}
+
         <Text style={styles.textHeader}>{title}</Text>
       </View>
       <TouchableOpacity onPress={toggleModal}>
@@ -49,6 +52,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  image: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   textHeader: {
     flexDirection: 'row',

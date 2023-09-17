@@ -13,6 +13,7 @@ import {
 
 import RideInformations from '../screens/TabUser/RideInformations';
 import Assessments from '../screens/TabUser/Assessments';
+import CreateAssessment from '../screens/TabUser/CreateAssessment';
 import RequestRide from '../screens/TabUser/RequestRide';
 import colors from '../styles/colors';
 import { Screen } from 'react-native-screens';
@@ -46,6 +47,7 @@ const UserRoutes = ({ route }: any) => {
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="History" component={History} />
       <Stack.Screen name="CreateCar" component={CreateCar} />
+      <Stack.Screen name="CreateAssessment" component={CreateAssessment} />
       <Stack.Screen name="Assessments" component={Assessments} />
       <Stack.Screen name="RideInformations" component={RideInformations} />
       <Stack.Screen name="RequestRide" component={RequestRide} />

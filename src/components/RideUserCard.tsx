@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { View, Text, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import colors from '../styles/colors';
 import Avatar from './Avatar';
 import Button from './Button';
@@ -19,6 +20,14 @@ interface userProps {
 }
 
 export default function RideUserCard({ user, showButtons }: userProps) {
+  const navigation = useNavigation();
+
+  const handleNavigation = (screen: string) => {
+    console.log({ screen });
+    // @ts-ignore
+    navigation.navigate(screen);
+  };
+
   const onPressPerfil = () => {
     console.log('open perfil');
     console.log(user);
@@ -45,7 +54,7 @@ export default function RideUserCard({ user, showButtons }: userProps) {
                 variant="primary"
                 size="personalized"
                 label="Avaliar"
-                onClick={() => console.log('click')}
+                onClick={() => handleNavigation('CreateAssessment')}
               />
             </View>
           ) : (
@@ -54,7 +63,7 @@ export default function RideUserCard({ user, showButtons }: userProps) {
                 variant="secondary"
                 size="personalized"
                 label="Avaliado"
-                onClick={() => console.log('click')}
+                onClick={() => handleNavigation('CreateAssessment')}
               />
             </View>
           )}
