@@ -40,6 +40,7 @@ const Register = () => {
       setUser(data);
       navigation.navigate('VerifyCode');
     } catch (e: any) {
+      console.log('ERRO');
       console.log(e);
     }
   }

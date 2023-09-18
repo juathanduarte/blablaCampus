@@ -1,3 +1,4 @@
+import { RegisterSchema } from '../../schemas';
 import { User } from '../../types/User';
 import { api } from '../api';
 
@@ -17,5 +18,23 @@ export async function registerTemporarilyUser(user: Pick<User, 'email' | 'name'>
       'Content-Type': 'application/json',
     },
   });
+  return data;
+}
+
+export async function registerUserWithCode({
+  user,
+  code,
+}: {
+  user: RegisterSchema;
+  code: string;
+}): Promise<{
+  accessToken: string;
+  refreshToken: string;
+}> {
+  const { data } = await api.post('/users', {
+    ...user,
+    code,
+  });
+
   return data;
 }

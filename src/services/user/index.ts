@@ -1,5 +1,5 @@
 import { me } from './me';
-import { registerUser } from './register';
+import { registerUser, registerUserWithCode } from './register';
 import { login } from './login';
 
-export { me, registerUser, login };
+export { me, registerUser, login, registerUserWithCode };

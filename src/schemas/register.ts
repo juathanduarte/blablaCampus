@@ -22,3 +22,12 @@ export const registerSchema = z
   });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;
+
+export const verifyCodeSchema = z.object({
+  code: z
+    .string()
+    .nonempty({ message: 'Campo obrigatório' })
+    .length(6, { message: 'Código inválido' }),
+});
+
+export type VerifyCodeSchema = z.infer<typeof verifyCodeSchema>;

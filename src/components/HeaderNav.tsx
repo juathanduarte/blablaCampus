@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 import Icon from './Icon';
+import ModalMoreActions from './ModalMoreActions';
 
 interface HeaderProps {
   title?: string;
@@ -11,6 +12,12 @@ interface HeaderProps {
 }
 
 export default function HeaderNav({ title, navigation, toggleModal, profileImage }: HeaderProps) {
+  const [modalVisible, setModalVisible] = React.useState(false);
+
+  const toggleModalVisible = () => {
+    setModalVisible(!modalVisible);
+  };
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -25,8 +32,9 @@ export default function HeaderNav({ title, navigation, toggleModal, profileImage
 
         <Text style={styles.textHeader}>{title}</Text>
       </View>
-      <TouchableOpacity onPress={toggleModal}>
+      <TouchableOpacity onPress={toggleModalVisible}>
         <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
+        <ModalMoreActions isVisible={modalVisible} toggleModal={toggleModalVisible} />
       </TouchableOpacity>
     </View>
   );

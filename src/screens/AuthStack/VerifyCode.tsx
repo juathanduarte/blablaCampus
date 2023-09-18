@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  Alert,
   Keyboard,
   StyleSheet,
   Text,
@@ -18,12 +17,17 @@ import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
 import { useRegisterStore } from '../../stores/register';
+import { useMutation } from '@tanstack/react-query';
+import { registerUserWithCode } from '../../services/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { VerifyCodeSchema, verifyCodeSchema } from '../../schemas/register';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export default function VerificationScreen() {
   const navigation = useNavigation();
-  const { register, handleSubmit, setValue } = useForm();
+  const { signIn } = useAuthContext();
 
-  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '']);
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null, null]);
   const [countdown, setCountdown] = useState(30);
   const [focusedInput, setFocusedInput] = useState(-1);
@@ -45,7 +49,7 @@ export default function VerificationScreen() {
     updatedCode[index] = text;
     setVerificationCode(updatedCode);
 
-    if (text && index < 4) {
+    if (text && index < 5) {
       inputRefs.current[index + 1]?.focus();
     } else if (!text && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -56,13 +60,17 @@ export default function VerificationScreen() {
     }
   };
 
+  useEffect(() => {
+    setValue('code', verificationCode.join(''));
+  }, [verificationCode]);
+
   const handleCopyPaste = async ({ nativeEvent: { text } }: { nativeEvent: { text: string } }) => {
     if (text.length === 1) {
       return;
     }
 
     const cleanedContent = text.replace(/\D/g, '');
-    const codeToPaste = cleanedContent.slice(0, 5);
+    const codeToPaste = cleanedContent.slice(0, 6);
 
     const startIndex = verificationCode.findIndex((digit) => digit === '');
     if (startIndex !== -1) {
@@ -86,19 +94,6 @@ export default function VerificationScreen() {
   const formattedCountdown = countdown < 10 ? `0${countdown}` : countdown;
   const { user } = useRegisterStore();
 
-  const handleVerify = () => {
-    const code = verificationCode.join('');
-    console.log('Código de verificação:', code);
-    setVerificationCode(['', '', '', '', '']);
-    inputRefs.current[0]?.focus();
-
-    if (!code) {
-      Alert.alert('Erro', 'Por favor, digite o código de verificação.');
-    } else {
-      navigation.navigate('ChangePassword');
-    }
-  };
-
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -111,23 +106,42 @@ export default function VerificationScreen() {
     Keyboard.dismiss();
   };
 
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<VerifyCodeSchema>({
+    resolver: zodResolver(verifyCodeSchema),
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: registerUserWithCode,
+    onSuccess: (data) => {
+      signIn(data.accessToken, data.refreshToken);
+    },
+    onError: (error: any) => {
+      console.log('Error:', error);
+    },
+  });
+
+  async function onSubmit() {
+    mutateAsync({
+      code: getValues('code'),
+      user: {
+        ...user,
+        passwordConfirmation: user.password,
+      },
+    });
+  }
+
   useEffect(() => {
-    register('email');
-  }, [register]);
-
-  const isEmailValid = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const onSubmit = (data: any) => {
-    if (!isEmailValid(data.email)) {
-      Alert.alert('Erro', 'Por favor, digite um e-mail válido.');
-    } else {
-      console.log('Email:', data.email);
-      navigation.navigate('VerifyCode');
+    if (getValues('code').length === 6) {
+      handleSubmit(onSubmit)();
     }
-  };
+  }, [watch('code')]);
 
   return (
     <TouchableWithoutFeedback onPress={handeDismissKeyboard}>
@@ -139,13 +153,14 @@ export default function VerificationScreen() {
           <Text style={styles.textTitle}>Verificação</Text>
           <Text style={styles.subtitle}>
             Enviamos um código de verificação para o email:
-            <Text style={styles.textEmail}>seu@email.com</Text>
+            <Text style={styles.textEmail}>{user.email}</Text>
           </Text>
         </View>
         <View style={styles.codeContainer}>
           {verificationCode.map((digit, index) => (
             <TextInput
               key={index}
+              // TODO: Add error style
               style={[
                 styles.codeInput,
                 focusedInput === index && { borderColor: colors.primary, borderWidth: 2 },
@@ -164,7 +179,12 @@ export default function VerificationScreen() {
         </View>
 
         <View style={styles.button}>
-          <Button label="Continuar" onClick={handleVerify} variant="primary" size="large" />
+          <Button
+            label="Continuar"
+            onClick={handleSubmit(onSubmit)}
+            variant="primary"
+            size="large"
+          />
         </View>
         {countdown >= 0 ? (
           <Text style={styles.textResend}>
