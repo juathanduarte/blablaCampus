@@ -1,22 +1,22 @@
 import React from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm } from 'react-hook-form';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
 import HeaderNav from '../../components/HeaderNav';
 import Input from '../../components/Input';
 import { CreateCarSchema, createCarSchema } from '../../schemas';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { editVehicle } from '../../services/vehicles';
 import {
   createVehicle,
   isChassesAvailable,
   isPlateAvailable,
   isReindeerAvailable,
 } from '../../services/vehicles/createVehicle';
-import { useNavigation } from '@react-navigation/native';
 import { Vehicle } from '../../types/Vehicle';
-import { editVehicle } from '../../services/vehicles';
 
 interface RouteProp<T> {
   route: {

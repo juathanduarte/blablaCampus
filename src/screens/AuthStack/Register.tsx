@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -16,7 +17,11 @@ import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import Input from '../../components/Input';
 import { RegisterSchema, registerSchema } from '../../schemas';
-import { registerTemporarilyUser } from '../../services/user/register';
+import {
+  isEmailAvailable,
+  isRegistrationAvailable,
+  registerTemporarilyUser,
+} from '../../services/user/register';
 import { useRegisterStore } from '../../stores/register';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
@@ -26,8 +31,13 @@ const Register = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    getValues,
+    setError,
+    clearErrors,
+    formState: { errors, isDirty },
   } = useForm<RegisterSchema>({
+    defaultValues: {},
+    mode: 'onSubmit',
     resolver: zodResolver(registerSchema),
   });
 
@@ -40,9 +50,38 @@ const Register = () => {
       setUser(data);
       navigation.navigate('VerifyCode');
     } catch (e: any) {
-      console.log('ERRO');
       console.log(e);
     }
+  }
+
+  const { mutateAsync: mutateIsEmailAvailable } = useMutation({
+    mutationFn: isEmailAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('email', { message: 'Email já cadastrado' });
+      if (!exists && errors.email) clearErrors('email');
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
+
+  async function isEmailAvailableHandler() {
+    await mutateIsEmailAvailable(getValues('email'));
+  }
+
+  const { mutateAsync: mutateIsRegistrationAvailable } = useMutation({
+    mutationFn: isRegistrationAvailable,
+    onSuccess: ({ exists }) => {
+      if (exists) setError('registration', { message: 'Matricula já cadastrada' });
+      if (!exists && errors.registration) clearErrors('registration');
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
+
+  async function isRegistrationAvailableHandler() {
+    await mutateIsRegistrationAvailable(getValues('registration'));
   }
 
   const handleGoBack = () => {
@@ -85,7 +124,7 @@ const Register = () => {
               name="email"
               control={control}
               render={({
-                field: { value = '', onChange },
+                field: { value = '', onChange, onBlur },
                 fieldState: { invalid, error, isDirty },
               }) => (
                 <Input
@@ -93,9 +132,16 @@ const Register = () => {
                   iconInput="envelope"
                   label="Email"
                   iconSize={20}
-                  error={error?.message}
+                  onChange={(value) => {
+                    setError('email', { message: '' });
+                    onChange(value);
+                  }}
+                  onblur={() => {
+                    onBlur();
+                    if (isDirty) isEmailAvailableHandler();
+                  }}
                   value={value}
-                  onChange={onChange}
+                  error={error?.message}
                 />
               )}
             />
@@ -103,17 +149,24 @@ const Register = () => {
               name="registration"
               control={control}
               render={({
-                field: { value = '', onChange },
+                field: { value = '', onChange, onBlur },
                 fieldState: { invalid, error, isDirty },
               }) => (
                 <Input
+                  label="Número de Matricula"
+                  onChange={(value) => {
+                    setError('registration', { message: '' });
+                    onChange(value);
+                  }}
+                  onblur={() => {
+                    onBlur();
+                    if (isDirty) isRegistrationAvailableHandler();
+                  }}
+                  value={value}
+                  error={error?.message}
                   variant={'login'}
                   iconInput="id-card"
-                  label="Número de Matricula"
                   iconSize={20}
-                  error={error?.message}
-                  value={value}
-                  onChange={onChange}
                 />
               )}
             />

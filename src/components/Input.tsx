@@ -37,7 +37,7 @@ export default function Input({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, error ? { borderColor: 'red', borderWidth: 1 } : null]}>
       {iconInput && (
         <View style={styles.containerIcon}>
           <Icon icon={iconInput} size={iconSize} color={colors.quaternary} lib="FontAwesome" />
@@ -45,7 +45,7 @@ export default function Input({
             onBlur={onblur}
             placeholder={label}
             secureTextEntry={variant === 'password' && !showPassword}
-            style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
+            style={styles.textInput}
             placeholderTextColor={colors.quaternary}
             onChangeText={(value) => {
               const onlyNumber = value.replace(/[^0-9]/g, '');

@@ -1,5 +1,10 @@
-import { me } from './me';
-import { registerUser, registerUserWithCode } from './register';
 import { login } from './login';
+import { me } from './me';
+import {
+  isEmailAvailable,
+  isRegistrationAvailable,
+  registerUser,
+  registerUserWithCode,
+} from './register';
 
-export { me, registerUser, login, registerUserWithCode };
+export { isEmailAvailable, isRegistrationAvailable, login, me, registerUser, registerUserWithCode };

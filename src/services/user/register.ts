@@ -38,3 +38,21 @@ export async function registerUserWithCode({
 
   return data;
 }
+
+export const isEmailAvailable = async (email: string): Promise<{ exists: boolean }> => {
+  const { data } = await api.post(`/users/is-email-available`, {
+    email,
+  });
+  return { exists: Boolean(data?.exists) };
+};
+
+export const isRegistrationAvailable = async (
+  registration: string
+): Promise<{ exists: boolean }> => {
+  console.log(registration);
+  const { data } = await api.post(`/users/is-registration-available`, {
+    registration,
+  });
+  console.log(data);
+  return { exists: Boolean(data?.exists) };
+};
