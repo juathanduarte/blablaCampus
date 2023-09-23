@@ -9,19 +9,22 @@ import Select from '../../components/Select';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
+const collegeSpots = [
+  {
+    label: 'All',
+    value: 'All',
+  },
+  {
+    label: 'Restaurant',
+    value: 'Restaurant',
+  },
+];
+
 export default function Search() {
   const insets = useSafeAreaInsets();
   const [open, setOpen] = React.useState(false);
-  const [items, setItems] = React.useState([
-    {
-      label: 'All',
-      value: 'All',
-    },
-    {
-      label: 'Restaurant',
-      value: 'Restaurant',
-    },
-  ]);
+  const [startingSpot, setStartingSpot] = React.useState('');
+  const [destinationSpot, setDestinationSpot] = React.useState('');
   const [value, setValue] = React.useState('');
 
   const navigation = useNavigation();
@@ -54,18 +57,18 @@ export default function Search() {
                 <View style={styles({}).selectContainer}>
                   <Select
                     onChange={(value, itemIndex) => {
-                      setValue(value);
+                      setStartingSpot(value);
                     }}
-                    values={items}
-                    selectedValue={value}
+                    values={collegeSpots}
+                    selectedValue={startingSpot}
                     placeholder="Escolha o local de Início"
                   />
                   <Select
                     onChange={(value, itemIndex) => {
-                      setValue(value);
+                      setDestinationSpot(value);
                     }}
-                    values={items}
-                    selectedValue={value}
+                    values={collegeSpots}
+                    selectedValue={destinationSpot}
                     placeholder="Escolha o local de Destino"
                   />
                 </View>
