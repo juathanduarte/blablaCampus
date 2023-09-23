@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   containerIcon: {
     display: 'flex',
     flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
     gap: 15,
     height: '100%',
