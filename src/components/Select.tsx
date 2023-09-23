@@ -1,8 +1,7 @@
-import RNPickerSelect from 'react-native-picker-select';
 import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import colors from '../styles/colors';
-import Picker from 'react-native-picker-select';
 
 interface SelectProps {
   placeholder?: string;

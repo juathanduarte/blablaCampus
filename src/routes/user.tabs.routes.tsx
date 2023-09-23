@@ -1,23 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from '../components/Icon';
-import AcceptRideRequest from '../screens/TabUser/AcceptRideRequest';
-import CreateRide from '../screens/TabUser/CreateRide';
-import Messages from '../screens/TabUser/Messages';
-import Profile from '../screens/TabUser/Profile';
-import Search from '../screens/TabUser/Search';
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
 import { useAuthContext } from '../contexts/AuthContext';
-import Button from '../components/Button';
-import fonts from '../styles/fonts';
-import ModalMoreActions from '../components/ModalMoreActions';
 import UserRoutes from './UserRoutes';
 
 const Tab = createBottomTabNavigator();
@@ -25,10 +11,16 @@ const Tab = createBottomTabNavigator();
 export default function UserTabRoutes() {
   const { signOut } = useAuthContext();
 
+  const navigation = useNavigation();
+
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   function toggleModal() {
     setIsModalVisible(!isModalVisible);
+  }
+
+  function handleBackToSearch() {
+    navigation.goBack();
   }
 
   return (
@@ -53,6 +45,16 @@ export default function UserTabRoutes() {
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="plus-square-o" color={color} size={size} lib="FontAwesome" />
+          ),
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{
+                marginLeft: 16,
+              }}
+              onPress={handleBackToSearch}
+            >
+              <Icon icon="arrow-left" color="black" size={24} lib="FontAwesome" />
+            </TouchableOpacity>
           ),
         }}
       />
