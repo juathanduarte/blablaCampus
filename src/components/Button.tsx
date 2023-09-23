@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
@@ -11,9 +11,18 @@ interface ButtonProps {
   icon?: any;
   onClick?: () => void;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
-export default function Button({ variant, size, label, icon, onClick, disabled }: ButtonProps) {
+export default function Button({
+  variant,
+  size,
+  label,
+  icon,
+  onClick,
+  disabled,
+  isLoading,
+}: ButtonProps) {
   const handlePress = () => {
     if (onClick) {
       onClick();
@@ -23,10 +32,12 @@ export default function Button({ variant, size, label, icon, onClick, disabled }
   return (
     <TouchableOpacity
       disabled={disabled}
-      style={styles({ variant, size }).container}
+      style={styles({ variant, size, disabled }).container}
       onPress={handlePress}
     >
-      {size === 'small' && icon ? (
+      {isLoading ? (
+        <ActivityIndicator size="small" color={colors.secondary} />
+      ) : size === 'small' && icon ? (
         <Ionicons name={icon} size={24} color={colors.secondary} />
       ) : (
         <Text style={styles({ variant, size }).text}>{label}</Text>
@@ -35,9 +46,10 @@ export default function Button({ variant, size, label, icon, onClick, disabled }
   );
 }
 
-const styles = ({ variant, size }: ButtonProps) =>
+const styles = ({ variant, size, disabled }: ButtonProps) =>
   StyleSheet.create({
     container: {
+      opacity: disabled ? 0.5 : 1,
       backgroundColor: variant === 'primary' ? colors.primary : colors.tertiary,
       width:
         size === 'large'

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -11,7 +11,12 @@ import { collegeSpotSchema } from '../../schemas/collegeSpot';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCollegeSpot, editCollegeSpot, isNameAvailable } from '../../services/collegespot';
+import {
+  createCollegeSpot,
+  editCollegeSpot,
+  getSpotInfoByCEP,
+  isNameAvailable,
+} from '../../services/collegespot';
 import { useNavigation } from '@react-navigation/native';
 
 interface RouteProp<T> {
@@ -26,7 +31,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
 
-  const editSpot = route.route.params.data;
+  const editSpot = route?.route?.params?.data;
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -48,6 +53,8 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
     getValues,
     setError,
     clearErrors,
+    watch,
+    setValue,
     formState: { errors, isDirty },
   } = useForm<CollegeSpot>({
     defaultValues: editSpot,
@@ -81,7 +88,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
     },
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isLoading: isLoadingCreate } = useMutation({
     mutationFn: createCollegeSpot,
     onSuccess: () => {
       // TODO: Invalidate query spots
@@ -94,6 +101,26 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
       console.log(error?.response);
     },
   });
+
+  const { mutateAsync: mutateGetCepInfo, isLoading: isLoadingCEP } = useMutation({
+    mutationFn: getSpotInfoByCEP,
+    onSuccess: (data) => {
+      const { bairro, localidade, logradouro, uf } = data;
+      setValue('state', uf);
+      setValue('city', localidade);
+      setValue('neighborhood', bairro);
+      setValue('street', logradouro);
+    }, 
+    onError: (error: any) => {
+      console.log(error?.response);
+    },
+  });
+
+  useEffect(() => {
+    if (watch('cep').length == 8) {
+      mutateGetCepInfo(getValues('cep'));
+    }
+  }, [watch('cep')]);
 
   function onsubmit() {
     const newSpot = getValues();
@@ -136,7 +163,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
                   onBlur();
                   if (isDirty) checkIsNameAvailable();
                 }}
-                defaultValue={editSpot?.name || ''}
+                defaultValue={editSpot?.name || value || ''}
               />
             );
           }}
@@ -157,7 +184,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.cep || ''}
+              defaultValue={editSpot?.cep || value || ''}
             />
           )}
         />
@@ -177,7 +204,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.state || ''}
+              defaultValue={editSpot?.state || value || ''}
             />
           )}
         />
@@ -197,7 +224,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.city || ''}
+              defaultValue={editSpot?.city || value || ''}
             />
           )}
         />
@@ -217,7 +244,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.neighborhood || ''}
+              defaultValue={editSpot?.neighborhood || value || ''}
             />
           )}
         />
@@ -237,7 +264,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.street || ''}
+              defaultValue={editSpot?.street || value || ''}
             />
           )}
         />
@@ -257,7 +284,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.number || ''}
+              defaultValue={editSpot?.number || value || ''}
             />
           )}
         />
@@ -277,11 +304,18 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
               }}
               value={value}
               error={error?.message}
-              defaultValue={editSpot?.complement || ''}
+              defaultValue={editSpot?.complement || value || ''}
             />
           )}
         />
-        <Button onClick={handleSubmit(onsubmit)} label="Cadastrar" variant="primary" size="large" />
+        <Button
+          onClick={handleSubmit(onsubmit)}
+          label="Cadastrar"
+          variant="primary"
+          size="large"
+          disabled={!isDirty || Object.keys(errors).length > 0 || isLoadingCreate || isLoadingCEP}
+          isLoading={isLoadingCreate || isLoadingCEP}
+        />
       </ScrollView>
       {/* </ScrollView> */}
     </SafeAreaView>

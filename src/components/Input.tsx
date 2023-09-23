@@ -71,7 +71,7 @@ export default function Input({
           <TextInput
             onBlur={onblur}
             placeholder={label}
-            style={[styles.textInput, error ? { borderColor: 'red', borderWidth: 1 } : null]}
+            style={[styles.textInput]}
             placeholderTextColor={colors.quaternary}
             onChangeText={(value) => {
               const onlyNumber = value.replace(/[^0-9]/g, '');
