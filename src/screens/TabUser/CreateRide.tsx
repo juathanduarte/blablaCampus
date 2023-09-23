@@ -1,7 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Button from '../../components/Button';
+import HeaderNav from '../../components/HeaderNav';
 import Select from '../../components/Select';
 import fonts from '../../styles/fonts';
 
@@ -27,8 +29,6 @@ const vehicles = [
   },
 ];
 
-// TODO: usar o headernav ?
-
 export default function CreateRide() {
   const [startingSpot, setStartingSpot] = React.useState('');
   const [destinationSpot, setDestinationSpot] = React.useState('');
@@ -36,8 +36,11 @@ export default function CreateRide() {
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [vehicle, setVehicle] = React.useState('');
 
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
+      <HeaderNav title="Oferecer Carona" navigation={navigation} />
       <Text style={styles.title}>Partida</Text>
       <Select
         onChange={(value, itemIndex) => {
@@ -84,6 +87,7 @@ export default function CreateRide() {
         style={{
           flex: 1,
           justifyContent: 'flex-end',
+          marginBottom: 36,
         }}
       >
         <Button
@@ -102,7 +106,7 @@ export default function CreateRide() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 21,
+    paddingHorizontal: 21,
   },
   title: {
     fontSize: 21,

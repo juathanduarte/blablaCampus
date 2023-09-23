@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useAuthContext } from '../contexts/AuthContext';
 import UserRoutes from './UserRoutes';
@@ -46,16 +46,7 @@ export default function UserTabRoutes() {
           tabBarIcon: ({ color, size }) => (
             <Icon icon="plus-square-o" color={color} size={size} lib="FontAwesome" />
           ),
-          headerLeft: () => (
-            <TouchableOpacity
-              style={{
-                marginLeft: 16,
-              }}
-              onPress={handleBackToSearch}
-            >
-              <Icon icon="arrow-left" color="black" size={24} lib="FontAwesome" />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
