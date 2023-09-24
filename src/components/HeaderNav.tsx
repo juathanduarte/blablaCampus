@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   },
   titleHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   image: {
