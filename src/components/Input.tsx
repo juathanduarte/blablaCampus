@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import Icon from './Icon';
@@ -82,6 +82,8 @@ export default function Input({
           />
         </View>
       )}
+
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 }
@@ -122,5 +124,11 @@ const styles = StyleSheet.create({
     color: colors.quaternary,
     borderColor: 'transparent',
     borderWidth: 1,
+  },
+
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
