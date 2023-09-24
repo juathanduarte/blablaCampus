@@ -1,14 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from '../../components/Icon';
 import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
 import { getRides } from '../../services/ride';
 
@@ -31,13 +39,19 @@ export default function Search() {
     queryFn: getCollegeSpots,
   });
 
-  const { data: rides, isLoading: isLoadingRides } = useQuery(
-    ['rides'],
-    () => getRides({ origin: startingSpot, destination: destinationSpot }),
-    {
-      enabled: Boolean(startingSpot && destinationSpot),
+  const {
+    data: rides,
+    mutateAsync,
+    isLoading: isLoadingRides,
+  } = useMutation({
+    mutationFn: getRides,
+  });
+
+  useEffect(() => {
+    if (startingSpot && destinationSpot) {
+      mutateAsync({ origin: startingSpot, destination: destinationSpot });
     }
-  );
+  }, [startingSpot, destinationSpot]);
 
   return (
     <View>
@@ -50,56 +64,56 @@ export default function Search() {
         </View>
         <Text style={styles({}).headerLowerPart}>Olá Gabriel!</Text>
       </View>
+      <View style={styles({}).selectContainer}>
+        <Select
+          onChange={(value, itemIndex) => {
+            setStartingSpot(value);
+            queryClient.invalidateQueries(['rides']);
+          }}
+          values={
+            collegeSpots?.map((spot) => ({
+              label: spot.name,
+              value: spot.name,
+            })) || []
+          }
+          selectedValue={startingSpot}
+          placeholder="Escolha o local de Início"
+        />
+        <Select
+          onChange={(value, itemIndex) => {
+            setDestinationSpot(value);
+            queryClient.invalidateQueries(['rides']);
+          }}
+          values={
+            collegeSpots?.map((spot) => ({
+              label: spot.name,
+              value: spot.name,
+            })) || []
+          }
+          selectedValue={destinationSpot}
+          placeholder="Escolha o local de Destino"
+        />
+      </View>
+
+      {isLoadingRides && (
+        <Text>
+          Carregando... <ActivityIndicator />
+        </Text>
+      )}
 
       <View style={styles({}).mainContainer}>
         <View style={styles({}).travelList}>
           <FlatList
-            stickyHeaderHiddenOnScroll
-            stickyHeaderIndices={[0]}
-            ListHeaderComponent={() => {
-              return (
-                <View style={styles({}).selectContainer}>
-                  <Select
-                    onChange={(value, itemIndex) => {
-                      setStartingSpot(value);
-                      queryClient.invalidateQueries(['rides']);
-                    }}
-                    values={
-                      collegeSpots?.map((spot) => ({
-                        label: spot.name,
-                        value: spot.name,
-                      })) || []
-                    }
-                    selectedValue={startingSpot}
-                    placeholder="Escolha o local de Início"
-                  />
-                  <Select
-                    onChange={(value, itemIndex) => {
-                      setDestinationSpot(value);
-                      queryClient.invalidateQueries(['rides']);
-                    }}
-                    values={
-                      collegeSpots?.map((spot) => ({
-                        label: spot.name,
-                        value: spot.name,
-                      })) || []
-                    }
-                    selectedValue={destinationSpot}
-                    placeholder="Escolha o local de Destino"
-                  />
-                </View>
-              );
-            }}
             style={styles({}).list}
-            data={collegeSpots}
-            renderItem={({ item }) => (
+            data={rides}
+            renderItem={(ride) => (
               <TouchableOpacity onPress={() => handleNavigation('RequestRide')}>
                 <RideCard
-                  dateTime="2021-08-20T18:00:00.000Z"
-                  destinyPoint="PUCRS"
+                  dateTime={ride.item.departure_date}
+                  destinyPoint={ride.item.destination_campus_name}
                   name="Gabriel"
                   rating={4.5}
-                  startPoint="UFRGS"
+                  startPoint={ride.item.origin_campus_name}
                   urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
                 />
               </TouchableOpacity>

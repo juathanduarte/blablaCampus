@@ -41,7 +41,6 @@ const Admin = () => {
     queryFn: getCollegeSpots,
   });
 
-
   React.useEffect(() => {
     setUsers([
       {
@@ -84,7 +83,7 @@ const Admin = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} />
+      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} icon />
       <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
       <TabHeader
         labels={['Usuários', 'Pontos']}

@@ -50,6 +50,8 @@ export default function CreateRide() {
     mutationFn: createRide,
     onSuccess: () => {
       console.log('success');
+      // @ts-ignore
+      navigation.navigate('Search');
     },
   });
 

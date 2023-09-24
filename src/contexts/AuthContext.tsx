@@ -71,6 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const signOut = useCallback(async () => {
+    console.log('entrou');
     await removeAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY });
     await removeAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY });
 

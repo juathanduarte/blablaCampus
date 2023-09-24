@@ -1,6 +1,24 @@
+import { Ride } from '../../types/Ride';
 import { api } from '../api';
 
-export async function getRides({ origin, destination }: { origin: string; destination: string }) {
+type RideResponse = Pick<
+  Ride,
+  | 'available_seats'
+  | 'created_at'
+  | 'departure_date'
+  | 'destination_campus_name'
+  | 'driver_registration'
+  | 'origin_campus_name'
+  | 'vehicle_plate'
+>;
+
+export async function getRides({
+  origin,
+  destination,
+}: {
+  origin: string;
+  destination: string;
+}): Promise<RideResponse[]> {
   const params = {
     origin,
     destination,
@@ -8,10 +26,7 @@ export async function getRides({ origin, destination }: { origin: string; destin
 
   // encode to urlparms
   const urlParams = new URLSearchParams(params);
-  console.log(urlParams.toString());
-
   const { data } = await api.get(`/carpool?${urlParams.toString()}`);
-  console.log(data);
 
-  return params;
+  return data.data;
 }
