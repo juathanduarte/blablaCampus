@@ -36,12 +36,11 @@ const Admin = () => {
     setIsModalVisible(!isModalVisible);
   }
 
-  const { data: spots, isLoading } = useQuery({
+  const { data: collegeSpots, isLoading } = useQuery({
     queryKey: ['spots'],
     queryFn: getCollegeSpots,
   });
 
-  const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
 
   React.useEffect(() => {
     setUsers([
