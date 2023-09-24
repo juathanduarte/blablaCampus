@@ -50,7 +50,7 @@ export default function UserTabRoutes() {
         }}
       />
       <Tab.Screen
-        name="Menssages"
+        name="Mensagens"
         component={UserRoutes}
         initialParams={{ initialRouteName: 'Messages' }}
         options={{
