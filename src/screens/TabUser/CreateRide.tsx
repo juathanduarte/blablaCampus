@@ -222,7 +222,7 @@ export default function CreateRide() {
           style={{
             flex: 1,
             justifyContent: 'flex-end',
-            marginBottom: 36,
+            marginVertical: 24,
           }}
         >
           <Button
@@ -243,10 +243,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 21,
   },
   title: {
-    fontSize: 21,
+    fontSize: 16,
     fontFamily: fonts.text_medium,
-    paddingBottom: 4,
-    paddingTop: 1,
+    paddingVertical: 4,
   },
   datePicker: {
     alignSelf: 'center',

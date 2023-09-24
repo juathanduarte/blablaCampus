@@ -32,63 +32,7 @@ export default function Messages() {
       },
     },
     {
-      text: 'O scroll ta mei bugado!!!!!',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'O scroll ta mei bugado!!!!!',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'O scroll ta mei bugado!!!!!',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'O scroll ta mei bugado!!!!!',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'Falatu paizin',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'Falatu paizin',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'Falatu paizin',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'Falatu paizin',
+      text: 'O scroll desbugou ihuuuul',
       date: '2023-09-24T9:00:00',
       user: {
         name: 'João',
@@ -108,8 +52,8 @@ export default function Messages() {
   }, [register]);
 
   return (
-    <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
         <View style={styles.inputContainer}>
           <Input
             label="Pesquisar"
@@ -118,22 +62,17 @@ export default function Messages() {
             onChange={(text) => setValue('searchtext', text)}
           />
         </View>
-        <View>
-          <ScrollView>
-            {mensagens.map((mensagem, index) => (
-              <View style={styles.messagesContainer}>
-                <Message
-                  key={index}
-                  text={mensagem.text}
-                  date={mensagem.date}
-                  user={mensagem.user}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+      </TouchableWithoutFeedback>
+      <View>
+        <ScrollView>
+          {mensagens.map((mensagem, index) => (
+            <View key={index} style={styles.messagesContainer}>
+              <Message text={mensagem.text} date={mensagem.date} user={mensagem.user} />
+            </View>
+          ))}
+        </ScrollView>
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 }
 
