@@ -60,7 +60,9 @@ export default function CreateRide() {
 
   return (
     <View style={styles.container}>
-      <HeaderNav title="Oferecer Carona" navigation={navigation} />
+      <View style={styles.headerNav}>
+        <HeaderNav title="Oferecer Carona" navigation={navigation} />
+      </View>
       <ScrollView
         style={{
           paddingBottom: 36,
@@ -241,6 +243,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 21,
+  },
+  headerNav: {
+    paddingTop: 10,
   },
   title: {
     fontSize: 16,

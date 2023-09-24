@@ -54,6 +54,7 @@ export default function UserTabRoutes() {
         component={UserRoutes}
         initialParams={{ initialRouteName: 'Messages' }}
         options={{
+          headerShown: false,
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="chatbox-outline" color={color} size={size} lib="IonIcons" />

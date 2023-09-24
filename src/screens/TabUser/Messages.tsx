@@ -1,9 +1,18 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { StyleSheet, ScrollView, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
 import Input from '../../components/Input';
 import Message from '../../components/Message';
+import HeaderNav from '../../components/HeaderNav';
 
 export default function Messages() {
   const mensagens = [
@@ -41,7 +50,15 @@ export default function Messages() {
     },
   ];
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, setValue } = useForm();
+
+  const navigation = useNavigation();
+
+  const handleNavigation = (screen: string) => {
+    console.log({ screen });
+    // @ts-ignore
+    navigation.navigate(screen);
+  };
 
   const handleDismissKeyboard = () => {
     Keyboard.dismiss();
@@ -53,6 +70,10 @@ export default function Messages() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerNav}>
+        <HeaderNav title="Mensagens" navigation={navigation} />
+      </View>
+
       <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
         <View style={styles.inputContainer}>
           <Input
@@ -66,9 +87,13 @@ export default function Messages() {
       <View>
         <ScrollView>
           {mensagens.map((mensagem, index) => (
-            <View key={index} style={styles.messagesContainer}>
+            <TouchableOpacity
+              key={index}
+              style={styles.messagesContainer}
+              onPress={() => handleNavigation('Chat')}
+            >
               <Message text={mensagem.text} date={mensagem.date} user={mensagem.user} />
-            </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -81,8 +106,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
   },
+  headerNav: {
+    paddingTop: 10,
+  },
   inputContainer: {
-    paddingVertical: 12,
+    paddingBottom: 12,
   },
   messagesContainer: {
     paddingVertical: 5,

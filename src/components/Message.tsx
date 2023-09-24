@@ -4,18 +4,6 @@ import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import Avatar from './Avatar';
 
-// para importar este componente em outro arquivo, basta fazer:
-// import Message from '../components/Message';
-// e usar o componente como uma tag html:
-// <Message
-//   text="Olá, tudo bem?"
-//   date="2021-09-15T18:00:00"
-//   user={{
-//     name: 'João',
-//     avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-//   }}
-// />
-
 interface MessageProps {
   text: string;
   date: string;
