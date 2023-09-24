@@ -41,7 +41,7 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.HeaderNav}>
-        <HeaderNav title="Perfil" navigation={navigation} />
+        <HeaderNav title="Perfil" navigation={navigation} icon={true} />
       </View>
       <StatusBar style="dark" />
       <View style={styles.header}>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   HeaderNav: {
     paddingHorizontal: 24,
-    paddingTop: 7,
+    paddingTop: 10,
   },
   header: {
     flexDirection: 'row',

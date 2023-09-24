@@ -9,9 +9,16 @@ interface HeaderProps {
   navigation: any;
   toggleModal?: () => void;
   profileImage?: string;
+  icon?: boolean;
 }
 
-export default function HeaderNav({ title, navigation, toggleModal, profileImage }: HeaderProps) {
+export default function HeaderNav({
+  title,
+  navigation,
+  toggleModal,
+  profileImage,
+  icon,
+}: HeaderProps) {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const toggleModalVisible = () => {
@@ -32,10 +39,12 @@ export default function HeaderNav({ title, navigation, toggleModal, profileImage
 
         <Text style={styles.textHeader}>{title}</Text>
       </View>
-      <TouchableOpacity onPress={toggleModalVisible}>
-        <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
-        <ModalMoreActions isVisible={modalVisible} toggleModal={toggleModalVisible} />
-      </TouchableOpacity>
+      {icon ? (
+        <TouchableOpacity onPress={toggleModalVisible}>
+          <Icon lib="IonIcons" icon="ellipsis-vertical" size={22} />
+          <ModalMoreActions isVisible={modalVisible} toggleModal={toggleModalVisible} />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
@@ -44,7 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'space-between',
     paddingTop: 24,
     paddingHorizontal: 24,
   },
@@ -53,12 +61,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 32,
+    marginTop: 28,
     marginBottom: 20,
   },
   titleHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 10,
   },
   image: {
@@ -68,7 +75,6 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: 16,
+    fontSize: 18,
   },
 });
