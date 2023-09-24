@@ -8,17 +8,17 @@ import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
+import { getRides } from '../../services/ride';
 
 export default function Search() {
   const insets = useSafeAreaInsets();
-  const [open, setOpen] = React.useState(false);
+  const navigation = useNavigation();
+  const queryClient = useQueryClient();
+
   const [startingSpot, setStartingSpot] = React.useState('');
   const [destinationSpot, setDestinationSpot] = React.useState('');
-  const [value, setValue] = React.useState('');
-
-  const navigation = useNavigation();
 
   const handleNavigation = (screen: string) => {
     console.log({ screen });
@@ -30,6 +30,14 @@ export default function Search() {
     queryKey: ['spots'],
     queryFn: getCollegeSpots,
   });
+
+  const { data: rides, isLoading: isLoadingRides } = useQuery(
+    ['rides'],
+    () => getRides({ origin: startingSpot, destination: destinationSpot }),
+    {
+      enabled: Boolean(startingSpot && destinationSpot),
+    }
+  );
 
   return (
     <View>
@@ -54,6 +62,7 @@ export default function Search() {
                   <Select
                     onChange={(value, itemIndex) => {
                       setStartingSpot(value);
+                      queryClient.invalidateQueries(['rides']);
                     }}
                     values={
                       collegeSpots?.map((spot) => ({
@@ -67,6 +76,7 @@ export default function Search() {
                   <Select
                     onChange={(value, itemIndex) => {
                       setDestinationSpot(value);
+                      queryClient.invalidateQueries(['rides']);
                     }}
                     values={
                       collegeSpots?.map((spot) => ({

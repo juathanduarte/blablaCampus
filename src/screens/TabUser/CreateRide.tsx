@@ -15,7 +15,7 @@ import { date } from 'zod';
 import { getVehicles } from '../../services/vehicles';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
-import { createRide } from '../../services/ride/createRide';
+import { createRide } from '../../services/ride';
 
 export default function CreateRide() {
   const [openDatePicker, setOpenDatePicker] = useState(false);
@@ -271,6 +271,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   datePicker: {
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
 });
