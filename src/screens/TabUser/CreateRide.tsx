@@ -13,8 +13,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { date } from 'zod';
 import { getVehicles } from '../../services/vehicles';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
+import { createRide } from '../../services/ride/createRide';
 
 export default function CreateRide() {
   const [openDatePicker, setOpenDatePicker] = useState(false);
@@ -45,10 +46,15 @@ export default function CreateRide() {
     resolver: zodResolver(createCarpool),
   });
 
-  function onSubmit() {
-    const values = getValues();
+  const { mutateAsync } = useMutation({
+    mutationFn: createRide,
+    onSuccess: () => {
+      console.log('success');
+    },
+  });
 
-    console.log(values);
+  function onSubmit() {
+    mutateAsync(getValues());
   }
 
   useEffect(() => {
@@ -122,7 +128,11 @@ export default function CreateRide() {
             setOpenDatePicker(true);
           }}
         >
-          <Input label={new Date(getValues('day')).toLocaleDateString()} disableEdit />
+          <Input
+            key={watch('day') && watch('day').toString()}
+            label={Intl.DateTimeFormat('pt-BR').format(new Date(getValues('day') || new Date()))}
+            disableEdit
+          />
 
           {openDatePicker && (
             <DateTimePicker
@@ -133,7 +143,7 @@ export default function CreateRide() {
                 setOpenDatePicker(false);
                 selectedDate && setValue('day', selectedDate);
               }}
-              // timeZoneName="America/Sao_Paulo"
+              timeZoneOffsetInMinutes={-180}
               locale="pt-BR"
               style={styles.datePicker}
               themeVariant="light"
@@ -148,7 +158,14 @@ export default function CreateRide() {
           }}
         >
           {/* get time */}
-          <Input label={new Date(getValues('time'))?.toLocaleTimeString() || ''} disableEdit />
+          <Input
+            key={watch('time') && watch('time').toString()}
+            label={Intl.DateTimeFormat('pt-BR', {
+              hour: 'numeric',
+              minute: 'numeric',
+            }).format(new Date(getValues('time') || new Date()))}
+            disableEdit
+          />
           {openTimePicker && (
             <DateTimePicker
               value={new Date()}
@@ -157,10 +174,11 @@ export default function CreateRide() {
               onChange={(event, selectedDate) => {
                 setOpenTimePicker(false);
                 const time = selectedDate?.toLocaleTimeString() || '';
-                console.log({ time });
                 selectedDate && setValue('time', selectedDate);
               }}
-              // timeZoneName="America/Sao_Paulo"
+              // -3 hours
+              timeZoneOffsetInMinutes={-180}
+              is24Hour
               locale="pt-BR"
               style={styles.datePicker}
               themeVariant="light"
@@ -253,6 +271,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   datePicker: {
-    alignSelf: 'center',
+    alignSelf: 'center', 
   },
 });

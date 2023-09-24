@@ -8,17 +8,8 @@ import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-
-const collegeSpots = [
-  {
-    label: 'All',
-    value: 'All',
-  },
-  {
-    label: 'Restaurant',
-    value: 'Restaurant',
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getCollegeSpots } from '../../services/collegespot';
 
 export default function Search() {
   const insets = useSafeAreaInsets();
@@ -34,6 +25,11 @@ export default function Search() {
     // @ts-ignore
     navigation.navigate(screen);
   };
+
+  const { data: collegeSpots, isLoading } = useQuery({
+    queryKey: ['spots'],
+    queryFn: getCollegeSpots,
+  });
 
   return (
     <View>
@@ -59,7 +55,12 @@ export default function Search() {
                     onChange={(value, itemIndex) => {
                       setStartingSpot(value);
                     }}
-                    values={collegeSpots}
+                    values={
+                      collegeSpots?.map((spot) => ({
+                        label: spot.name,
+                        value: spot.name,
+                      })) || []
+                    }
                     selectedValue={startingSpot}
                     placeholder="Escolha o local de Início"
                   />
@@ -67,7 +68,12 @@ export default function Search() {
                     onChange={(value, itemIndex) => {
                       setDestinationSpot(value);
                     }}
-                    values={collegeSpots}
+                    values={
+                      collegeSpots?.map((spot) => ({
+                        label: spot.name,
+                        value: spot.name,
+                      })) || []
+                    }
                     selectedValue={destinationSpot}
                     placeholder="Escolha o local de Destino"
                   />
@@ -75,7 +81,7 @@ export default function Search() {
               );
             }}
             style={styles({}).list}
-            data={[1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6]}
+            data={collegeSpots}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleNavigation('RequestRide')}>
                 <RideCard
