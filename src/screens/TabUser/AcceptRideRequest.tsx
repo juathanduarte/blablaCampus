@@ -1,31 +1,33 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import RequestRideCard from '../../components/RequestRideCard';
+import { useQuery } from '@tanstack/react-query';
+import { getMyRequests } from '../../services/ride';
 
 export default function AcceptRideRequest() {
-  const rideRequests = Array.from({ length: 10 }, (_, index) => ({
-    id: index,
-    dateTime: '2021-08-01T10:00:00',
-    destinyPoint: 'Praça da Sé',
-    name: 'João',
-    rating: 4.5,
-    role: 'Motorista',
-    startPoint: 'Praça da Sé',
-    urlImage: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-  }));
+  const { data: rideRequests, isLoading } = useQuery({
+    queryKey: ['myRequests'],
+    queryFn: getMyRequests,
+    cacheTime: 0,
+  });
+  console.log('RETURN: ', rideRequests);
 
   return (
     <ScrollView style={styles.container}>
-      {rideRequests.map((request, index) => (
-        <View key={request.id} style={[styles.cardContainer, index !== 0 && { marginTop: 16 }]}>
+      {rideRequests?.map((request, index) => (
+        <View
+          key={request.passenger_registration}
+          style={[styles.cardContainer, index !== 0 && { marginTop: 16 }]}
+        >
           <RequestRideCard
-            dateTime={request.dateTime}
-            destinyPoint={request.destinyPoint}
-            name={request.name}
-            rating={request.rating}
-            role={request.role}
-            startPoint={request.startPoint}
-            urlImage={request.urlImage}
+            passengerRegistration={request.passenger_registration}
+            dateTime={request.carpool_departure_date}
+            destinyPoint={request.carpool.destination_campus_name}
+            name={request.passenger.name}
+            rating={request.passenger.review_average}
+            // role={}
+            startPoint={request.carpool.origin_campus_name}
+            urlImage={'https://avatars.githubusercontent.com/u/60272913?v=4'}
           />
         </View>
       ))}

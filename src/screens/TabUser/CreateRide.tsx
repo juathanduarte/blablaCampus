@@ -56,6 +56,13 @@ export default function CreateRide() {
   });
 
   function onSubmit() {
+    const vehicle = vehicles?.find((vehicle) => vehicle.plate === getValues('vehiclePlate'));
+    if (vehicle && vehicle?.seats < getValues('availableSeats') - 1) {
+      setError('availableSeats', {
+        message: `Máximo de assents: ${vehicle?.seats - 1}`,
+      });
+      return;
+    }
     mutateAsync(getValues());
   }
 
