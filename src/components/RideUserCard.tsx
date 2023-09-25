@@ -7,13 +7,8 @@ import Avatar from './Avatar';
 import Button from './Button';
 import fonts from '../styles/fonts';
 import Rating from './Rating';
+import { User } from '../types/User';
 
-interface User {
-  name: string;
-  urlImage: string;
-  rating: number;
-  status: 'active' | 'inactive';
-}
 interface userProps {
   user: User;
   showButtons: boolean;
@@ -32,23 +27,25 @@ export default function RideUserCard({ user, showButtons }: userProps) {
     console.log('open perfil');
     console.log(user);
   };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressPerfil}>
         <View style={styles.info}>
-          <Avatar urlImage={user.urlImage} size="md" />
+          <Avatar
+            urlImage={'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'}
+            size="md"
+          />
           <View>
             <View style={styles.textContainer}>
               <Text style={styles.textName}>{user.name}</Text>
-              <Rating rating={user.rating} />
+              <Rating rating={user?.review_average} />
             </View>
           </View>
         </View>
       </TouchableOpacity>
       {showButtons && (
         <View style={styles.buttonContainer}>
-          {user.status === 'active' ? (
+          {user.isBlocked ? (
             <View style={styles.button}>
               <Button
                 variant="primary"

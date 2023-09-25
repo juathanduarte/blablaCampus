@@ -16,6 +16,5 @@ export async function getRides({
   // encode to urlparms
   const urlParams = new URLSearchParams(params);
   const { data } = await api.get(`/carpool?${urlParams.toString()}`);
-
   return data.data;
 }

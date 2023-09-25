@@ -9,9 +9,6 @@ export async function createRide(ride: CreateCarpool) {
   departureDate.setMinutes(departureTime.getMinutes());
   departureDate.setSeconds(departureTime.getSeconds());
 
-  console.log({ departureTime });
-  console.log({ departureDate });
-
   const { data } = await api.post('/carpool', {
     originCampusName: ride.originCampusName,
     destinationCampusName: ride.destinationCampusName,
@@ -19,7 +16,4 @@ export async function createRide(ride: CreateCarpool) {
     vehiclePlate: ride.vehiclePlate,
     availableSeats: ride.availableSeats,
   });
-
-  console.log('data', data);
-  console.log('DTIME RETURN', new Date(data.departure_date).toLocaleTimeString());
 }

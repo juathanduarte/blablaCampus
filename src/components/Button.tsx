@@ -12,6 +12,8 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
+  success?: boolean;
+  failed?: boolean;
 }
 
 export default function Button({
@@ -22,6 +24,8 @@ export default function Button({
   onClick,
   disabled,
   isLoading,
+  failed,
+  success,
 }: ButtonProps) {
   const handlePress = () => {
     if (onClick) {
@@ -32,7 +36,11 @@ export default function Button({
   return (
     <TouchableOpacity
       disabled={disabled}
-      style={styles({ variant, size, disabled }).container}
+      style={[
+        styles({ variant, size, disabled }).container,
+        success && styles({ variant, size, disabled }).successButton,
+        failed && styles({ variant, size, disabled }).failedButton,
+      ]}
       onPress={handlePress}
     >
       {isLoading ? (
@@ -95,5 +103,13 @@ const styles = ({ variant, size, disabled }: ButtonProps) =>
           : fonts.text_semi_bold,
 
       textTransform: size === 'large' ? 'uppercase' : 'none',
+    },
+    successButton: {
+      backgroundColor: '#00FF00',
+      textAlign: 'center',
+    },
+    failedButton: {
+      backgroundColor: '#FF0000',
+      textAlign: 'center',
     },
   });
