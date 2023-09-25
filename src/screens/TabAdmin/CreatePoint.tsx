@@ -5,19 +5,19 @@ import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
-import HeaderNav from '../../components/HeaderNav';
-import { CollegeSpot } from '../../types/CollegeSpot';
-import { collegeSpotSchema } from '../../schemas/collegeSpot';
-import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Controller, useForm } from 'react-hook-form';
+import HeaderNav from '../../components/HeaderNav';
+import { collegeSpotSchema } from '../../schemas/collegeSpot';
 import {
   createCollegeSpot,
   editCollegeSpot,
   getSpotInfoByCEP,
   isNameAvailable,
 } from '../../services/collegespot';
-import { useNavigation } from '@react-navigation/native';
+import { CollegeSpot } from '../../types/CollegeSpot';
 
 interface RouteProp<T> {
   route: {
@@ -110,7 +110,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
       setValue('city', localidade);
       setValue('neighborhood', bairro);
       setValue('street', logradouro);
-    }, 
+    },
     onError: (error: any) => {
       console.log(error?.response);
     },
@@ -136,8 +136,9 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderNav title="Novo Ponto" navigation={navigation} />
-      {/* <ScrollView> */}
+      <View style={styles.containerHeader}>
+        <HeaderNav title="Novo Ponto" navigation={navigation} />
+      </View>
       <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -317,7 +318,6 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
           isLoading={isLoadingCreate || isLoadingCEP}
         />
       </ScrollView>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
@@ -325,10 +325,9 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    // justifyContent: 'space-between',
-    paddingTop: 24,
-    paddingHorizontal: 32,
+  },
+  containerHeader: {
+    paddingHorizontal: 24,
   },
   header: {
     width: '100%',
@@ -353,5 +352,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingBottom: 20,
     gap: 20,
+    padding: 24,
   },
 });

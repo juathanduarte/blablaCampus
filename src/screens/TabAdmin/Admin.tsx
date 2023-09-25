@@ -1,17 +1,16 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
-import HeaderNav from '../../components/HeaderNav';
 import ModalMoreActions from '../../components/ModalMoreActions';
 import TabHeader from '../../components/TabHeader';
 import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
 import { getCollegeSpots } from '../../services/collegespot';
 import { getUsers } from '../../services/user';
-import { CollegeSpot } from '../../types/CollegeSpot';
+import HeaderNav from '../../components/HeaderNav';
 
 const Admin = () => {
   const navigation = useNavigation();
@@ -53,7 +52,9 @@ const Admin = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} icon />
+      <View style={styles.containerHeader}>
+        <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} icon />
+      </View>
       <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
       <TabHeader
         labels={['Usuários', 'Pontos']}
@@ -94,6 +95,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // justifyContent: 'space-between',
     paddingTop: 24,
+    paddingHorizontal: 24,
+  },
+  containerHeader: {
+    width: '100%',
     paddingHorizontal: 24,
   },
   header: {
