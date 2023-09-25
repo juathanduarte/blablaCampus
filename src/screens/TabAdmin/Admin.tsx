@@ -4,13 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
+import HeaderNav from '../../components/HeaderNav';
 import ModalMoreActions from '../../components/ModalMoreActions';
 import TabHeader from '../../components/TabHeader';
 import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
 import { getCollegeSpots } from '../../services/collegespot';
 import { getUsers } from '../../services/user';
-import HeaderNav from '../../components/HeaderNav';
 
 const Admin = () => {
   const navigation = useNavigation();
@@ -53,7 +53,7 @@ const Admin = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerHeader}>
-        <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} icon />
+        <HeaderNav title="Bem vindo Admin" toggleModal={toggleModal} icon />
       </View>
       <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
       <TabHeader
@@ -80,8 +80,14 @@ const Admin = () => {
                   spot={point}
                 />
               ))}
+              <Button
+                variant="primary"
+                size="large"
+                icon="add"
+                label="Adicionar"
+                onClick={handleAddPoint}
+              />
             </View>
-            <Button variant="primary" size="small" icon="add" onClick={handleAddPoint} />
           </ScrollView>
         )}
       </View>

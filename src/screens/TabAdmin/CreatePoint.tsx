@@ -33,20 +33,6 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
 
   const editSpot = route?.route?.params?.data;
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleOpenDetail = () => {
-    // navigation.navigate('Detail');
-    console.log('Detail');
-  };
-
-  const handleAdd = () => {
-    console.log('Add');
-    navigation.navigate('Admin');
-  };
-
   const {
     handleSubmit,
     control,
@@ -62,7 +48,6 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
     resolver: zodResolver(collegeSpotSchema),
   });
 
-  // Verifica se nome está disponível
   const { mutateAsync: mutateIsNameAvailable } = useMutation({
     mutationFn: isNameAvailable,
     onSuccess: ({ exists }) => {
@@ -70,6 +55,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
       if (!exists && errors.name) clearErrors('name');
     },
   });
+
   function checkIsNameAvailable() {
     if (!errors.name) return;
     mutateIsNameAvailable(getValues('name'));
@@ -91,7 +77,6 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
   const { mutateAsync, isLoading: isLoadingCreate } = useMutation({
     mutationFn: createCollegeSpot,
     onSuccess: () => {
-      // TODO: Invalidate query spots
       queryClient.invalidateQueries({
         queryKey: ['spots'],
       });
@@ -137,7 +122,7 @@ export default function CreatePoint(route: RouteProp<CollegeSpot>) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerHeader}>
-        <HeaderNav title="Novo Ponto" navigation={navigation} />
+        <HeaderNav title="Cadastrar / Editar ponto" navigation={navigation} />
       </View>
       <ScrollView
         style={styles.content}

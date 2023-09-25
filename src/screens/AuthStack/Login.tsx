@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +14,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { LoginSchema, loginSchema } from '../../schemas';
-import { login, me } from '../../services/user';
+import { login } from '../../services/user';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
@@ -107,10 +107,6 @@ export default function Login() {
             <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>Ou</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('AdminLogin')}>
-          <Text style={[styles.text, { color: colors.primary }]}>Acesse como Administrador</Text>
-        </TouchableOpacity>
       </View>
 
       <StatusBar style="auto" />

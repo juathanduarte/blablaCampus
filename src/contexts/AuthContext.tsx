@@ -1,3 +1,4 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React, {
   createContext,
   ReactNode,
@@ -7,18 +8,13 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { User } from '../types/User';
+import { BLABLACAMPUS_ACCESS_TOKEN_KEY, BLABLACAMPUS_REFRESH_TOKEN_KEY } from '../constants/keys';
 import { api } from '../services/api';
-import {
-  BLABLACAMPUS_ACCESS_TOKEN_KEY,
-  BLABLACAMPUS_REFRESH_TOKEN_KEY,
-  BLABLACAMPUS_VIEW_AS,
-} from '../constants/keys';
 import { me } from '../services/user';
-import { getAsyncStorage, removeAsyncStorage, setAsyncStorage } from '../utils/AsyncStorage';
 import { useUserStore } from '../stores/user';
+import { User } from '../types/User';
+import { getAsyncStorage, removeAsyncStorage, setAsyncStorage } from '../utils/AsyncStorage';
 
 export type AuthContextData = {
   user?: User;
@@ -71,7 +67,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const signOut = useCallback(async () => {
-    console.log('entrou');
     await removeAsyncStorage({ key: BLABLACAMPUS_ACCESS_TOKEN_KEY });
     await removeAsyncStorage({ key: BLABLACAMPUS_REFRESH_TOKEN_KEY });
 

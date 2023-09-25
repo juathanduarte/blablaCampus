@@ -37,8 +37,6 @@ const Profile = () => {
     queryFn: getCarPools,
   });
 
-  function onSubmit() {}
-
   const handleNavigation = (screen: string) => {
     // @ts-ignore
     navigation.navigate(screen);
@@ -114,7 +112,7 @@ const Profile = () => {
           <View style={styles.buttonContainer}>
             <Button
               variant="primary"
-              size="small"
+              size="large"
               icon={'add'}
               onClick={() => handleNavigation('CreateRide')}
             />

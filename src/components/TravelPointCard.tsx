@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import fonts from '../styles/fonts';
-import colors from '../styles/colors';
-import Button from './Button';
+import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import {
+  Modal,
   StyleSheet,
-  View,
   Text,
   TouchableOpacity,
-  Modal,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteCollegeSpot } from '../services/collegespot';
+import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 import { CollegeSpot } from '../types/CollegeSpot';
-import { useNavigation } from '@react-navigation/native';
+import Button from './Button';
 
 interface TravelPointCardProps {
   name: string;
@@ -52,11 +52,11 @@ export default function TravelPointCard({ name, address, spot }: TravelPointCard
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardContent}>
-        <View style={styles.fieldContainer}>
+        <View>
           <Text style={styles.fieldLabel}>Nome:</Text>
           <Text style={styles.fieldValue}>{name}</Text>
         </View>
-        <View style={styles.fieldContainer}>
+        <View>
           <Text style={styles.fieldLabel}>Endereço:</Text>
           <Text style={styles.fieldValue}>{address}</Text>
         </View>
@@ -97,19 +97,15 @@ export default function TravelPointCard({ name, address, spot }: TravelPointCard
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: 'transparent',
-    borderRadius: 16,
-    margin: 8,
-    overflow: 'hidden',
-    elevation: 2,
+    borderRadius: 8,
   },
 
   cardContent: {
     backgroundColor: 'white',
-    padding: 16,
-  },
-
-  fieldContainer: {
-    marginBottom: 10,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 8,
   },
 
   fieldLabel: {

@@ -12,7 +12,6 @@ import {
   View,
 } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Icon from '../../components/Icon';
 import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
 import { getCollegeSpots } from '../../services/collegespot';
@@ -62,7 +61,6 @@ export default function Search() {
       <View style={styles({ insets }).headerContainer}>
         <View style={styles({}).headerUpperPart}>
           <Text style={styles({}).headerUpperText}>BlaBlaCampus</Text>
-          <Icon lib="FontAwesome" icon="bars" size={24} color="#fff" />
         </View>
         <Text style={styles({}).headerLowerPart}>Olá {user?.name}!</Text>
       </View>
