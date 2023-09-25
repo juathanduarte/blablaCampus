@@ -29,7 +29,7 @@ const Admin = () => {
     queryFn: getCollegeSpots,
   });
 
-
+  const handleGoBack = () => {
     navigation.goBack();
   };
 
@@ -37,13 +37,10 @@ const Admin = () => {
     console.log('open detail');
   };
 
-  const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
-
   const { data: users } = useQuery({
     queryKey: ['users'],
     queryFn: getUsers,
   });
-
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
