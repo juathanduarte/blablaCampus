@@ -1,8 +1,7 @@
 import { createRide } from './createRide';
 import { getCarPools } from './getCarPools';
+import { getMyRequests } from './getRideRequests';
 import { getRides } from './getRides';
 import { requestRide } from './requestRide';
-import { getMyRequests } from './getRideRequests';
-import { AcceptRideRequest } from '../../screens/TabUser';
 
-export { createRide, getRides, requestRide, getMyRequests, AcceptRideRequest, getCarPools, getRides };
+export { createRide, getCarPools, getMyRequests, getRides, requestRide };
