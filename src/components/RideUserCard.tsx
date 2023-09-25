@@ -18,14 +18,12 @@ export default function RideUserCard({ user, showButtons }: userProps) {
   const navigation = useNavigation();
 
   const handleNavigation = (screen: string) => {
-    console.log({ screen });
     // @ts-ignore
     navigation.navigate(screen);
   };
 
   const onPressPerfil = () => {
     console.log('open perfil');
-    console.log(user);
   };
   return (
     <View style={styles.container}>

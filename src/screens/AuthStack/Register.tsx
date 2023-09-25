@@ -45,7 +45,6 @@ const Register = () => {
   async function onSubmit(data: RegisterSchema) {
     try {
       const response = await registerTemporarilyUser(data);
-      console.log({ response });
 
       setUser(data);
       navigation.navigate('VerifyCode');

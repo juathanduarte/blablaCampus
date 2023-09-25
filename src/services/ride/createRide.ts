@@ -4,7 +4,6 @@ import { api } from '../api';
 export async function createRide(ride: CreateCarpool) {
   const departureDate = new Date(ride.day);
   const departureTime = new Date(ride.time);
-  console.log('time', departureTime);
   departureDate.setHours(departureTime.getHours());
   departureDate.setMinutes(departureTime.getMinutes());
   departureDate.setSeconds(departureTime.getSeconds());

@@ -30,8 +30,6 @@ export default function UserCard({ user }: userProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const queryClient = useQueryClient();
 
-  console.log(user);
-
   const { mutateAsync } = useMutation({
     mutationFn: blockUser,
     onSuccess: () => {

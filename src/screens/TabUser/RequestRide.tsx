@@ -11,6 +11,7 @@ import { User } from '../../types/User';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getRideInfo } from '../../services/ride/getRideInfo';
 import { requestRide } from '../../services/ride';
+import { useUserStore } from '../../stores/user';
 
 // interface User {
 //   id: string;
@@ -47,6 +48,7 @@ export default function RequestRide({
   },
 }: RouteProp<Ride>) {
   const navigate = useNavigation();
+  const user = useUserStore((state) => state.user);
 
   const [requestSucceeded, setRequestSucceeded] = React.useState(false);
   const [requestFailed, setRequestFailed] = React.useState(false);

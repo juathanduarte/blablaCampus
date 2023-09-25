@@ -26,6 +26,5 @@ interface GetSpotInfoByCEPResponse {
 
 export async function getSpotInfoByCEP(cep: string) {
   const { data } = await api.get<GetSpotInfoByCEPResponse>(`https://viacep.com.br/ws/${cep}/json/`);
-  console.log({ data });
   return data;
 }

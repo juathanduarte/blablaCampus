@@ -36,8 +36,6 @@ export default function ChangePassword() {
     } else if (!data.password || !data.password2) {
       Alert.alert('Por favor, preencha todos os campos.');
     } else {
-      console.log('Password:', data.password);
-      console.log('Password2:', data.password2);
       navigation.navigate('Login');
     }
   };

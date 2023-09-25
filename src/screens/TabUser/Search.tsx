@@ -29,7 +29,6 @@ export default function Search() {
   const [destinationSpot, setDestinationSpot] = React.useState('');
 
   const handleNavigation = (screen: string) => {
-    console.log({ screen });
     // @ts-ignore
     navigation.navigate(screen);
   };
