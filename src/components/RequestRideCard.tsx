@@ -4,16 +4,19 @@ import colors from '../styles/colors';
 import Avatar from './Avatar';
 import Button from './Button';
 import Icon from './Icon';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { acceptRide } from '../services/ride/acceptRide';
+import { useUserStore } from '../stores/user';
 
 interface RideProps {
   urlImage: string;
   name: string;
   rating: number;
   dateTime: string;
-  role: string;
   startPoint: string;
   destinyPoint: string;
   onClick?: () => void;
+  passengerRegistration: string;
   //todo add onClick
 }
 
@@ -22,11 +25,14 @@ export default function RequestRideCard({
   name,
   rating,
   dateTime,
-  role,
   startPoint,
   destinyPoint,
   onClick,
+  passengerRegistration,
 }: RideProps) {
+  const queryClient = useQueryClient();
+  const user = useUserStore((state) => state.user);
+
   function formatDate(date: string) {
     //return date with hour and minutes;
     const dateObj = new Date(date);
@@ -41,9 +47,20 @@ export default function RequestRideCard({
     return `${hour}:${minutes} - ${day}/${month}/${year}`;
   }
 
-  const handleAccept = () => {
-    //TODO: add accept ride request
-  };
+  const { mutateAsync: mutateAcceptPassenger } = useMutation({
+    mutationFn: acceptRide,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myRequests']);
+    },
+  });
+
+  function handleAccept() {
+    mutateAcceptPassenger({
+      departureDate: dateTime,
+      driverRegistration: user!.registration,
+      passengerRegistration: passengerRegistration,
+    });
+  }
 
   const handleDecline = () => {
     //TODO: add decline ride request
@@ -63,8 +80,8 @@ export default function RequestRideCard({
           </View>
         </View>
         <View style={styles.infoRide}>
-          <Button variant="secondary" size="small" icon={'close'} onClick={handleAccept} />
-          <Button variant="primary" size="small" icon={'add'} onClick={handleDecline} />
+          <Button variant="secondary" size="small" icon={'close'} onClick={handleDecline} />
+          <Button variant="primary" size="small" icon={'add'} onClick={handleAccept} />
         </View>
       </View>
       <View>

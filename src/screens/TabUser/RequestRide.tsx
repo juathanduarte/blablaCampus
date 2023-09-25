@@ -7,15 +7,20 @@ import colors from '../../styles/colors';
 import RideUserCard from '../../components/RideUserCard';
 import Button from '../../components/Button';
 import { Ride } from '../../types/Ride';
+import { User } from '../../types/User';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getRideInfo } from '../../services/ride/getRideInfo';
+import { requestRide } from '../../services/ride';
+import { useUserStore } from '../../stores/user';
 
-interface User {
-  id: string;
-  name: string;
-  urlImage: string;
-  rating: number;
-  status: 'active' | 'inactive';
-  type: 'motorista' | 'passageiro';
-}
+// interface User {
+//   id: string;
+//   name: string;
+//   urlImage: string;
+//   rating: number;
+//   status: 'active' | 'inactive';
+//   type: 'motorista' | 'passageiro';
+// }
 
 interface Carona {
   inicio: string;
@@ -43,45 +48,42 @@ export default function RequestRide({
   },
 }: RouteProp<Ride>) {
   const navigate = useNavigation();
-  const [users, setUsers] = React.useState<User[]>([]);
+  const user = useUserStore((state) => state.user);
 
-  console.log({ data });
+  const [requestSucceeded, setRequestSucceeded] = React.useState(false);
+  const [requestFailed, setRequestFailed] = React.useState(false);
 
-  const caronaTeste = {
-    inicio: 'Campus Anglo',
-    destino: 'Campus Capão do Leão',
-    data: '18/09/2023 - Segunda-Feira',
-    horario: '12:00',
-  };
+  const { data: rideData, isLoading } = useQuery({
+    queryKey: ['rideInfo'],
+    queryFn: () =>
+      getRideInfo({
+        registration: data.driver_registration,
+        departureDate: data.departure_date,
+      }),
+  });
 
-  React.useEffect(() => {
-    setUsers([
-      {
-        id: '20102119',
-        name: 'Lucas Ferreira',
-        urlImage: 'https://github.com/lcsferreira.png',
-        status: 'active',
-        rating: 5.0,
-        type: 'passageiro',
-      },
-      {
-        id: '20102118',
-        name: 'Gabriel Timm',
-        urlImage: 'https://github.com/gstimm.png',
-        status: 'active',
-        rating: 5.0,
-        type: 'motorista',
-      },
-      {
-        id: '20152149',
-        name: 'Juathan Duarte',
-        urlImage: 'https://github.com/juathanduarte.png',
-        status: 'inactive',
-        rating: 5.0,
-        type: 'passageiro',
-      },
-    ]);
-  }, []);
+  const {
+    mutateAsync,
+
+    isLoading: isRequestingRide,
+  } = useMutation({
+    mutationFn: requestRide,
+    onSuccess: () => {
+      setRequestSucceeded(true);
+      setRequestFailed(false);
+    },
+    onError: () => {
+      setRequestFailed(true);
+      setRequestSucceeded(false);
+    },
+  });
+
+  function handleRequestRide() {
+    mutateAsync({
+      driverRegistration: data.driver_registration,
+      departureDate: data.departure_date,
+    });
+  }
 
   return (
     <View style={styles.header}>
@@ -90,34 +92,55 @@ export default function RequestRide({
       </View>
       <View style={styles.container}>
         <Text style={styles.text}>Motorista</Text>
-        {users?.map((user: User) =>
-          user.type === 'motorista' ? (
-            <View style={styles.cardSection} key={user.id}>
-              <RideUserCard key={user.id} user={user} showButtons={false} />
-            </View>
-          ) : null
-        )}
+        <View style={styles.cardSection} key={data.driver_registration}>
+          <RideUserCard key={data.driver.registration} user={data.driver} showButtons={false} />
+        </View>
         <Text style={styles.text}>Passageiros</Text>
-        {users?.map((user: User) =>
-          user.type === 'passageiro' ? (
-            <View style={styles.cardSection} key={user.id}>
-              <RideUserCard key={user.id} user={user} showButtons={false} />
-            </View>
-          ) : null
-        )}
+        {rideData?.passengers?.map((user) => (
+          <View style={styles.cardSection} key={user.passenger_registration}>
+            <RideUserCard user={user.passenger} showButtons={false} />
+          </View>
+        ))}
         <View style={styles.rideInformation}>
           <Text style={styles.title}>Início:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.inicio}</Text>
+          <Text style={styles.subtitle}>{rideData?.origin_campus_name}</Text>
           <Text style={styles.title}>Destino:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.destino}</Text>
+          <Text style={styles.subtitle}>{rideData?.destination_campus_name}</Text>
           <Text style={styles.title}>Data:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.data}</Text>
+          <Text style={styles.subtitle}>
+            {rideData &&
+              Intl.DateTimeFormat('pt-BR', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+              }).format(new Date(rideData.departure_date))}
+          </Text>
           <Text style={styles.title}>Horário:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.horario}</Text>
+          <Text style={styles.subtitle}>
+            {rideData &&
+              Intl.DateTimeFormat('pt-BR', {
+                hour: 'numeric',
+                minute: 'numeric',
+              }).format(new Date(rideData.departure_date))}
+          </Text>
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button variant="primary" size="large" label="Solicitar" />
+          <Button
+            disabled={
+              isRequestingRide ||
+              requestSucceeded ||
+              requestFailed ||
+              isLoading ||
+              user?.registration === rideData?.driver.registration
+            }
+            variant="primary"
+            size="large"
+            label="Solicitar"
+            onClick={handleRequestRide}
+            success={requestSucceeded}
+            failed={requestFailed}
+          />
         </View>
       </View>
     </View>

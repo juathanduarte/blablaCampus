@@ -34,8 +34,4 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: fonts.text_bold,
   },
-  constructionIcon: {
-    width: 250,
-    height: 250,
-  },
 });

@@ -1,4 +1,5 @@
 import { CollegeSpot } from './CollegeSpot';
+import { Passenger } from './Passengers';
 import { Review } from './Review';
 import { User } from './User';
 import { Vehicle } from './Vehicle';
@@ -16,7 +17,7 @@ export interface Ride {
   destination_campus: CollegeSpot;
   driver: User;
   vehicle: Vehicle;
-  passengers: string;
+  passengers: Passenger[];
   reviews: Review[];
   updated_at: string;
 }
