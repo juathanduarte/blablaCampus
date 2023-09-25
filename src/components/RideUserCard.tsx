@@ -25,6 +25,8 @@ export default function RideUserCard({ user, showButtons }: userProps) {
   const onPressPerfil = () => {
     console.log('open perfil');
   };
+
+  console.log('NOME: ', Object.keys(user));
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressPerfil}>

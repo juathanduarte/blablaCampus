@@ -96,9 +96,9 @@ export default function RequestRide({
           <RideUserCard key={data.driver.registration} user={data.driver} showButtons={false} />
         </View>
         <Text style={styles.text}>Passageiros</Text>
-        {rideData?.passengers?.map((user: User) => (
-          <View style={styles.cardSection} key={user.registration}>
-            <RideUserCard key={user.registration} user={user} showButtons={false} />
+        {rideData?.passengers?.map((user) => (
+          <View style={styles.cardSection} key={user.passenger_registration}>
+            <RideUserCard user={user.passenger} showButtons={false} />
           </View>
         ))}
         <View style={styles.rideInformation}>
@@ -127,7 +127,13 @@ export default function RequestRide({
 
         <View style={styles.buttonContainer}>
           <Button
-            disabled={isRequestingRide || requestSucceeded || requestFailed || isLoading}
+            disabled={
+              isRequestingRide ||
+              requestSucceeded ||
+              requestFailed ||
+              isLoading ||
+              user?.registration === rideData?.driver.registration
+            }
             variant="primary"
             size="large"
             label="Solicitar"

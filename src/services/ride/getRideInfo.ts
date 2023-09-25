@@ -1,4 +1,5 @@
 import { CollegeSpot } from '../../types/CollegeSpot';
+import { Passenger } from '../../types/Passengers';
 import { Ride } from '../../types/Ride';
 import { User } from '../../types/User';
 import { Vehicle } from '../../types/Vehicle';
@@ -8,7 +9,7 @@ interface IRideInfo {
   driver: User;
   origin_campus: CollegeSpot;
   destination_campus: CollegeSpot;
-  passengers: User[];
+  passengers: Passenger[];
   vehicle: Vehicle;
   departure_date: string;
   destination_campus_name: string;
@@ -25,5 +26,6 @@ export async function getRideInfo({
   departureDate: string;
 }): Promise<IRideInfo> {
   const { data } = await api.get(`/carpool/${registration}/${departureDate}`);
+  console.log('ride info: ', data);
   return data;
 }
