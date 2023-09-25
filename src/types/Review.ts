@@ -9,7 +9,7 @@ export interface Review {
   carpool: Ride;
   carpool_departure_date: string;
   carpool_driver_registration: string;
-  rating: string;
+  rating: number;
   comment: string;
   created_at: string;
   updated_at: string;

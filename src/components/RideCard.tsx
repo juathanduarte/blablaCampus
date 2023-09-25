@@ -5,7 +5,6 @@ import Avatar from './Avatar';
 import Icon from './Icon';
 
 interface RideProps {
-  urlImage: string;
   name: string;
   rating: number;
   dateTime: string;
@@ -17,7 +16,6 @@ interface RideProps {
 }
 
 export default function RideCard({
-  urlImage,
   name,
   rating,
   dateTime,
@@ -43,7 +41,12 @@ export default function RideCard({
     <View style={styles.container}>
       <View style={styles.infoUserContainer}>
         <View style={styles.infoUser}>
-          <Avatar urlImage={urlImage} size="sm" />
+          <Avatar
+            urlImage={
+              'https://thumbs.dreamstime.com/b/homem-cinzento-do-placeholder-da-foto-pessoa-gen%C3%A9rica-silhueta-cinzenta-em-um-fundo-branco-144511705.jpg'
+            }
+            size="sm"
+          />
           <View style={styles.infoUserText}>
             <Text style={styles.textName}>{name}</Text>
             <Text style={styles.textRating}>

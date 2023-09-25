@@ -1,17 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '../../components/Button';
 import CarCard from '../../components/CarCard';
+import HeaderNav from '../../components/HeaderNav';
 import Rating from '../../components/Rating';
 import RideCard from '../../components/RideCard';
 import TabHeader from '../../components/TabHeader';
-import fonts from '../../styles/fonts';
-import Button from '../../components/Button';
-import { StatusBar } from 'expo-status-bar';
-import { useUserStore } from '../../stores/user';
-import { useQuery } from '@tanstack/react-query';
+import { getCarPools } from '../../services/ride';
 import { getVehicles } from '../../services/vehicles/getVehicles';
-import HeaderNav from '../../components/HeaderNav';
+import { useUserStore } from '../../stores/user';
+import fonts from '../../styles/fonts';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -31,7 +32,10 @@ const Profile = () => {
     queryFn: getVehicles,
   });
 
-  function onSubmit() {}
+  const { data: carPools } = useQuery({
+    queryKey: ['myCarPools'],
+    queryFn: getCarPools,
+  });
 
   const handleNavigation = (screen: string) => {
     // @ts-ignore
@@ -86,8 +90,6 @@ const Profile = () => {
         />
       </View>
 
-      {/* Futuro Conteúdo da página */}
-
       {selectedTab === 0 ? (
         <View>
           <ScrollView>
@@ -95,21 +97,22 @@ const Profile = () => {
               style={styles.content}
               onPress={() => handleNavigation('RideInformations')}
             >
-              <RideCard
-                dateTime="2021-08-20T18:00:00.000Z"
-                destinyPoint="PUCRS"
-                name="Gabriel"
-                rating={4.5}
-                role="Passageiro"
-                startPoint="UFRGS"
-                urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
-              />
+              {carPools?.map((carPool, index) => (
+                <RideCard
+                  dateTime={carPool.departure_date}
+                  startPoint={carPool.origin_campus.name}
+                  destinyPoint={carPool.destination_campus.name}
+                  name={carPool.driver.name}
+                  rating={carPool.reviews[index].rating}
+                  role="Passageiro" // TODO: talvez deixar dinâmico
+                />
+              ))}
             </TouchableOpacity>
           </ScrollView>
           <View style={styles.buttonContainer}>
             <Button
               variant="primary"
-              size="small"
+              size="large"
               icon={'add'}
               onClick={() => handleNavigation('CreateRide')}
             />
@@ -129,7 +132,7 @@ const Profile = () => {
                 rating={4.5}
                 role="Recusada"
                 startPoint="UFRGS"
-                urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
+                // urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
               />
             </TouchableOpacity>
           </ScrollView>

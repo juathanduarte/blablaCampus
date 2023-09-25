@@ -16,12 +16,12 @@ import Button from '../../components/Button';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
-import { useRegisterStore } from '../../stores/register';
-import { useMutation } from '@tanstack/react-query';
-import { registerUserWithCode } from '../../services/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { VerifyCodeSchema, verifyCodeSchema } from '../../schemas/register';
+import { useMutation } from '@tanstack/react-query';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { VerifyCodeSchema, verifyCodeSchema } from '../../schemas/register';
+import { registerUserWithCode } from '../../services/user';
+import { useRegisterStore } from '../../stores/register';
 
 export default function VerificationScreen() {
   const navigation = useNavigation();
@@ -235,9 +235,9 @@ const styles = StyleSheet.create({
   codeInput: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 48,
-    width: 48,
-    marginHorizontal: 8,
+    height: 44,
+    width: 44,
+    marginHorizontal: 3.5,
     color: colors.primary,
     fontWeight: 'bold',
     fontSize: 16,

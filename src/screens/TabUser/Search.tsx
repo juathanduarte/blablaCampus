@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import {
@@ -11,19 +12,20 @@ import {
   View,
 } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Icon from '../../components/Icon';
 import RideCard from '../../components/RideCard';
 import Select from '../../components/Select';
-import colors from '../../styles/colors';
-import fonts from '../../styles/fonts';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
 import { getRides } from '../../services/ride';
+import { useUserStore } from '../../stores/user';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 export default function Search() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+
+  const user = useUserStore((state) => state.user);
 
   const [startingSpot, setStartingSpot] = React.useState('');
   const [destinationSpot, setDestinationSpot] = React.useState('');
@@ -58,10 +60,8 @@ export default function Search() {
       <View style={styles({ insets }).headerContainer}>
         <View style={styles({}).headerUpperPart}>
           <Text style={styles({}).headerUpperText}>BlaBlaCampus</Text>
-          {/* TODO: Change to Button Icon */}
-          <Icon lib="FontAwesome" icon="bars" size={24} color="#fff" />
         </View>
-        <Text style={styles({}).headerLowerPart}>Olá Gabriel!</Text>
+        <Text style={styles({}).headerLowerPart}>Olá {user?.name}!</Text>
       </View>
       <View style={styles({}).selectContainer}>
         <Select
@@ -115,7 +115,6 @@ export default function Search() {
                   name="Gabriel"
                   rating={4.5}
                   startPoint={ride.item.origin_campus_name}
-                  urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
                 />
               </TouchableOpacity>
             )}
@@ -183,6 +182,7 @@ const styles = ({ insets }: StylesProps) => {
       shadowOpacity: 0.1,
       shadowRadius: 4,
       borderRadius: 8,
+      paddingHorizontal: 24,
     },
     travelList: {
       marginTop: 18,

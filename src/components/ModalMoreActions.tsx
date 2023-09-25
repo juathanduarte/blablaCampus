@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { useAuthContext } from '../contexts/AuthContext';
 import fonts from '../styles/fonts';
 import Button from './Button';
-import { useAuthContext } from '../contexts/AuthContext';
 
 interface ModalMoreActionsProps {
   isVisible: boolean;
@@ -24,7 +24,7 @@ const ModalMoreActions = ({ isVisible, toggleModal }: ModalMoreActionsProps) => 
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
               <View style={styles.buttonContainer}>
-                <Button variant="secondary" size="medium" label="Sair" onClick={signOut} />
+                <Button variant="secondary" size="large" label="Sair" onClick={signOut} />
               </View>
             </View>
           </TouchableWithoutFeedback>

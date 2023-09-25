@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import Icon from './Icon';
 import ModalMoreActions from './ModalMoreActions';
 
 interface HeaderProps {
   title?: string;
-  navigation: any;
+  navigation?: any;
   toggleModal?: () => void;
   profileImage?: string;
   icon?: boolean;
@@ -32,9 +32,12 @@ export default function HeaderNav({
   return (
     <View style={styles.header}>
       <View style={styles.titleHeader}>
-        <TouchableOpacity onPress={handleGoBack}>
-          <Icon lib="IonIcons" icon="arrow-back-outline" size={22} />
-        </TouchableOpacity>
+        {navigation ? (
+          <TouchableOpacity onPress={handleGoBack}>
+            <Icon lib="IonIcons" icon="arrow-back-outline" size={22} />
+          </TouchableOpacity>
+        ) : null}
+
         {profileImage ? <Image source={{ uri: profileImage }} style={styles.image} /> : null}
 
         <Text style={styles.textHeader}>{title}</Text>

@@ -1,20 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView, // Adicionado o KeyboardAvoidingView
-  Platform, // Adicionado o Platform
-} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import HeaderNav from '../../components/HeaderNav';
-import ChatItem from '../../components/ChatItem';
-import Input from '../../components/Input';
+import React from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import Button from '../../components/Button';
+import ChatItem from '../../components/ChatItem';
+import HeaderNav from '../../components/HeaderNav';
+import Input from '../../components/Input';
 
 export default function Chat() {
   const navigation = useNavigation();
