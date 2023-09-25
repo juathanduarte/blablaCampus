@@ -6,6 +6,7 @@ import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import RideUserCard from '../../components/RideUserCard';
 import Button from '../../components/Button';
+import { Ride } from '../../types/Ride';
 
 interface User {
   id: string;
@@ -28,9 +29,23 @@ interface userProps {
   carona: Carona;
 }
 
-export default function RequestRide({ user, carona }: userProps) {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+export default function RequestRide({
+  route: {
+    params: { data },
+  },
+}: RouteProp<Ride>) {
   const navigate = useNavigation();
   const [users, setUsers] = React.useState<User[]>([]);
+
+  console.log({ data });
 
   const caronaTeste = {
     inicio: 'Campus Anglo',

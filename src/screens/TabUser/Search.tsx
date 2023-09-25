@@ -107,7 +107,9 @@ export default function Search() {
             style={styles({}).list}
             data={rides}
             renderItem={(ride) => (
-              <TouchableOpacity onPress={() => handleNavigation('RequestRide')}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('RequestRide', { data: ride.item })}
+              >
                 <RideCard
                   dateTime={ride.item.departure_date}
                   destinyPoint={ride.item.destination_campus_name}

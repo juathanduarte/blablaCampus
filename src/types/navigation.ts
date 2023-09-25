@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack';
+import { Ride } from './Ride';
 
 export type RootStackParamList = {
   Welcome: undefined;
@@ -9,6 +10,7 @@ export type RootStackParamList = {
   VerifyCode: undefined;
   Admin: undefined;
   AdminLogin: undefined;
+  RequestRide: { data: Ride };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
