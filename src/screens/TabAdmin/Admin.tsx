@@ -1,37 +1,25 @@
 import React, { useMemo } from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import Button from '../../components/Button';
 import HeaderNav from '../../components/HeaderNav';
+import ModalMoreActions from '../../components/ModalMoreActions';
 import TabHeader from '../../components/TabHeader';
 import TravelPointCard from '../../components/TravelPointCard';
 import UserCard from '../../components/UserCard';
-import Button from '../../components/Button';
-import ModalMoreActions from '../../components/ModalMoreActions';
-import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
 import { getCollegeSpots } from '../../services/collegespot';
+import { getUsers } from '../../services/user';
 import { CollegeSpot } from '../../types/CollegeSpot';
-
-interface User {
-  id: string;
-  name: string;
-  urlImage: string;
-  status: 'active' | 'inactive';
-}
-
-interface Point {
-  id: string;
-  name: string;
-  address: string;
-}
 
 const Admin = () => {
   const navigation = useNavigation();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
-  const [users, setUsers] = React.useState<User[]>([]);
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+
   function toggleModal() {
     setIsModalVisible(!isModalVisible);
   }
@@ -41,36 +29,21 @@ const Admin = () => {
     queryFn: getCollegeSpots,
   });
 
-  React.useEffect(() => {
-    setUsers([
-      {
-        id: '20102119',
-        name: 'Lucas Ferreira',
-        urlImage: 'https://github.com/lcsferreira.png',
-        status: 'active',
-      },
-      {
-        id: '20102118',
-        name: 'Gabriel Timm',
-        urlImage: 'https://github.com/gstimm.png',
-        status: 'inactive',
-      },
-      {
-        id: '20152149',
-        name: 'Juathan Duarte',
-        urlImage: 'https://github.com/juathanduarte.png',
-        status: 'active',
-      },
-    ]);
-  }, []);
 
-  const handleGoBack = () => {
     navigation.goBack();
   };
 
   const handleOpenDetail = () => {
     console.log('open detail');
   };
+
+  const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
+
+  const { data: users } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUsers,
+  });
+
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
@@ -95,7 +68,7 @@ const Admin = () => {
         {selectedTab === 0 ? (
           <ScrollView>
             <View style={styles.content}>
-              {users?.map((user: User) => <UserCard key={user.id} user={user} />)}
+              {users?.map((user) => <UserCard key={user.registration} user={user} />)}
             </View>
           </ScrollView>
         ) : (

@@ -6,5 +6,15 @@ import {
   registerUser,
   registerUserWithCode,
 } from './register';
+import { blockUser, getUsers } from './users';
 
-export { isEmailAvailable, isRegistrationAvailable, login, me, registerUser, registerUserWithCode };
+export {
+  blockUser,
+  getUsers,
+  isEmailAvailable,
+  isRegistrationAvailable,
+  login,
+  me,
+  registerUser,
+  registerUserWithCode,
+};

@@ -1,16 +1,24 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { View, Text, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { blockUser } from '../services/user';
 import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 import Avatar from './Avatar';
 import Button from './Button';
-import fonts from '../styles/fonts';
 
 interface User {
-  id: string;
+  registration: string;
   name: string;
-  urlImage: string;
-  status: 'active' | 'inactive';
+  urlImage?: string;
+  is_blocked?: boolean;
 }
 interface userProps {
   user: User;
@@ -20,6 +28,18 @@ interface userProps {
 
 export default function UserCard({ user }: userProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const queryClient = useQueryClient();
+
+  console.log(user);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: blockUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users'],
+      });
+    },
+  });
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -29,28 +49,32 @@ export default function UserCard({ user }: userProps) {
     console.log('open perfil');
   };
 
-  const onPressStatusBtn = () => {
-    console.log('open modal');
-    console.log('change status');
+  const handleUpdateIsBlocked = async () => {
+    mutateAsync(user.registration);
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressPerfil}>
         <View style={styles.info}>
-          <Avatar urlImage={user.urlImage} size="md" />
+          <Avatar
+            urlImage={
+              'https://thumbs.dreamstime.com/b/%C3%ADcone-do-perfil-do-placeholder-do-defeito-90197957.jpg'
+            }
+            size="md"
+          />
           <View>
             <View style={styles.textContainer}>
               <Text style={styles.textName}>{user.name}</Text>
-              <Text style={styles.textId}>{user.id}</Text>
+              <Text style={styles.textId}>{user.registration}</Text>
             </View>
           </View>
         </View>
       </TouchableOpacity>
-      {user.status === 'active' ? (
-        <Button variant="primary" size="medium" label="Bloquear" onClick={toggleModal} />
-      ) : (
+      {user.is_blocked ? (
         <Button variant="secondary" size="medium" label="Desbloquear" onClick={toggleModal} />
+      ) : (
+        <Button variant="primary" size="medium" label="Bloquear" onClick={toggleModal} />
       )}
 
       <Modal
@@ -64,12 +88,24 @@ export default function UserCard({ user }: userProps) {
             <TouchableWithoutFeedback>
               <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>
-                  {user.status == 'active' ? 'Bloquear ' : 'Desbloquear '}
+                  {user.is_blocked ? 'Desbloquear ' : 'Bloquear '}
                   {user.name}
                 </Text>
                 <View style={styles.buttonContainer}>
-                  <Button variant="secondary" size="medium" label="Cancelar" />
-                  <Button variant="primary" size="medium" label="Confirmar" />
+                  <Button
+                    variant="secondary"
+                    size="medium"
+                    label="Cancelar"
+                    onClick={toggleModal}
+                  />
+                  <Button
+                    variant="primary"
+                    size="medium"
+                    label="Confirmar"
+                    onClick={() => {
+                      handleUpdateIsBlocked();
+                    }}
+                  />
                 </View>
               </View>
             </TouchableWithoutFeedback>
