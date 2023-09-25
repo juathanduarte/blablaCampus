@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import Avatar from './Avatar';
 
@@ -46,7 +47,11 @@ export default function Message({ text, date, user }: MessageProps) {
     }
     interval = Math.floor(seconds / 3600);
     if (interval >= 1) {
-      return 'Há ' + interval + ' horas';
+      if (interval < 2) {
+        return 'Há ' + interval + ' hora';
+      } else {
+        return 'Há ' + interval + ' horas';
+      }
     }
     interval = Math.floor(seconds / 60);
     if (interval >= 1) {
@@ -60,7 +65,7 @@ export default function Message({ text, date, user }: MessageProps) {
       <Avatar size="md" urlImage={user.avatar_url} />
       <View style={styles.content}>
         <View style={styles.textInfo}>
-          <Text>{user.name}</Text>
+          <Text style={styles.nameText}>{user.name}</Text>
           <Text style={styles.dateText}>{timeAgo(date)}</Text>
         </View>
         <Text style={styles.lastMessage}>{text}</Text>
@@ -82,20 +87,28 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     height: 40,
+    width: '80%',
   },
   textInfo: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  nameText: {
+    alignSelf: 'flex-start',
+    fontFamily: fonts.text_medium,
+    fontSize: 14,
   },
   dateText: {
     color: colors.blueGray,
     fontSize: 12,
+    alignSelf: 'flex-end',
+    fontFamily: fonts.text_light,
   },
 
   lastMessage: {
     color: colors.gray,
     fontSize: 13,
+    fontFamily: fonts.text_regular,
   },
 });

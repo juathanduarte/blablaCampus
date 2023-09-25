@@ -16,6 +16,8 @@ interface InputProps {
   onblur?: () => void;
   defaultValue?: string;
   inputNumber?: boolean;
+  disableEdit?: boolean;
+  maxLength?: number;
 }
 
 export default function Input({
@@ -29,6 +31,8 @@ export default function Input({
   onblur,
   defaultValue,
   inputNumber,
+  disableEdit,
+  maxLength,
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,6 +46,8 @@ export default function Input({
         <View style={styles.containerIcon}>
           <Icon icon={iconInput} size={iconSize} color={colors.quaternary} lib="FontAwesome" />
           <TextInput
+            {...(maxLength && { maxLength })}
+            editable={!disableEdit}
             onBlur={onblur}
             placeholder={label}
             secureTextEntry={variant === 'password' && !showPassword}
@@ -69,6 +75,7 @@ export default function Input({
       {!iconInput && (
         <View style={styles.containerDefault}>
           <TextInput
+            editable={!disableEdit}
             onBlur={onblur}
             placeholder={label}
             style={[styles.textInput]}

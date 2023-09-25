@@ -10,7 +10,7 @@ import {
   Profile,
   Search,
 } from '../screens/TabUser';
-
+import Chat from '../screens/TabUser/Chat';
 import RideInformations from '../screens/TabUser/RideInformations';
 import Assessments from '../screens/TabUser/Assessments';
 import CreateAssessment from '../screens/TabUser/CreateAssessment';
@@ -51,6 +51,7 @@ const UserRoutes = ({ route }: any) => {
       <Stack.Screen name="Assessments" component={Assessments} />
       <Stack.Screen name="RideInformations" component={RideInformations} />
       <Stack.Screen name="RequestRide" component={RequestRide} />
+      <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
 };

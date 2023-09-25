@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // .env está chegando undefined aqui
-const apiUrl = process.env.EXPO_PUBLIC_API_URl;
+const apiUrl = process.env.EXPO_PUBLIC_API_URl || 'http://localhost:3000';
 
 /**
  * Checa qual o emulador e retorna a url local

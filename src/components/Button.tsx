@@ -6,7 +6,7 @@ import fonts from '../styles/fonts';
 
 interface ButtonProps {
   variant: 'primary' | 'secondary';
-  size: 'small' | 'medium' | 'large' | 'personalized';
+  size: 'small' | 'medium' | 'large' | 'personalized' | 'inputsize';
   label?: string;
   icon?: any;
   onClick?: () => void;
@@ -37,7 +37,7 @@ export default function Button({
     >
       {isLoading ? (
         <ActivityIndicator size="small" color={colors.secondary} />
-      ) : size === 'small' && icon ? (
+      ) : (size === 'small' || size === 'inputsize') && icon ? (
         <Ionicons name={icon} size={24} color={colors.secondary} />
       ) : (
         <Text style={styles({ variant, size }).text}>{label}</Text>
@@ -60,6 +60,8 @@ const styles = ({ variant, size, disabled }: ButtonProps) =>
           ? 36
           : size === 'personalized'
           ? 80
+          : size === 'inputsize'
+          ? 50
           : 'auto',
       paddingVertical: size === 'large' ? 18 : size === 'medium' ? 12 : 0,
       height:
@@ -71,6 +73,8 @@ const styles = ({ variant, size, disabled }: ButtonProps) =>
           ? 36
           : size === 'personalized'
           ? 36
+          : size === 'inputsize'
+          ? 50
           : 0,
       borderRadius: 8,
       justifyContent: 'center',
@@ -86,7 +90,10 @@ const styles = ({ variant, size, disabled }: ButtonProps) =>
           ? fonts.text_medium
           : size === 'personalized'
           ? fonts.text_regular
+          : size === 'inputsize'
+          ? fonts.text_regular
           : fonts.text_semi_bold,
+
       textTransform: size === 'large' ? 'uppercase' : 'none',
     },
   });

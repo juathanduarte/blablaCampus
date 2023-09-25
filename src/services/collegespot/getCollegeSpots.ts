@@ -1,6 +1,7 @@
+import { CollegeSpot } from '../../types/CollegeSpot';
 import { api } from '../api';
 
-export async function getCollegeSpots() {
+export async function getCollegeSpots(): Promise<CollegeSpot[]> {
   const { data } = await api.get('/collegeSpot');
-  return data;
+  return data.data;
 }

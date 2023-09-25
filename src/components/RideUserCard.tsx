@@ -71,7 +71,7 @@ export default function RideUserCard({ user, showButtons }: userProps) {
             variant="primary"
             size="small"
             icon="chatbox-outline"
-            onClick={() => console.log('click')}
+            onClick={() => handleNavigation('Chat')}
           />
         </View>
       )}

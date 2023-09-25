@@ -38,6 +38,17 @@ export default function UserTabRoutes() {
         }}
       />
       <Tab.Screen
+        name="Solicitações de carona"
+        component={UserRoutes}
+        initialParams={{ initialRouteName: 'AskForRide' }}
+        options={{
+          tabBarLabel: () => null,
+          tabBarIcon: ({ color, size }) => (
+            <Icon icon="thumbs-up" color={color} size={size} lib="IonIcons" />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Oferecer Carona"
         component={UserRoutes}
         initialParams={{ initialRouteName: 'CreateRide' }}
@@ -50,24 +61,14 @@ export default function UserTabRoutes() {
         }}
       />
       <Tab.Screen
-        name="Menssages"
+        name="Mensagens"
         component={UserRoutes}
         initialParams={{ initialRouteName: 'Messages' }}
         options={{
+          headerShown: false,
           tabBarLabel: () => null,
           tabBarIcon: ({ color, size }) => (
             <Icon icon="chatbox-outline" color={color} size={size} lib="IonIcons" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Solicitações de carona"
-        component={UserRoutes}
-        initialParams={{ initialRouteName: 'AskForRide' }}
-        options={{
-          tabBarLabel: () => null,
-          tabBarIcon: ({ color, size }) => (
-            <Icon icon="thumbs-up" color={color} size={size} lib="IonIcons" />
           ),
         }}
       />

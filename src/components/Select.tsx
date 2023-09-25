@@ -8,13 +8,25 @@ interface SelectProps {
   onChange: (value: string, itemIndex: number) => void;
   values: { label: string; value: string }[];
   selectedValue: string | undefined;
+  error?: string;
 }
 
-export default function Select({ selectedValue, onChange, placeholder, values }: SelectProps) {
+export default function Select({
+  selectedValue,
+  onChange,
+  placeholder,
+  values,
+  error,
+}: SelectProps) {
   const pickerRef = useRef<any>();
 
   return (
-    <View style={styles.selectContainer}>
+    <View
+      style={[
+        styles.selectContainer,
+        error ? { borderColor: '#f00', borderWidth: 1 } : { borderColor: colors.quinary },
+      ]}
+    >
       <RNPickerSelect
         placeholder={{
           label: placeholder,

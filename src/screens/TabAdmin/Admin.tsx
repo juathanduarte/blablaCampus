@@ -24,10 +24,18 @@ const Admin = () => {
     setIsModalVisible(!isModalVisible);
   }
 
-  const { data: spots, isLoading } = useQuery({
+  const { data: collegeSpots, isLoading } = useQuery({
     queryKey: ['spots'],
     queryFn: getCollegeSpots,
   });
+
+
+    navigation.goBack();
+  };
+
+  const handleOpenDetail = () => {
+    console.log('open detail');
+  };
 
   const collegeSpots = useMemo(() => spots?.data, [spots]) as CollegeSpot[];
 
@@ -35,6 +43,7 @@ const Admin = () => {
     queryKey: ['users'],
     queryFn: getUsers,
   });
+
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
@@ -47,7 +56,7 @@ const Admin = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} />
+      <HeaderNav title="Bem vindo Admin" navigation={navigation} toggleModal={toggleModal} icon />
       <ModalMoreActions isVisible={isModalVisible} toggleModal={toggleModal} />
       <TabHeader
         labels={['Usuários', 'Pontos']}
