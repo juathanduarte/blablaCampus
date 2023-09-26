@@ -8,13 +8,16 @@ import Button from './Button';
 import fonts from '../styles/fonts';
 import Rating from './Rating';
 import { User } from '../types/User';
+import { Ride } from '../types/Ride';
+import { IRideInfo } from '../services/ride/getRideInfo';
 
 interface userProps {
   user: User;
   showButtons: boolean;
+  ride: IRideInfo;
 }
 
-export default function RideUserCard({ user, showButtons }: userProps) {
+export default function RideUserCard({ user, showButtons, ride }: userProps) {
   const navigation = useNavigation();
 
   const handleNavigation = (screen: string) => {
@@ -51,7 +54,14 @@ export default function RideUserCard({ user, showButtons }: userProps) {
                 variant="primary"
                 size="personalized"
                 label="Avaliar"
-                onClick={() => handleNavigation('CreateAssessment')}
+                onClick={() =>
+                  navigation.navigate('CreateAssessment', {
+                    data: {
+                      user: user,
+                      ride: ride,
+                    },
+                  })
+                }
               />
             </View>
           ) : (
@@ -60,7 +70,14 @@ export default function RideUserCard({ user, showButtons }: userProps) {
                 variant="secondary"
                 size="personalized"
                 label="Avaliado"
-                onClick={() => handleNavigation('CreateAssessment')}
+                onClick={() =>
+                  navigation.navigate('CreateAssessment', {
+                    data: {
+                      user: user,
+                      ride: ride,
+                    },
+                  })
+                }
               />
             </View>
           )}

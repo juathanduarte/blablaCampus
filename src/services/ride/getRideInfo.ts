@@ -5,7 +5,7 @@ import { User } from '../../types/User';
 import { Vehicle } from '../../types/Vehicle';
 import { api } from '../api';
 
-interface IRideInfo {
+export interface IRideInfo {
   driver: User;
   origin_campus: CollegeSpot;
   destination_campus: CollegeSpot;

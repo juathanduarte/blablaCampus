@@ -20,12 +20,16 @@ interface RouteProp<T> {
   };
 }
 
-export default function RideInformations({ route }: RouteProp<Ride>) {
+export default function RideInformations({
+  route,
+}: RouteProp<{
+  ride: Ride;
+}>) {
   const user = useUserStore((state) => state.user);
 
   const navigate = useNavigation();
 
-  const ride = route?.params?.data;
+  const ride = route?.params?.data?.ride;
 
   const { data: rideData, isLoading } = useQuery({
     queryKey: ['rideInfo'],
@@ -48,13 +52,13 @@ export default function RideInformations({ route }: RouteProp<Ride>) {
       <View style={styles.container}>
         <Text style={styles.text}>Motorista</Text>
         <View style={styles.cardSection} key={user?.registration}>
-          <RideUserCard user={rideData!.driver} showButtons={true} />
+          <RideUserCard user={rideData!.driver} showButtons={false} ride={rideData!} />
         </View>
         <Text style={styles.text}>Passageiros</Text>
         {/* TODO: Map com repsonse da API */}
         {rideData?.passengers.map((passenger) => (
           <View style={styles.cardSection} key={passenger.passenger_registration}>
-            <RideUserCard user={passenger.passenger} showButtons={true} />
+            <RideUserCard user={passenger.passenger} showButtons={true} ride={rideData} />
           </View>
         ))}
 

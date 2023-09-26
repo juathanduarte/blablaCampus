@@ -96,7 +96,9 @@ const Profile = () => {
                 style={styles.content}
                 onPress={() =>
                   navigation.navigate('RideInformations', {
-                    data: carPool,
+                    data: {
+                      ride: carPool,
+                    },
                   })
                 }
                 key={carPool.driver_registration + carPool.departure_date}
