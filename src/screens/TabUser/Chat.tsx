@@ -15,7 +15,7 @@ export default function Chat() {
         <HeaderNav
           title="Alex lee"
           navigation={navigation}
-          profileImage="https://avatars.githubusercontent.com/u/60272913?v=4"
+          profileImage="https://www.promoview.com.br/uploads/images/unnamed%2819%29.png"
         />
       </View>
       <KeyboardAvoidingView

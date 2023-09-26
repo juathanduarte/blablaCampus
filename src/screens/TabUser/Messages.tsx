@@ -5,6 +5,7 @@ import {
   ScrollView,
   View,
   Keyboard,
+  Text,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
@@ -13,6 +14,9 @@ import { useForm } from 'react-hook-form';
 import Input from '../../components/Input';
 import Message from '../../components/Message';
 import HeaderNav from '../../components/HeaderNav';
+import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Messages() {
   const mensagens = [
@@ -20,32 +24,16 @@ export default function Messages() {
       text: 'Olá, tudo bem?',
       date: '2023-09-24T10:00:00',
       user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
+        name: 'Gabriel',
+        avatar_url: 'https://www.promoview.com.br/uploads/images/unnamed%2819%29.png',
       },
     },
     {
-      text: 'Eai fei',
+      text: 'Clique para um preview do chat!',
       date: '2023-09-24T10:40:00',
       user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'O scroll ta mei bugado!!!!!',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
-      },
-    },
-    {
-      text: 'O scroll desbugou ihuuuul',
-      date: '2023-09-24T9:00:00',
-      user: {
-        name: 'João',
-        avatar_url: 'https://avatars.githubusercontent.com/u/60005589?v=4',
+        name: 'Lucas',
+        avatar_url: 'https://www.promoview.com.br/uploads/images/unnamed%2819%29.png',
       },
     },
   ];
@@ -95,6 +83,13 @@ export default function Messages() {
             </TouchableOpacity>
           ))}
         </ScrollView>
+        <View style={styles.emConstrucao}>
+          <Ionicons name="construct-outline" size={35} color={colors.gray} />
+          <Text style={styles.textConstrucao}>
+            Estamos trabalhando duro para trazer um novo e incrível recurso de chat na próxima
+            versão!
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -113,5 +108,19 @@ const styles = StyleSheet.create({
   },
   messagesContainer: {
     paddingVertical: 5,
+  },
+  emConstrucao: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    color: colors.gray,
+    paddingTop: 55,
+  },
+  textConstrucao: {
+    fontFamily: fonts.text_light,
+    fontSize: 16,
+    color: colors.gray,
+    paddingBottom: 10,
+    textAlign: 'center',
   },
 });
