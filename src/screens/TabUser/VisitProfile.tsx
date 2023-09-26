@@ -14,10 +14,29 @@ import { getVehicles } from '../../services/vehicles/getVehicles';
 import { useUserStore } from '../../stores/user';
 import fonts from '../../styles/fonts';
 import profileImage from '../../assets/profileImage.png';
+import Profile from './Profile';
+import { User } from '../../types/User';
+import { getVisitUser } from '../../services/user';
 
-const Profile = () => {
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
+  };
+}
+
+const VisitProfile = ({ route }: RouteProp<{ user: User }>) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
-  const user = useUserStore((state) => state.user);
+
+  const userVisit = route?.params?.data?.user;
+
+  console.log({ userVisit });
+
+  const { data: user } = useQuery({
+    queryKey: ['teste'],
+    queryFn: () => getVisitUser(userVisit.registration),
+  });
 
   const navigation = useNavigation();
   const queryClient = useQueryClient();
@@ -26,25 +45,28 @@ const Profile = () => {
     setSelectedTab(index);
   };
 
-  const { data: vehicles, isLoading } = useQuery({
-    queryKey: ['myVehicles'],
-    queryFn: () => getVehicles(user!.registration),
-  });
-
   useEffect(() => {
-    if (selectedTab === 0) queryClient.invalidateQueries(['myHistory']);
+    queryClient.invalidateQueries(['teste', 'visitVehicles', 'visitHistory']);
+    refetch();
+  }, [user]);
 
-    if (selectedTab === 1) queryClient.invalidateQueries(['myRequests']);
-  }, [selectedTab]);
+  const {
+    data: vehicles,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['visitVehicles'],
+    queryFn: () => getVehicles(userVisit.registration),
+    onError: (error) => {
+      console.log(error);
+    },
+    enabled: Boolean(user),
+    cacheTime: 0,
+  });
 
   const { data: carPools } = useQuery({
-    queryKey: ['myHistory'],
-    queryFn: () => getCarPools(user!.registration),
-  });
-
-  const { data: carPoolRequests } = useQuery({
-    queryKey: ['myRequests'],
-    queryFn: () => getCarPoolsRequests(user!.registration),
+    queryKey: ['visitHistory'],
+    queryFn: () => getCarPools(userVisit.registration),
   });
 
   const handleNavigation = (screen: string) => {
@@ -62,34 +84,34 @@ const Profile = () => {
         <View style={styles.section}>
           <Image source={profileImage} style={styles.profileImage} />
 
-          <View style={styles.menu}>
-            <TouchableOpacity
-              style={styles.menu3Items}
-              onPress={() => handleNavigation('Assessments')}
-            >
-              <Text style={styles.menuNumber}>{user?._count?.reviews_received || 0}</Text>
-              <Text style={styles.menuText}>Avaliações</Text>
-              <View style={styles.menuIcon}>
-                <Rating rating={user?.review_average || 0} />
-              </View>
-            </TouchableOpacity>
-            <View style={styles.separator}></View>
-            <View style={styles.menu2Items}>
-              <Text style={styles.menuNumber}>{user?._count?.driver_carpools || 0}</Text>
-              <Text style={styles.menuText}>Caronas Ofertadas</Text>
+          <Text style={styles.name}>{user?.name}</Text>
+        </View>
+        <View style={styles.menu}>
+          <TouchableOpacity
+            style={styles.menu3Items}
+            onPress={() => handleNavigation('Assessments')}
+          >
+            <Text style={styles.menuNumber}>{user?._count?.reviews_received || 0}</Text>
+            <Text style={styles.menuText}>Avaliações</Text>
+            <View style={styles.menuIcon}>
+              <Rating rating={user?.review_average || 0} />
             </View>
-            <View style={styles.separator}></View>
-            <View style={styles.menu2Items}>
-              <Text style={styles.menuNumber}>{user?._count?.passengers_carpools || 0}</Text>
-              <Text style={styles.menuText}>Caronas Recebidas</Text>
-            </View>
+          </TouchableOpacity>
+          <View style={styles.separator}></View>
+          <View style={styles.menu2Items}>
+            <Text style={styles.menuNumber}>{user?._count?.driver_carpools || 0}</Text>
+            <Text style={styles.menuText}>Caronas Ofertadas</Text>
+          </View>
+          <View style={styles.separator}></View>
+          <View style={styles.menu2Items}>
+            <Text style={styles.menuNumber}>{user?._count?.passengers_carpools || 0}</Text>
+            <Text style={styles.menuText}>Caronas Recebidas</Text>
           </View>
         </View>
-        <Text style={styles.name}>{user?.name}</Text>
       </View>
       <View style={styles.tab}>
         <TabHeader
-          labels={['Histórico', 'Solicitações', 'Veículos']}
+          labels={['Histórico', 'Veículos']}
           handleTabChange={handleTabChange}
           activeTab={selectedTab}
         />
@@ -123,38 +145,6 @@ const Profile = () => {
               </TouchableOpacity>
             ))}
           </ScrollView>
-        </View>
-      ) : selectedTab === 1 ? (
-        <View>
-          <ScrollView>
-            {carPoolRequests?.map((request) => {
-              return (
-                <TouchableOpacity
-                  style={styles.content}
-                  onPress={() => handleNavigation('RideInformations')}
-                  key={request.driver_registration + request.departure_date}
-                >
-                  <RideCard
-                    dateTime={request.departure_date}
-                    destinyPoint={request.destination_campus_name}
-                    name={request.driver.name}
-                    rating={request.driver.review_average}
-                    role={request?.passengers?.[0].is_accepted ? 'Aceita' : 'Pendente'}
-                    startPoint={request.origin_campus_name}
-                    // urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-          <View style={styles.buttonContainer}>
-            <Button
-              variant="primary"
-              size="small"
-              icon={'add'}
-              onClick={() => handleNavigation('CreateRide')}
-            />
-          </View>
         </View>
       ) : (
         <View>
@@ -195,12 +185,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   header: {
-    flexDirection: 'column',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#FFF', // Fundo branco
     paddingHorizontal: 24,
   },
   section: {
-    flexDirection: 'row',
     marginRight: 8,
   },
   profileImage: {
@@ -264,4 +254,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default VisitProfile;

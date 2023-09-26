@@ -10,6 +10,7 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   Register: undefined;
   VerifyCode: undefined;
+  Profile: undefined;
   Admin: undefined;
   AdminLogin: undefined;
   RequestRide: { data: Ride };
@@ -22,6 +23,11 @@ export type RootStackParamList = {
     data: {
       user: User;
       ride: IRideInfo;
+    };
+  };
+  VisitProfile: {
+    data: {
+      user: User;
     };
   };
 };

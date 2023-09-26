@@ -7,6 +7,7 @@ import {
   registerUserWithCode,
 } from './register';
 import { blockUser, getUsers } from './users';
+import { getVisitUser } from './visitUser';
 
 export {
   blockUser,
@@ -17,4 +18,5 @@ export {
   me,
   registerUser,
   registerUserWithCode,
+  getVisitUser,
 };

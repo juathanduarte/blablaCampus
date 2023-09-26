@@ -17,6 +17,7 @@ import CreateAssessment from '../screens/TabUser/CreateAssessment';
 import RequestRide from '../screens/TabUser/RequestRide';
 import colors from '../styles/colors';
 import { Screen } from 'react-native-screens';
+import VisitProfile from '../screens/TabUser/VisitProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ const UserRoutes = ({ route }: any) => {
       <Stack.Screen name="RideInformations" component={RideInformations} />
       <Stack.Screen name="RequestRide" component={RequestRide} />
       <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="VisitProfile" component={VisitProfile} />
     </Stack.Navigator>
   );
 };

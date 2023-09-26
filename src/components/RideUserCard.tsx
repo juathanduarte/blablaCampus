@@ -29,7 +29,13 @@ export default function RideUserCard({ user, showButtons, ride }: userProps) {
   };
 
   const onPressPerfil = () => {
-    console.log('open perfil');
+    user.registration === myUser?.registration
+      ? navigation.navigate('Profile')
+      : navigation.navigate('VisitProfile', {
+          data: {
+            user,
+          },
+        });
   };
 
   console.log({
