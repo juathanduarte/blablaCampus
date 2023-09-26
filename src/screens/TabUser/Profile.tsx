@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../components/Button';
 import CarCard from '../../components/CarCard';
@@ -13,15 +13,14 @@ import { getCarPools } from '../../services/ride';
 import { getVehicles } from '../../services/vehicles/getVehicles';
 import { useUserStore } from '../../stores/user';
 import fonts from '../../styles/fonts';
+import profileImage from '../../assets/profileImage.png';
 
 const Profile = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
-  const [avaliações, setAvaliações] = React.useState(23);
-  const [caronasOfertadas, setCaronasOfertadas] = React.useState(14);
-  const [caronasRecebidas, setCaronasRecebidas] = React.useState(33);
   const user = useUserStore((state) => state.user);
 
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index);
@@ -32,9 +31,13 @@ const Profile = () => {
     queryFn: getVehicles,
   });
 
+  useEffect(() => {
+    if (selectedTab === 0) queryClient.invalidateQueries(['myHistory']);
+  }, [selectedTab]);
+
   const { data: carPools } = useQuery({
-    queryKey: ['myCarPools'],
-    queryFn: getCarPools,
+    queryKey: ['myHistory'],
+    queryFn: () => getCarPools(user!.registration),
   });
 
   const handleNavigation = (screen: string) => {
@@ -50,12 +53,7 @@ const Profile = () => {
       <StatusBar style="dark" />
       <View style={styles.header}>
         <View style={styles.section}>
-          <Image
-            source={{
-              uri: 'https://avatars.githubusercontent.com/u/26155340?s=400&u=afa52086562394d1489670fa765628d480e2bfb9&v=4',
-            }}
-            style={styles.profileImage}
-          />
+          <Image source={profileImage} style={styles.profileImage} />
 
           <Text style={styles.name}>{user?.name}</Text>
         </View>
@@ -64,20 +62,20 @@ const Profile = () => {
             style={styles.menu3Items}
             onPress={() => handleNavigation('Assessments')}
           >
-            <Text style={styles.menuNumber}>{avaliações}</Text>
+            <Text style={styles.menuNumber}>{user?._count?.reviews_received || 0}</Text>
             <Text style={styles.menuText}>Avaliações</Text>
             <View style={styles.menuIcon}>
-              <Rating rating={5} />
+              <Rating rating={user!.review_average} />
             </View>
           </TouchableOpacity>
           <View style={styles.separator}></View>
           <View style={styles.menu2Items}>
-            <Text style={styles.menuNumber}>{caronasOfertadas}</Text>
+            <Text style={styles.menuNumber}>{user?._count?.driver_carpools || 0}</Text>
             <Text style={styles.menuText}>Caronas Ofertadas</Text>
           </View>
           <View style={styles.separator}></View>
           <View style={styles.menu2Items}>
-            <Text style={styles.menuNumber}>{caronasRecebidas}</Text>
+            <Text style={styles.menuNumber}>{user?._count?.passengers_carpools || 0}</Text>
             <Text style={styles.menuText}>Caronas Recebidas</Text>
           </View>
         </View>
@@ -93,30 +91,29 @@ const Profile = () => {
       {selectedTab === 0 ? (
         <View>
           <ScrollView>
-            <TouchableOpacity
-              style={styles.content}
-              onPress={() => handleNavigation('RideInformations')}
-            >
-              {carPools?.map((carPool, index) => (
+            {carPools?.map((carPool, index) => (
+              <TouchableOpacity
+                style={styles.content}
+                onPress={() =>
+                  navigation.navigate('RideInformations', {
+                    data: carPool,
+                  })
+                }
+                key={carPool.driver_registration + carPool.departure_date}
+              >
                 <RideCard
                   dateTime={carPool.departure_date}
-                  startPoint={carPool.origin_campus.name}
-                  destinyPoint={carPool.destination_campus.name}
+                  startPoint={carPool.origin_campus_name}
+                  destinyPoint={carPool.destination_campus_name}
                   name={carPool.driver.name}
-                  rating={carPool.reviews[index].rating}
-                  role="Passageiro" // TODO: talvez deixar dinâmico
+                  rating={user!.review_average}
+                  role={
+                    user?.registration === carPool.driver_registration ? 'Motorista' : 'Passageiro'
+                  }
                 />
-              ))}
-            </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
-          <View style={styles.buttonContainer}>
-            <Button
-              variant="primary"
-              size="large"
-              icon={'add'}
-              onClick={() => handleNavigation('CreateRide')}
-            />
-          </View>
         </View>
       ) : selectedTab === 1 ? (
         <View>

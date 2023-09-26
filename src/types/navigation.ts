@@ -11,6 +11,7 @@ export type RootStackParamList = {
   Admin: undefined;
   AdminLogin: undefined;
   RequestRide: { data: Ride };
+  RideInformations: { data: Ride };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

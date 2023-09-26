@@ -26,6 +26,5 @@ export async function getRideInfo({
   departureDate: string;
 }): Promise<IRideInfo> {
   const { data } = await api.get(`/carpool/${registration}/${departureDate}`);
-  console.log('ride info: ', data);
   return data;
 }

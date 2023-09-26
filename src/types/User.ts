@@ -17,4 +17,9 @@ export interface User {
   passengers_carpools: Passenger[];
   reviews_made: Review[];
   reviews_received: Review[];
+  _count: {
+    reviews_received: number;
+    driver_carpools: number;
+    passengers_carpools: number;
+  };
 }

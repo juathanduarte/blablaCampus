@@ -6,67 +6,39 @@ import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import RideUserCard from '../../components/RideUserCard';
 import Button from '../../components/Button';
+import { User } from '../../types/User';
+import { useUserStore } from '../../stores/user';
+import { useQuery } from '@tanstack/react-query';
+import { getRideInfo } from '../../services/ride/getRideInfo';
+import { Ride } from '../../types/Ride';
 
-interface User {
-  id: string;
-  name: string;
-  urlImage: string;
-  rating: number;
-  status: 'active' | 'inactive';
-  type: 'motorista' | 'passageiro';
-}
-
-interface Carona {
-  inicio: string;
-  destino: string;
-  data: string;
-  horario: string;
-}
-
-interface userProps {
-  user: User;
-  carona: Carona;
-}
-
-export default function RideInformations({ user, carona }: userProps) {
-  const navigate = useNavigation();
-  const [users, setUsers] = React.useState<User[]>([]);
-
-  const caronaTeste = {
-    inicio: 'Campus Anglo',
-    destino: 'Campus Capão do Leão',
-    data: '18/09/2023 - Segunda-Feira',
-    horario: '12:00',
+interface RouteProp<T> {
+  route: {
+    params: {
+      data: T;
+    };
   };
+}
 
-  React.useEffect(() => {
-    setUsers([
-      {
-        id: '20102119',
-        name: 'Lucas Ferreira',
-        urlImage: 'https://github.com/lcsferreira.png',
-        status: 'active',
-        rating: 5.0,
-        type: 'passageiro',
-      },
-      {
-        id: '20102118',
-        name: 'Gabriel Timm',
-        urlImage: 'https://github.com/gstimm.png',
-        status: 'active',
-        rating: 5.0,
-        type: 'motorista',
-      },
-      {
-        id: '20152149',
-        name: 'Juathan Duarte',
-        urlImage: 'https://github.com/juathanduarte.png',
-        status: 'inactive',
-        rating: 5.0,
-        type: 'passageiro',
-      },
-    ]);
-  }, []);
+export default function RideInformations({ route }: RouteProp<Ride>) {
+  const user = useUserStore((state) => state.user);
+
+  const navigate = useNavigation();
+
+  const ride = route?.params?.data;
+
+  const { data: rideData, isLoading } = useQuery({
+    queryKey: ['rideInfo'],
+    queryFn: () =>
+      getRideInfo({
+        registration: ride.driver_registration,
+        departureDate: ride.departure_date,
+      }),
+  });
+
+  console.log(rideData?.driver);
+
+  if (isLoading) return <View></View>;
 
   return (
     <View style={styles.header}>
@@ -75,30 +47,37 @@ export default function RideInformations({ user, carona }: userProps) {
       </View>
       <View style={styles.container}>
         <Text style={styles.text}>Motorista</Text>
-        {users?.map((user: User) =>
-          user.type === 'motorista' ? (
-            <View style={styles.cardSection} key={user.id}>
-              <RideUserCard key={user.id} user={user} showButtons={true} />
-            </View>
-          ) : null
-        )}
+        <View style={styles.cardSection} key={user?.registration}>
+          <RideUserCard user={rideData!.driver} showButtons={true} />
+        </View>
         <Text style={styles.text}>Passageiros</Text>
-        {users?.map((user: User) =>
-          user.type === 'passageiro' ? (
-            <View style={styles.cardSection} key={user.id}>
-              <RideUserCard key={user.id} user={user} showButtons={true} />
-            </View>
-          ) : null
-        )}
+        {/* TODO: Map com repsonse da API */}
+        {rideData?.passengers.map((passenger) => (
+          <View style={styles.cardSection} key={passenger.passenger_registration}>
+            <RideUserCard user={passenger.passenger} showButtons={true} />
+          </View>
+        ))}
+
         <View style={styles.rideInformation}>
           <Text style={styles.title}>Início:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.inicio}</Text>
+          <Text style={styles.subtitle}>{rideData?.origin_campus_name}</Text>
           <Text style={styles.title}>Destino:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.destino}</Text>
+          <Text style={styles.subtitle}>{rideData?.destination_campus_name}</Text>
           <Text style={styles.title}>Data:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.data}</Text>
+          <Text style={styles.subtitle}>
+            {Intl.DateTimeFormat('pt-BR', {
+              day: 'numeric',
+              month: 'numeric',
+              year: 'numeric',
+            }).format(new Date(rideData?.departure_date!))}
+          </Text>
           <Text style={styles.title}>Horário:</Text>
-          <Text style={styles.subtitle}>{caronaTeste.horario}</Text>
+          <Text style={styles.subtitle}>
+            {Intl.DateTimeFormat('pt-BR', {
+              hour: 'numeric',
+              minute: 'numeric',
+            }).format(new Date(rideData?.departure_date!))}
+          </Text>
         </View>
       </View>
     </View>
