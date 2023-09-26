@@ -1,3 +1,5 @@
 import { createReview } from './createReview';
+import { getSentReviews } from './getSentReviews';
+import { getReceivedReviews } from './getReceivedReviews';
 
-export { createReview };
+export { createReview, getSentReviews, getReceivedReviews };

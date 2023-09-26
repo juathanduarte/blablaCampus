@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import Rating from './Rating';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
+import placeHolder from '../assets/profileImage.png';
 
 interface ReviewCardProps {
   image: string;
@@ -17,7 +18,7 @@ export default function ReviewCard({ image, name, type, rating, reviewText }: Re
     <View style={styles.cardContainer}>
       <View style={styles.cardContent}>
         <View style={styles.header}>
-          <Image source={{ uri: image }} style={styles.profileImage} />
+          <Image source={placeHolder} style={styles.profileImage} />
           <View style={styles.userInfo}>
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.type}>{type}</Text>

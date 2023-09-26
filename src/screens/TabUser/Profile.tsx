@@ -72,7 +72,7 @@ const Profile = () => {
             <Text style={styles.menuNumber}>{user?._count?.reviews_received || 0}</Text>
             <Text style={styles.menuText}>Avaliações</Text>
             <View style={styles.menuIcon}>
-              <Rating rating={user!.review_average} />
+              <Rating rating={user?.review_average || 0} />
             </View>
           </TouchableOpacity>
           <View style={styles.separator}></View>
