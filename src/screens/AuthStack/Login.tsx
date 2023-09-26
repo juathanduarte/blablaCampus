@@ -2,7 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -98,16 +105,15 @@ export default function Login() {
         <TouchableOpacity style={styles.forgotPassword} onPress={showAsyncStorage}>
           <Text style={styles.text}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
-        <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
-      </View>
-      <View style={[styles.footerContainer]}>
-        <View style={styles.registerContainer}>
+        <View style={styles.forgotPassword}>
           <Text style={styles.text}>Não tem uma conta?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={[styles.text, { color: colors.primary, marginLeft: 3 }]}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
+        <Button variant="primary" size="large" label="Entrar" onClick={handleSubmit(onSubmit)} />
       </View>
+      <View style={[styles.footerContainer]}></View>
 
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -142,20 +148,15 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     alignSelf: 'center',
-    marginVertical: 10,
+    display: 'flex',
+    flexDirection: 'row',
   },
   text: {
     color: colors.title,
     fontSize: 14,
     fontFamily: fonts.text_medium,
   },
-  footerContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 86,
-  },
+  footerContainer: {},
   registerContainer: {
     display: 'flex',
     flexDirection: 'row',
