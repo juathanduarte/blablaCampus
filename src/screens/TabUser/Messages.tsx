@@ -55,7 +55,6 @@ export default function Messages() {
   const navigation = useNavigation();
 
   const handleNavigation = (screen: string) => {
-    console.log({ screen });
     // @ts-ignore
     navigation.navigate(screen);
   };

@@ -64,8 +64,6 @@ export default function CreateAssessment({ route }: RouteProp<{ user: User; ride
     Keyboard.dismiss();
   };
 
-  console.log(data.ride.driver);
-
   const { mutateAsync } = useMutation({
     mutationFn: () =>
       createReview({

@@ -40,8 +40,6 @@ export default function RideInformations({
       }),
   });
 
-  console.log(rideData?.driver);
-
   if (isLoading) return <View></View>;
 
   return (

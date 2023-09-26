@@ -10,7 +10,6 @@ export default function AcceptRideRequest() {
     queryFn: getMyRequests,
     cacheTime: 0,
   });
-  console.log('RETURN: ', rideRequests);
 
   return (
     <ScrollView style={styles.container}>

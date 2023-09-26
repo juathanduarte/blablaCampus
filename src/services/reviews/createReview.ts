@@ -9,6 +9,5 @@ interface CreateReviewProps {
 }
 
 export async function createReview(review: CreateReviewProps) {
-  // console.log(review);
   await api.post('/review', review);
 }

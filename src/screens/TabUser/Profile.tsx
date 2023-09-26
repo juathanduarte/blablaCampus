@@ -9,7 +9,7 @@ import HeaderNav from '../../components/HeaderNav';
 import Rating from '../../components/Rating';
 import RideCard from '../../components/RideCard';
 import TabHeader from '../../components/TabHeader';
-import { getCarPools } from '../../services/ride';
+import { getCarPools, getCarPoolsRequests } from '../../services/ride';
 import { getVehicles } from '../../services/vehicles/getVehicles';
 import { useUserStore } from '../../stores/user';
 import fonts from '../../styles/fonts';
@@ -39,6 +39,13 @@ const Profile = () => {
     queryKey: ['myHistory'],
     queryFn: () => getCarPools(user!.registration),
   });
+
+  const { data: carPoolRequests } = useQuery({
+    queryKey: ['myRequests'],
+    queryFn: () => getCarPoolsRequests(user!.registration),
+  });
+
+  console.log({ carPoolRequests });
 
   const handleNavigation = (screen: string) => {
     // @ts-ignore
