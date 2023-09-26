@@ -37,7 +37,7 @@ export default function RideUserCard({ user, showButtons, ride }: userProps) {
     user,
   });
 
-  const haveIReviewed = user.reviews_received.some((review) => {
+  const haveIReviewed = user?.reviews_received?.some((review) => {
     console.log({ review });
     return review?.reviewer_registration === myUser?.registration;
   });

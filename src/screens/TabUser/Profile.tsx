@@ -33,6 +33,8 @@ const Profile = () => {
 
   useEffect(() => {
     if (selectedTab === 0) queryClient.invalidateQueries(['myHistory']);
+
+    if (selectedTab === 1) queryClient.invalidateQueries(['myRequests']);
   }, [selectedTab]);
 
   const { data: carPools } = useQuery({
@@ -44,8 +46,6 @@ const Profile = () => {
     queryKey: ['myRequests'],
     queryFn: () => getCarPoolsRequests(user!.registration),
   });
-
-  console.log({ carPoolRequests });
 
   const handleNavigation = (screen: string) => {
     // @ts-ignore
@@ -127,20 +127,25 @@ const Profile = () => {
       ) : selectedTab === 1 ? (
         <View>
           <ScrollView>
-            <TouchableOpacity
-              style={styles.content}
-              onPress={() => handleNavigation('RideInformations')}
-            >
-              <RideCard
-                dateTime="2021-08-20T18:00:00.000Z"
-                destinyPoint="PUCRS"
-                name="Gabriel"
-                rating={4.5}
-                role="Recusada"
-                startPoint="UFRGS"
-                // urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
-              />
-            </TouchableOpacity>
+            {carPoolRequests?.map((request) => {
+              return (
+                <TouchableOpacity
+                  style={styles.content}
+                  onPress={() => handleNavigation('RideInformations')}
+                  key={request.driver_registration + request.departure_date}
+                >
+                  <RideCard
+                    dateTime={request.departure_date}
+                    destinyPoint={request.destination_campus_name}
+                    name={request.driver.name}
+                    rating={request.driver.review_average}
+                    role={request?.passengers?.[0].is_accepted ? 'Aceita' : 'Pendente'}
+                    startPoint={request.origin_campus_name}
+                    // urlImage="https://avatars.githubusercontent.com/u/60005589?v=4"
+                  />
+                </TouchableOpacity>
+              );
+            })}
           </ScrollView>
           <View style={styles.buttonContainer}>
             <Button

@@ -3,5 +3,6 @@ import { api } from '../api';
 
 export async function getCarPoolsRequests(registration: string) {
   const { data } = await api.get(`/carpool/requests/${registration}`);
+  console.log(data);
   return data.data as Ride[];
 }
