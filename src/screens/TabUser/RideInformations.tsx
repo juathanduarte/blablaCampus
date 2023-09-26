@@ -52,13 +52,21 @@ export default function RideInformations({
       <View style={styles.container}>
         <Text style={styles.text}>Motorista</Text>
         <View style={styles.cardSection} key={user?.registration}>
-          <RideUserCard user={rideData!.driver} showButtons={false} ride={rideData!} />
+          <RideUserCard
+            user={rideData!.driver}
+            showButtons={user?.registration !== rideData?.driver.registration}
+            ride={rideData!}
+          />
         </View>
         <Text style={styles.text}>Passageiros</Text>
         {/* TODO: Map com repsonse da API */}
         {rideData?.passengers.map((passenger) => (
           <View style={styles.cardSection} key={passenger.passenger_registration}>
-            <RideUserCard user={passenger.passenger} showButtons={true} ride={rideData} />
+            <RideUserCard
+              user={passenger.passenger}
+              showButtons={user?.registration !== passenger.passenger.registration}
+              ride={rideData}
+            />
           </View>
         ))}
 

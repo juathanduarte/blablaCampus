@@ -10,6 +10,7 @@ import Rating from './Rating';
 import { User } from '../types/User';
 import { Ride } from '../types/Ride';
 import { IRideInfo } from '../services/ride/getRideInfo';
+import { useUserStore } from '../stores/user';
 
 interface userProps {
   user: User;
@@ -20,6 +21,8 @@ interface userProps {
 export default function RideUserCard({ user, showButtons, ride }: userProps) {
   const navigation = useNavigation();
 
+  const myUser = useUserStore((state) => state.user);
+
   const handleNavigation = (screen: string) => {
     // @ts-ignore
     navigation.navigate(screen);
@@ -28,6 +31,16 @@ export default function RideUserCard({ user, showButtons, ride }: userProps) {
   const onPressPerfil = () => {
     console.log('open perfil');
   };
+
+  console.log({
+    myUser,
+    user,
+  });
+
+  const haveIReviewed = user.reviews_received.some((review) => {
+    console.log({ review });
+    return review?.reviewer_registration === myUser?.registration;
+  });
 
   console.log('NOME: ', Object.keys(user));
   return (
@@ -48,12 +61,13 @@ export default function RideUserCard({ user, showButtons, ride }: userProps) {
       </TouchableOpacity>
       {showButtons && (
         <View style={styles.buttonContainer}>
-          {user.isBlocked ? (
-            <View style={styles.button}>
+          <View style={styles.button}>
+            {myUser?.registration !== user.registration && (
               <Button
+                disabled={haveIReviewed}
                 variant="primary"
                 size="personalized"
-                label="Avaliar"
+                label={!haveIReviewed ? 'Avaliar' : 'Avaliado'}
                 onClick={() =>
                   navigation.navigate('CreateAssessment', {
                     data: {
@@ -63,24 +77,8 @@ export default function RideUserCard({ user, showButtons, ride }: userProps) {
                   })
                 }
               />
-            </View>
-          ) : (
-            <View style={styles.button}>
-              <Button
-                variant="secondary"
-                size="personalized"
-                label="Avaliado"
-                onClick={() =>
-                  navigation.navigate('CreateAssessment', {
-                    data: {
-                      user: user,
-                      ride: ride,
-                    },
-                  })
-                }
-              />
-            </View>
-          )}
+            )}
+          </View>
           <Button
             variant="primary"
             size="small"
