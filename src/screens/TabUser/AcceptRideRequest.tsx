@@ -19,13 +19,13 @@ export default function AcceptRideRequest() {
           style={[styles.cardContainer, index !== 0 && { marginTop: 16 }]}
         >
           <RequestRideCard
-            passengerRegistration={request.passenger_registration}
-            dateTime={request.carpool_departure_date}
-            destinyPoint={request.carpool.destination_campus_name}
-            name={request.passenger.name}
-            rating={request.passenger.review_average}
+            passengerRegistration={request?.passenger_registration}
+            dateTime={request?.carpool_departure_date}
+            destinyPoint={request?.carpool?.destination_campus_name}
+            name={request?.passenger?.name}
+            rating={request?.passenger?.review_average}
             // role={}
-            startPoint={request.carpool.origin_campus_name}
+            startPoint={request?.carpool?.origin_campus_name}
             urlImage={'https://avatars.githubusercontent.com/u/60272913?v=4'}
           />
         </View>

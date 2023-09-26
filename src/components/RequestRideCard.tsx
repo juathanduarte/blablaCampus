@@ -7,6 +7,7 @@ import Icon from './Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { acceptRide } from '../services/ride/acceptRide';
 import { useUserStore } from '../stores/user';
+import { rejectRide } from '../services/ride';
 
 interface RideProps {
   urlImage: string;
@@ -62,8 +63,19 @@ export default function RequestRideCard({
     });
   }
 
+  const { mutateAsync: mutateRejectPassenger } = useMutation({
+    mutationFn: rejectRide,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['myRequests']);
+    },
+  });
+
   const handleDecline = () => {
-    //TODO: add decline ride request
+    mutateRejectPassenger({
+      departureDate: dateTime,
+      driverRegistration: user!.registration,
+      passengerRegistration: passengerRegistration,
+    });
   };
 
   return (
